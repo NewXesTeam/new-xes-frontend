@@ -1,11 +1,27 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { type } = require("os");
 const path = require("path");
+const { cache } = require("react");
+
+const entriesName = ["index", "about"];
+
+let entries = {};
+let plugins = [new MiniCssExtractPlugin()];
+
+for (let entry of entriesName) {
+    entries[entry] = `./src/${entry}.jsx`;
+    plugins.push(
+        new HtmlWebpackPlugin({
+            template: "./src/template.html",
+            filename: `${entry}.html`,
+            chunks: [entry],
+        })
+    );
+}
 
 module.exports = {
-    entry: {
-        index: "./src/index.jsx",
-    },
+    entry: entries,
     mode: "development",
     devtool: "source-map",
     stats: {
@@ -42,16 +58,14 @@ module.exports = {
             },
         ],
     },
-    plugins: [
-        new MiniCssExtractPlugin(),
-        new HtmlWebpackPlugin({
-            template: "./src/template.html",
-        }),
-    ],
+    plugins: plugins,
     optimization: {
         splitChunks: {
             chunks: "all",
             minChunks: 2,
         },
+    },
+    cache: {
+        type: "filesystem",
     },
 };
