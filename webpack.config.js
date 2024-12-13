@@ -1,10 +1,8 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { type } = require("os");
 const path = require("path");
-const { cache } = require("react");
 
-const entriesName = ["index", "about"];
+const entriesName = ["index", "about", "login", "eula"];
 
 let entries = {};
 let plugins = [new MiniCssExtractPlugin()];

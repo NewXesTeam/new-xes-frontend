@@ -2,6 +2,23 @@ import React from "react";
 import { Container, Nav, Navbar, NavDropdown, Form } from "react-bootstrap";
 
 const NavbarComponent = () => {
+    const logoutEvent = async () => {
+        await fetch("/passport/logout")
+        localStorage.setItem("logged_in", false);
+        location.reload();
+    };
+    let userComponent;
+
+    if (document.cookie.includes("is_login=1;")) {
+        userComponent = (
+            <NavDropdown title="用户" align={"end"}>
+                <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
+            </NavDropdown>
+        );
+    } else {
+        userComponent = <Nav.Link href="/login.html">登录</Nav.Link>;
+    }
+
     return (
         <Navbar expand="lg" className="bg-body-tertiary shadow">
             <Container>
@@ -15,10 +32,13 @@ const NavbarComponent = () => {
                         <Nav.Link href="#">发现</Nav.Link>
                         <Nav.Link href="/about.html">关于</Nav.Link>
                     </Nav>
+
                     <Nav className="ms-auto">
                         <Form role="search" action="https://code.xueersi.com/search-center" className="me-2">
                             <Form.Control type="search" placeholder="搜索" className=" mr-sm-2" name="keyword" />
                         </Form>
+
+                        {userComponent}
 
                         <NavDropdown title="创作" align={"end"}>
                             <NavDropdown.Item href="#">TurboWarp</NavDropdown.Item>

@@ -1,0 +1,16 @@
+@import "./common.scss";
+
+.login-form-container {
+    background-color: #f0f0f0;
+    border: 2px solid #aaaaaa;
+    border-radius: 20px;
+    padding: 20px;
+
+    h1 {
+        margin-bottom: 20px;
+    }
+}
+
+.input-group {
+    margin-bottom: 10px;
+}
