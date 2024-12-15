@@ -1,5 +1,5 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
 const eula = `我们感谢您选择使用 NewXesFrontend 平台！
 我们与您一样，也不想面对巨长的用户协议。
@@ -18,15 +18,22 @@ NewXesFrontend 平台为用户提供 学而思编程社区 第三方的网页端
 本协议解释权归 NewXesTeam 团队所有。`;
 
 const EulaPage = () => {
-    const eulaText = eula.split("\n").map((line, index) => <p key={index}>{line}</p>);
+    const eulaText = eula
+        .split('\n')
+        .map((line, index) => <p key={index}>{line}</p>);
 
     return (
-        <div>
+        <>
             <h1>NewXesFrontend 最终用户协议</h1>
             {eulaText}
-        </div>
+        </>
     );
-}
+};
 
-const root = createRoot(document.getElementById("app"));
-root.render(<EulaPage />);
+const dom: HTMLElement | null = document.getElementById('app');
+if (dom) {
+    const root = createRoot(dom);
+    root.render(<EulaPage />);
+} else {
+    throw new Error('Cannot find dom element #app');
+}

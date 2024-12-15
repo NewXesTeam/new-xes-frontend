@@ -1,32 +1,38 @@
 {
-  "name": "newxesfrontend",
-  "version": "1.0.0",
-  "description": "New Xueersi Frontend made with React",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pwsh scripts/build.ps1"
-  },
-  "author": "NewXesTeam",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "bootstrap": "^5.3.3",
-    "react": "^18.3.1",
-    "react-bootstrap": "^2.10.6",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.25.9",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
-    "babel-loader": "^9.2.1",
-    "css-loader": "^7.1.2",
-    "html-webpack-plugin": "^5.6.3",
-    "mini-css-extract-plugin": "^2.9.2",
-    "sass": "^1.82.0",
-    "sass-loader": "^16.0.4",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.97.0",
-    "webpack-cli": "^5.1.4"
-  }
+    "name": "newxesfrontend",
+    "version": "1.0.0",
+    "description": "New Xueersi Frontend made with React",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "pwsh scripts/build.ps1",
+        "prettier": "npx prettier --write ."
+    },
+    "author": "NewXesTeam",
+    "license": "GPL-3.0",
+    "dependencies": {
+        "@types/react": "^19.0.1",
+        "@types/react-dom": "^19.0.2",
+        "bootstrap": "^5.3.3",
+        "react": "^18.3.1",
+        "react-bootstrap": "^2.10.6",
+        "react-dom": "^18.3.1"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.25.9",
+        "@babel/core": "^7.26.0",
+        "@babel/preset-env": "^7.26.0",
+        "@babel/preset-react": "^7.26.3",
+        "@babel/preset-typescript": "^7.26.0",
+        "babel-loader": "^9.2.1",
+        "css-loader": "^7.1.2",
+        "html-webpack-plugin": "^5.6.3",
+        "mini-css-extract-plugin": "^2.9.2",
+        "prettier": "^3.4.2",
+        "sass": "^1.82.0",
+        "sass-loader": "^16.0.4",
+        "style-loader": "^4.0.0",
+        "webpack": "^5.97.0",
+        "webpack-cli": "^5.1.4"
+    }
 }

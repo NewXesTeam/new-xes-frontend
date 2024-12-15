@@ -1,24 +1,39 @@
 # NewXesFrontend
-> React New Xueersi Frontend
+
+> 学而思新的前端体验（第三方）
 
 > [!WARNING]
 > 此项目仅供交流学习，请勿他用！
 
 > [!WARNING]
 > 这是使用 React 重写的 NewXesFrontend
-> 
+>
 > 欲查看原来的*屎山* NewXesFrontend，请访问 [NewXesTeam/Archived-NewXesFrontend](https://github/NewXesTeam/Archived-NewXesFrontend)
 
 ## 构建
+
 运行 `npm run build` 以进行构建。
 
 ## 运行开发服务器
+
 1. 下载 nginx
-2. 复制 nginx 到根目录。*注意不要把 `conf/nginx.conf` 给覆盖了！！！*
+2. 复制 nginx 到根目录。_注意不要把 `conf/nginx.conf` 给覆盖了！！！_
 3. 运行 nginx。（请先构建后再运行）
 4. 访问 `http://localhost:8080`
 
 ## 关于使用
-请注意，本版本目前需要手动设置 cookie 才能正常使用。
 
-登录将于一段时间后尝试实现。
+您可以直接使用我们提供的 登录功能 进行登录。
+
+## 开发进度
+
+- [x] 主页 /index.html
+- [x] 登录 /login.html
+- [ ] 发现 /discover.html
+- [ ] 搜索 /search.html
+- [ ] 我的作品 /user.html
+- [ ] 个人主页 /space.html
+- [ ] 消息中心 /messages.html
+- [x] 关于 /about.html
+- [ ] 最终用户协议（等待补充内容） /eula.html
+- ...
