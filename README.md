@@ -10,9 +10,10 @@
 >
 > 欲查看原来的*屎山* NewXesFrontend，请访问 [NewXesTeam/Archived-NewXesFrontend](https://github/NewXesTeam/Archived-NewXesFrontend)
 
-## 构建
+## npm 脚本
 
-运行 `npm run build` 以进行构建。
+- `npm run build` 构建项目
+- `npm run prettier` 使用 Prettier 格式化代码
 
 ## 运行开发服务器
 
