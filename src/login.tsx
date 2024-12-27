@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Form, Row, Col, Button, InputGroup, Alert } from 'react-bootstrap';
 import { CaptchaPacket, LoginPacket } from './interfaces/login.ts';
+import { checkLoggedIn } from './utils.ts';
 import './styles/login.scss';
 
 const LoginPage = () => {
@@ -100,40 +101,26 @@ const LoginPage = () => {
         setCaptchaBase64(captchaResult.data.captcha);
     };
 
-    new Promise(() => {
-        setTimeout(() => {
-            if (document.cookie.includes('is_login=1;')) {
-                setSuccessValue('您已登录！正在跳转到主页...');
-                setTimeout(() => {
-                    location.href = '/';
-                }, 500);
-            }
-        }, 100);
-    });
+    React.useEffect(() => {
+        if (checkLoggedIn()) {
+            setSuccessValue('您已登录！正在跳转到主页...');
+            setTimeout(() => {
+                location.href = '/';
+            }, 500);
+        }
+    }, []);
 
     return (
         <>
             <Row className="justify-content-md-center width-100 height-100">
-                <Col
-                    xs={12}
-                    sm={8}
-                    md={6}
-                    lg={4}
-                    className="login-form-container shadow margin-auto"
-                >
+                <Col xs={12} sm={8} md={6} lg={4} className="login-form-container shadow margin-auto">
                     <h1>欢迎登录 NewXesFrontend</h1>
 
                     <Form onSubmit={loginEvent}>
-                        <Alert
-                            variant="danger"
-                            hidden={errorValue ? false : true}
-                        >
+                        <Alert variant="danger" hidden={errorValue ? false : true}>
                             {errorValue}
                         </Alert>
-                        <Alert
-                            variant="success"
-                            hidden={successValue ? false : true}
-                        >
+                        <Alert variant="success" hidden={successValue ? false : true}>
                             {successValue}
                         </Alert>
 
@@ -146,9 +133,7 @@ const LoginPage = () => {
                                 placeholder="13333333333"
                                 disabled={passportReadOnly}
                                 value={symbolValue}
-                                onChange={event =>
-                                    setSymbolValue(event.target.value)
-                                }
+                                onChange={event => setSymbolValue(event.target.value)}
                             />
                         </InputGroup>
 
@@ -161,9 +146,7 @@ const LoginPage = () => {
                                 placeholder="123456"
                                 disabled={passportReadOnly}
                                 value={passwordValue}
-                                onChange={event =>
-                                    setPasswordValue(event.target.value)
-                                }
+                                onChange={event => setPasswordValue(event.target.value)}
                             />
                         </InputGroup>
 
@@ -182,10 +165,7 @@ const LoginPage = () => {
                                         《学而思网校用户协议》
                                     </a>
                                     、
-                                    <a
-                                        href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/privacy"
-                                        target="_blank"
-                                    >
+                                    <a href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/privacy" target="_blank">
                                         《用户个人信息保护政策》
                                     </a>
                                     、
@@ -203,9 +183,7 @@ const LoginPage = () => {
                                 </div>
                             }
                             value={Number(privacyValue)}
-                            onChange={event =>
-                                setPrivacyValue(event.target.checked)
-                            }
+                            onChange={event => setPrivacyValue(event.target.checked)}
                         />
 
                         <InputGroup hidden={visuallyValue}>
@@ -219,9 +197,7 @@ const LoginPage = () => {
                                 title="验证码"
                                 placeholder="abcd"
                                 value={captchaAnswer}
-                                onChange={event =>
-                                    setCaptchaAnswer(event.target.value)
-                                }
+                                onChange={event => setCaptchaAnswer(event.target.value)}
                             />
                         </InputGroup>
 

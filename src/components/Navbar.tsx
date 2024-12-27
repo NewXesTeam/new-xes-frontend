@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
+import { checkLoggedIn } from '../utils.ts';
 
 const NavbarComponent = () => {
     const logoutEvent = async () => {
@@ -8,7 +9,7 @@ const NavbarComponent = () => {
     };
     let userComponent: React.JSX.Element;
 
-    if (document.cookie.includes('is_login=1;')) {
+    if (checkLoggedIn()) {
         userComponent = (
             <NavDropdown title="用户" align={'end'}>
                 <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
@@ -22,11 +23,7 @@ const NavbarComponent = () => {
         <Navbar expand="lg" className="bg-body-tertiary shadow">
             <Container>
                 <Navbar.Brand href="/">
-                    <img
-                        src={require('../static/logo.png')}
-                        width={190}
-                        height={37}
-                    ></img>
+                    <img src={require('../static/logo.png')} width={190} height={37}></img>
                 </Navbar.Brand>
 
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -37,35 +34,18 @@ const NavbarComponent = () => {
                     </Nav>
 
                     <Nav className="ms-auto">
-                        <Form
-                            role="search"
-                            action="https://code.xueersi.com/search-center"
-                            className="me-2"
-                        >
-                            <Form.Control
-                                type="search"
-                                placeholder="搜索"
-                                className=" mr-sm-2"
-                                name="keyword"
-                            />
+                        <Form role="search" action="https://code.xueersi.com/search-center" className="me-2">
+                            <Form.Control type="search" placeholder="搜索" className=" mr-sm-2" name="keyword" />
                         </Form>
 
                         {userComponent}
 
                         <NavDropdown title="创作" align={'end'}>
-                            <NavDropdown.Item href="#">
-                                TurboWarp
-                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#">TurboWarp</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#">
-                                Python 基础
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#">
-                                Python 海龟
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#">
-                                Python 本地
-                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#">Python 基础</NavDropdown.Item>
+                            <NavDropdown.Item href="#">Python 海龟</NavDropdown.Item>
+                            <NavDropdown.Item href="#">Python 本地</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#">C++</NavDropdown.Item>
                         </NavDropdown>

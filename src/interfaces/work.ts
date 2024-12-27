@@ -55,3 +55,15 @@ export interface Work {
     /** 作品源代码浏览量 */
     source_code_views: number;
 }
+
+export interface WorkList {
+    /** 作品列表 */
+    data: Work[];
+
+    /** 作品总数 */
+    total: number;
+    /** 当前页码 */
+    page: number;
+    /** 每页数量 */
+    per_page: number;
+}

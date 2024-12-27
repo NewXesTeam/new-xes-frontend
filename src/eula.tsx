@@ -18,9 +18,7 @@ NewXesFrontend 平台为用户提供 学而思编程社区 第三方的网页端
 本协议解释权归 NewXesTeam 团队所有。`;
 
 const EulaPage = () => {
-    const eulaText = eula
-        .split('\n')
-        .map((line, index) => <p key={index}>{line}</p>);
+    const eulaText = eula.split('\n').map((line, index) => <p key={index}>{line}</p>);
 
     return (
         <>
