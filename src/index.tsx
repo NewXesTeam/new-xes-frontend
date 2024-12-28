@@ -2,10 +2,29 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Carousel } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
-import FollowsWorkList from './components/FollowsWorkList.tsx';
+import WorkList from './components/WorkList.tsx';
+import { Work } from './interfaces/work.ts';
 import './styles/index.scss';
 
 const IndexPage = () => {
+    const [cards, setCards] = React.useState<React.JSX.Element | null>(null);
+
+    React.useEffect(() => {
+        let ignore = false;
+
+        const fetchWorkData = async () => {
+            const response = await fetch('/api/index/works/follows');
+            let data = await response.json();
+            let workData: Array<Work> = data.data.filter(Boolean);
+            setCards(<WorkList works={workData} />);
+        };
+
+        if (!ignore) fetchWorkData();
+        return () => {
+            ignore = true;
+        };
+    }, []);
+
     return (
         <>
             <NavbarComponent />
@@ -38,7 +57,7 @@ const IndexPage = () => {
                     </a>
                 </Carousel.Item>
             </Carousel>
-            <FollowsWorkList />
+            {cards}
         </>
     );
 };

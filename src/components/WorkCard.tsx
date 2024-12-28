@@ -3,8 +3,6 @@ import { Col, Card } from 'react-bootstrap';
 import { Work } from '../interfaces/work.ts';
 
 const WorkCard = ({ work }: { work: Work }) => {
-    console.log(work);
-
     let lang: 'scratch' | 'compiler' | 'code' = work.project_type;
     if (lang === 'compiler') lang = 'code';
 
