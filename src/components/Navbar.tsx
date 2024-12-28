@@ -12,6 +12,13 @@ const NavbarComponent = () => {
     if (checkLoggedIn()) {
         userComponent = (
             <NavDropdown title="用户" align={'end'}>
+                <NavDropdown.Item href="/space.html" target="_blank">
+                    个人空间
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/userInfo.html" target="_blank">
+                    个人信息
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
                 <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
             </NavDropdown>
         );
