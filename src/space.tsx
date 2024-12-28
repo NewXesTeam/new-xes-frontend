@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Tabs, Tab, Container, Stack } from 'react-bootstrap';
+import NavbarComponent from './components/Navbar.tsx';
 import { UserInfo } from './interfaces/user.ts';
 import { SpaceProfile } from './interfaces/space.ts';
 import { checkLoggedIn } from './utils.ts';
-import NavbarComponent from './components/Navbar.tsx';
 import './styles/common.scss';
 
 const SpaceTabs = {
@@ -49,7 +49,12 @@ const SpacePage = () => {
     let URLParams = new URLSearchParams(document.location.search);
     let userId = URLParams.get('id');
 
-    if (userId === null && checkLoggedIn()) {
+    if (userId === null) {
+        if (!checkLoggedIn()) {
+            location.href = '/login.html';
+            return null;
+        }
+
         React.useEffect(() => {
             let ignore = false;
 
@@ -65,14 +70,13 @@ const SpacePage = () => {
                 ignore = true;
             };
         }, []);
-    } else {
-        location.href = '/login.html';
-        return null;
     }
 
     const [username, setUsername] = React.useState('Loading...');
     const [userAvatar, setUserAvatar] = React.useState('https://t.100tal.com/avatar/');
     const [userSignature, setUserSignature] = React.useState('Loading...');
+    const [userFollows, setUserFollows] = React.useState(0);
+    const [userFans, setUserFans] = React.useState(0);
 
     React.useEffect(() => {
         let ignore = false;
@@ -84,6 +88,8 @@ const SpacePage = () => {
             setUsername(spaceProfileData.data.realname);
             setUserAvatar(spaceProfileData.data.avatar_path);
             setUserSignature(spaceProfileData.data.signature);
+            setUserFollows(spaceProfileData.data.follows);
+            setUserFans(spaceProfileData.data.fans);
         };
 
         if (!ignore) func();
@@ -100,6 +106,9 @@ const SpacePage = () => {
                 <img className="rounded-circle mx-auto" src={userAvatar} height={128} width={128} />
                 <span style={{ fontSize: '24px' }}>{username}</span>
                 <span style={{ fontSize: '16px' }}>{userSignature}</span>
+                <span>
+                    关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
+                </span>
             </Stack>
 
             <Tabs className="mt-5 justify-content-center" transition={false}>
