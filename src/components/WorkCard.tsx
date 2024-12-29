@@ -1,13 +1,11 @@
 import React from 'react';
 import { Col, Card } from 'react-bootstrap';
+import { getWorkLink } from '../utils.ts';
 import { Work } from '../interfaces/work.ts';
 
 const WorkCard = ({ work }: { work: Work }) => {
-    let lang: 'scratch' | 'compiler' | 'code' = work.project_type;
-    if (lang === 'compiler') lang = 'code';
-
-    let link = `https://code.xueersi.com/home/project/detail?lang=${lang}&pid=${work.id}&version=${work.version}&langType=${work.lang}`;
-    let author_url = `https://code.xueersi.com/space/${work.user_id}`;
+    let link = getWorkLink(work);
+    let author_url = `/space.html?user_id=${work.user_id}`;
 
     return (
         <Col>
