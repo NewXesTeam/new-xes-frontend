@@ -14,6 +14,7 @@ for (let entry of entriesName) {
             template: './src/template.html',
             filename: `${entry}.html`,
             chunks: [entry],
+            favicon: './src/static/favicon.ico',
         }),
     );
 }

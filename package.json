@@ -5,7 +5,8 @@
     "private": true,
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "pwsh scripts/build.ps1",
+        "build:dev": "npx webpack --config webpack.dev.js --progress",
+        "build:prod": "npx webpack --config webpack.prod.js --progress",
         "prettier": "npx prettier --write ."
     },
     "author": "NewXesTeam",
@@ -33,6 +34,7 @@
         "sass-loader": "^16.0.4",
         "style-loader": "^4.0.0",
         "webpack": "^5.97.0",
-        "webpack-cli": "^5.1.4"
+        "webpack-cli": "^5.1.4",
+        "webpack-merge": "^6.0.1"
     }
 }
