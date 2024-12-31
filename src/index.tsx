@@ -16,7 +16,7 @@ const IndexPage = () => {
             const response = await fetch('/api/index/works/follows');
             let data = await response.json();
             let workData: Array<Work> = data.data.filter(Boolean);
-            setCards(<WorkList works={workData} />);
+            setCards(<WorkList works={workData} className="m-4" />);
         };
 
         if (!ignore) fetchWorkData();
