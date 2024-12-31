@@ -2,9 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Tabs, Tab, Container, Stack, Card } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
+import WorkList from './components/WorkList.tsx';
+import { SmallWorkCard } from './components/WorkCard.tsx';
+import { checkLoggedIn } from './utils.ts';
 import { UserInfo } from './interfaces/user.ts';
 import { SpaceProfile, SpaceIndex } from './interfaces/space.ts';
-import { checkLoggedIn, getWorkLink } from './utils.ts';
 import './styles/common.scss';
 
 const SpaceTabs = {
@@ -49,23 +51,7 @@ const SpaceTabs = {
                                         代表作：
                                         <br />
                                         {responseData.data.representative_work ? (
-                                            <Card>
-                                                <Card.Header>
-                                                    <a
-                                                        href={getWorkLink(responseData.data.representative_work)}
-                                                        className="stretched-link"
-                                                    >
-                                                        {responseData.data.representative_work.name}
-                                                    </a>
-                                                </Card.Header>
-                                                <Card.Body className="py-0">
-                                                    <img
-                                                        src={responseData.data.representative_work.thumbnail}
-                                                        height={138}
-                                                        className="m-auto"
-                                                    />
-                                                </Card.Body>
-                                            </Card>
+                                            <SmallWorkCard work={responseData.data.representative_work} />
                                         ) : (
                                             '暂无代表作'
                                         )}
@@ -73,6 +59,9 @@ const SpaceTabs = {
                                 </Stack>
                             </Card.Body>
                         </Card>
+
+                        <h2 className="mt-2">TA 的作品</h2>
+                        <WorkList works={responseData.data.works.data} />
                     </>,
                 );
             };
