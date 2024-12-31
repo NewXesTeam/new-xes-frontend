@@ -37,4 +37,5 @@
 - [ ] 消息中心 /messages.html
 - [x] 关于 /about.html
 - [ ] 最终用户协议（等待补充内容） /eula.html
-- ...
+- [x] 用户信息展示 /userInfo.html
+- [ ] ...
