@@ -24,7 +24,11 @@ const AboutPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<AboutPage />);
+    root.render(
+        <React.StrictMode>
+            <AboutPage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }

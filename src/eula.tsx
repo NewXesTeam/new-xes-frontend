@@ -31,7 +31,11 @@ const EulaPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<EulaPage />);
+    root.render(
+        <React.StrictMode>
+            <EulaPage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }

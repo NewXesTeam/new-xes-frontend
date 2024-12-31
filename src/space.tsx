@@ -39,9 +39,12 @@ const SpaceTabs = {
                                     <OverviewItemCard title="作品总数" value={responseData.data.overview.works} />
                                     <OverviewItemCard title="被点赞总数" value={responseData.data.overview.likes} />
                                     <OverviewItemCard title="被浏览总数" value={responseData.data.overview.views} />
-                                    <OverviewItemCard title="被改编总数" value={responseData.data.overview.source_code_views} />
+                                    <OverviewItemCard
+                                        title="被改编总数"
+                                        value={responseData.data.overview.source_code_views}
+                                    />
                                     <OverviewItemCard title="被收藏总数" value={responseData.data.overview.favorites} />
-                                
+
                                     <Card border="dark" className="m-auto" body>
                                         代表作：
                                         <br />
@@ -205,7 +208,11 @@ const SpacePage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<SpacePage />);
+    root.render(
+        <React.StrictMode>
+            <SpacePage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }

@@ -214,7 +214,11 @@ const LoginPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<LoginPage />);
+    root.render(
+        <React.StrictMode>
+            <LoginPage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }
