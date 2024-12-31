@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Card } from 'react-bootstrap';
+import { Col, Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { getWorkLink } from '../utils.ts';
 import { Work } from '../interfaces/work.ts';
 
@@ -11,17 +11,19 @@ const WorkCard = ({ work }: { work: Work }) => {
         <Col>
             <Card className="mb-3">
                 <a href={link} className="text-decoration-none" target="_blank">
-                    <img src={work.thumbnail} className="card-img-top padding-5px" alt={work.name} />
+                    <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+                        <img src={work.thumbnail} className="card-img-top padding-5px" alt={work.name} />
+                    </OverlayTrigger>
+
                     <Card.Body>
                         <Card.Title>{work.name}</Card.Title>
                         <Card.Text style={{ transform: 'rotate(0)' }}>
                             <a href={author_url} target="_blank">
-                                {work.username}
+                                <span style={{ fontSize: '14px' }}>{work.username}</span>
                             </a>
-                            👀{work.views} 👍{work.likes} 👎{work.unlikes}
-                        </Card.Text>
-                        <Card.Text>
-                            <small className="text-body-secondary">{work.created_at}</small>
+                            <span style={{ fontSize: '12px' }}>
+                                👀{work.views} 👍{work.likes} 👎{work.unlikes}
+                            </span>
                         </Card.Text>
                     </Card.Body>
                 </a>
@@ -30,4 +32,25 @@ const WorkCard = ({ work }: { work: Work }) => {
     );
 };
 
+const SmallWorkCard = ({ work }: { work: Work }) => {
+    return (
+        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+            <Card>
+                <Card.Header>
+                    <a href={getWorkLink(work)} className="stretched-link">
+                        {work.name}
+                    </a>
+                </Card.Header>
+                <Card.Body className="py-0">
+                    <img src={work.thumbnail} height={138} className="m-auto" />
+                </Card.Body>
+                <Card.Footer>
+                    👀{work.views} 👍{work.likes} 👎{work.unlikes}
+                </Card.Footer>
+            </Card>
+        </OverlayTrigger>
+    );
+};
+
 export default WorkCard;
+export { SmallWorkCard };
