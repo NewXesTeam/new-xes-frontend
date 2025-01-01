@@ -34,7 +34,15 @@ const WorkCard = ({ work }: { work: Work }) => {
 
 const SmallWorkCard = ({ work }: { work: Work }) => {
     return (
-        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+        <OverlayTrigger
+            overlay={
+                <Tooltip>
+                    👀{work.views} 👍{work.likes} 👎{work.unlikes}
+                    <br />
+                    {work.created_at}
+                </Tooltip>
+            }
+        >
             <Card>
                 <Card.Header>
                     <a href={getWorkLink(work)} className="stretched-link">
@@ -44,9 +52,6 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
                 <Card.Body className="py-0">
                     <img src={work.thumbnail} height={138} className="m-auto" />
                 </Card.Body>
-                <Card.Footer>
-                    👀{work.views} 👍{work.likes} 👎{work.unlikes}
-                </Card.Footer>
             </Card>
         </OverlayTrigger>
     );
