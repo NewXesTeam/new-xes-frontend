@@ -4,6 +4,7 @@ import { Tabs, Tab, Container, Stack, Card } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
 import { SmallWorkCard } from './components/WorkCard.tsx';
+import { UserHorizontalList } from './components/UserList.tsx';
 import { checkLoggedIn } from './utils.ts';
 import { UserInfo } from './interfaces/user.ts';
 import { SpaceProfile, SpaceIndex } from './interfaces/space.ts';
@@ -65,6 +66,12 @@ const SpaceTabs = {
 
                         <h2 className="mt-2">TA 的收藏</h2>
                         <WorkList works={responseData.data.favorites.data} />
+
+                        <h2 className="mt-2">TA 的粉丝</h2>
+                        <UserHorizontalList users={responseData.data.fans.data} />
+
+                        <h2 className="mt-2">TA 的关注</h2>
+                        <UserHorizontalList users={responseData.data.follows.data} />
                     </>,
                 );
             };
