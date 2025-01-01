@@ -62,6 +62,9 @@ const SpaceTabs = {
 
                         <h2 className="mt-2">TA 的作品</h2>
                         <WorkList works={responseData.data.works.data} />
+
+                        <h2 className="mt-2">TA 的收藏</h2>
+                        <WorkList works={responseData.data.favorites.data} />
                     </>,
                 );
             };
