@@ -3,7 +3,7 @@ import { Row } from 'react-bootstrap';
 import { Work } from '../interfaces/work.ts';
 import WorkCard from './WorkCard.tsx';
 
-const WorkList = ({ works, className = "" }: { works: Array<Work>; className?: string }) => {
+const WorkList = ({ works, className = '' }: { works: Work[]; className?: string }) => {
     const cards = works.map((work: Work) => <WorkCard key={work.id} work={work} />);
 
     return (
