@@ -37,7 +37,7 @@ export interface UserInfo {
     msg: string;
 }
 
-interface SimpleUserInfo {
+export interface SimpleUserInfo {
     /** 用户 ID */
     id: string | number;
     /** 用户 ID */
