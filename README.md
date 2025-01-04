@@ -12,7 +12,8 @@
 
 ## npm 脚本
 
-- `npm run build` 构建项目
+- `npm run build:dev` 构建项目（开发模式）
+- `npm run build:prod` 构建项目（生产模式）
 - `npm run prettier` 使用 Prettier 格式化代码
 
 ## 运行开发服务器
