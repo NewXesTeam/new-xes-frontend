@@ -3,5 +3,5 @@ const baseConfig = require('./webpack.base.js');
 
 module.exports = webpackMerge.merge(baseConfig, {
     mode: 'production',
-    devtool: 'none',
+    devtool: false,
 });
