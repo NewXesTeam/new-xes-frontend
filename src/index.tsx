@@ -1,9 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { Work } from './interfaces/work.ts';
+
 import { Carousel } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
-import { Work } from './interfaces/work.ts';
+
 import './styles/index.scss';
 
 const IndexPage = () => {
