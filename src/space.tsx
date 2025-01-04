@@ -1,20 +1,23 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+
+import { UserInfo } from './interfaces/user.ts';
+import { SpaceProfile, SpaceIndex, SpaceCover } from './interfaces/space.ts';
+
 import { Tabs, Tab, Container, Stack, Card } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
 import { SmallWorkCard } from './components/WorkCard.tsx';
 import { UserHorizontalList } from './components/UserList.tsx';
+
 import { checkLoggedIn } from './utils.ts';
-import { UserInfo } from './interfaces/user.ts';
-import { SpaceProfile, SpaceIndex } from './interfaces/space.ts';
 import './styles/common.scss';
 
 const SpaceTabs = {
     HomeTab: ({ userId }: { userId: string }) => {
         const OverviewItemCard = ({ title, value }: { title: string; value: number }) => {
             return (
-                <Card border="dark" className="m-auto" body>
+                <Card border="secondary" className="m-auto" body>
                     {title}：
                     <br />
                     <span style={{ fontSize: '24px' }}>{value}</span>
@@ -47,8 +50,7 @@ const SpaceTabs = {
                                         value={responseData.data.overview.source_code_views}
                                     />
                                     <OverviewItemCard title="被收藏总数" value={responseData.data.overview.favorites} />
-
-                                    <Card border="dark" className="m-auto" body>
+                                    <Card border="secondary" body>
                                         代表作：
                                         <br />
                                         {responseData.data.representative_work ? (
@@ -84,12 +86,30 @@ const SpaceTabs = {
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
-    CoverTab: () => {
-        return (
-            <Container>
-                <h1>封面</h1>
-            </Container>
-        );
+    CoverTab: ({ userId }: { userId: string }) => {
+        const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+
+        React.useEffect(() => {
+            let ignore = false;
+
+            const func = async () => {
+                const response = await fetch(`/api/space/web_cover?user_id=${userId}`);
+                const responseData: SpaceCover = await response.json();
+
+                if (responseData.data.is_show_web_tab) {
+                    setPageComponent(<iframe src={responseData.data.index_url} width="100%" height={600} />);
+                } else {
+                    setPageComponent(<h2>未设置封面</h2>);
+                }
+            };
+
+            if (!ignore) func();
+            return () => {
+                ignore = true;
+            };
+        }, []);
+
+        return <Container className="mt-2">{pageComponent}</Container>;
     },
     ProjectsTab: () => {
         return (
@@ -115,8 +135,8 @@ const SpaceTabs = {
 };
 
 const SpacePage = () => {
-    let URLParams = new URLSearchParams(document.location.search);
-    let userId = URLParams.get('id');
+    const URLParams = new URLSearchParams(document.location.search);
+    const userId = URLParams.get('id');
 
     if (userId === null) {
         if (!checkLoggedIn()) {
@@ -130,7 +150,7 @@ const SpacePage = () => {
             const func = async () => {
                 const response = await fetch('/api/user/info');
                 const responseData: UserInfo = await response.json();
-                userId = responseData.data.id;
+                let userId = responseData.data.id;
                 location.href = `/space.html?id=${userId}`;
             };
 
@@ -140,7 +160,7 @@ const SpacePage = () => {
             };
         }, []);
 
-        return <div />; // 额，这是为了避免用户看到提示语感觉不舒服所以才不加任何内容
+        return <div />;
     }
 
     const [username, setUsername] = React.useState('Loading...');
@@ -187,7 +207,7 @@ const SpacePage = () => {
                     <SpaceTabs.HomeTab userId={userId} />
                 </Tab>
                 <Tab eventKey="cover" title="封面" mountOnEnter unmountOnExit>
-                    <SpaceTabs.CoverTab />
+                    <SpaceTabs.CoverTab userId={userId} />
                 </Tab>
                 <Tab eventKey="projects" title="作品" mountOnEnter unmountOnExit>
                     <SpaceTabs.ProjectsTab />
