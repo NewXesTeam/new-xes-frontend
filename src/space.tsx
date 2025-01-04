@@ -1,15 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
 import { UserInfo } from './interfaces/user.ts';
-import { SpaceProfile, SpaceIndex, SpaceCover } from './interfaces/space.ts';
-
+import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks } from './interfaces/space.ts';
 import { Tabs, Tab, Container, Stack, Card } from 'react-bootstrap';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
 import { SmallWorkCard } from './components/WorkCard.tsx';
 import { UserHorizontalList } from './components/UserList.tsx';
-
+import { Pagination } from './components/Pagination.tsx';
 import { checkLoggedIn } from './utils.ts';
 import './styles/common.scss';
 
@@ -111,12 +109,49 @@ const SpaceTabs = {
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
-    ProjectsTab: () => {
-        return (
-            <Container>
-                <h1>作品</h1>
-            </Container>
-        );
+    ProjectsTab: ({ userId }: { userId: string }) => {
+        const [currentPage, setCurrentPage] = React.useState(1);
+        const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+
+        React.useEffect(() => {
+            let ignore = false;
+
+            const func = async () => {
+                const response = await fetch(
+                    `/api/space/works?user_id=${userId}&page=${currentPage}&per_page=20&order_type=time`,
+                );
+                const responseData: SpaceWorks = await response.json();
+
+                if (responseData.data.total === 0) {
+                    setPageComponent(<h2>暂无作品</h2>);
+                }
+
+                setPageComponent(
+                    <>
+                        <WorkList works={responseData.data.data} />
+                        {responseData.data.total > 20 && (
+                            <div style={{ width: '100%' }}>
+                                <Pagination
+                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    value={currentPage}
+                                    handlePageChange={page => {
+                                        setCurrentPage(page);
+                                    }}
+                                    className="m-auto width-fit-content"
+                                />
+                            </div>
+                        )}
+                    </>,
+                );
+            };
+
+            if (!ignore) func();
+            return () => {
+                ignore = true;
+            };
+        }, [currentPage]);
+
+        return <Container className="mt-2">{pageComponent}</Container>;
     },
     FavoritesTab: () => {
         return (
@@ -210,7 +245,7 @@ const SpacePage = () => {
                     <SpaceTabs.CoverTab userId={userId} />
                 </Tab>
                 <Tab eventKey="projects" title="作品" mountOnEnter unmountOnExit>
-                    <SpaceTabs.ProjectsTab />
+                    <SpaceTabs.ProjectsTab userId={userId} />
                 </Tab>
                 <Tab eventKey="favorites" title="收藏" mountOnEnter unmountOnExit>
                     <SpaceTabs.FavoritesTab />

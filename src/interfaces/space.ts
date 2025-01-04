@@ -87,3 +87,13 @@ export interface SpaceCover {
     /** 状态信息 */
     msg: string;
 }
+
+export interface SpaceWorks {
+    /** 数据 */
+    data: WorkList;
+
+    /** 状态码 */
+    status: number;
+    /** 状态信息 */
+    msg: string;
+}
