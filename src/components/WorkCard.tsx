@@ -11,7 +11,13 @@ const WorkCard = ({ work }: { work: Work }) => {
         <Card className="mb-3">
             <a href={link} className="text-decoration-none" target="_blank">
                 <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
-                    <img src={work.thumbnail} className="card-img-top padding-5px" alt={work.name} />
+                    <img
+                        src={work.thumbnail}
+                        className="card-img-top padding-5px"
+                        alt={work.name}
+                        width={224}
+                        height={168}
+                    />
                 </OverlayTrigger>
 
                 <Card.Body>

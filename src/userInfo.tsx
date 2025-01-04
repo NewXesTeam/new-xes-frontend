@@ -1,10 +1,10 @@
 import React from 'react';
-import { Table, Container } from 'react-bootstrap';
 import { createRoot } from 'react-dom/client';
-import NavbarComponent from './components/Navbar.tsx';
 import { UserInfo } from './interfaces/user.ts';
 import { SpaceProfile } from './interfaces/space.ts';
 import { checkLoggedIn } from './utils.ts';
+import { Table, Container } from 'react-bootstrap';
+import NavbarComponent from './components/Navbar.tsx';
 import './styles/common.scss';
 
 const UserInfoPage = () => {

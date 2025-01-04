@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
 import { SimpleUserInfo } from '../interfaces/user.ts';
+import { Card } from 'react-bootstrap';
 
 const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
     const userLink = `/space.index?user_id=${user.id}`;

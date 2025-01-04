@@ -1,10 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
 import { CaptchaPacket, LoginPacket } from './interfaces/login.ts';
-
 import { Form, Row, Col, Button, InputGroup, Alert } from 'react-bootstrap';
-
 import { checkLoggedIn } from './utils.ts';
 import './styles/login.scss';
 
