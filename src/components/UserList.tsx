@@ -1,12 +1,16 @@
 import React from 'react';
-import { Stack } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { SmallUserCard } from './UserCard.tsx';
 import { SimpleUserInfo } from '../interfaces/user.ts';
 
 const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {
-    const cards = users.map(user => <SmallUserCard key={user.id} user={user} />);
+    const cards = users.map(user => (
+        <Col key={user.id}>
+            <SmallUserCard user={user} />
+        </Col>
+    ));
 
-    return <Stack direction="horizontal">{cards}</Stack>;
+    return <Row xs="auto">{cards}</Row>;
 };
 
 export { UserHorizontalList };

@@ -3,10 +3,14 @@ import { Card } from 'react-bootstrap';
 import { SimpleUserInfo } from '../interfaces/user.ts';
 
 const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
+    const userLink = `/space.index?user_id=${user.id}`;
+
     return (
-        <Card style={{ padding: '10px', margin: 'auto' }}>
-            <img src={user.avatar_path} alt={user.realname} style={{ borderRadius: '50%', width: '80px', height: '80px' }} />
-            <small>{user.realname}</small>
+        <Card style={{ padding: '10px' }}>
+            <img src={user.avatar_path} alt={user.realname} height={80} width={80} style={{ borderRadius: '50%' }} />
+            <a className="stretched-link" href={userLink}>
+                {user.realname}
+            </a>
         </Card>
     );
 };
