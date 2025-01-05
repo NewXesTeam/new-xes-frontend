@@ -10,6 +10,7 @@ import { SmallWorkCard } from './components/WorkCard.tsx';
 import { UserHorizontalList } from './components/UserList.tsx';
 import { Pagination } from './components/Pagination.tsx';
 import { checkLoggedIn } from './utils.ts';
+import { v4 as generateUUID } from 'uuid';
 import './styles/common.scss';
 
 const SpaceTabs = {
@@ -222,7 +223,7 @@ const SpacePage = () => {
         const responseData: FollowUser = await response.json();
         setUserFollowed(!userFollowed);
         setAlerts([
-            <AutoCloseAlert key={alerts.length + 1} variant="success">
+            <AutoCloseAlert key={generateUUID().slice(0, 8)} variant="success">
                 {userFollowed ? '取消关注成功' : '关注成功'}
             </AutoCloseAlert>,
             ...alerts,
@@ -269,7 +270,7 @@ const SpacePage = () => {
                         variant={(userFollowed ? 'outline-' : '') + 'secondary'}
                         onClick={() => onClickFollow()}
                         style={{ width: '124px' }}
-                        className='mx-auto'
+                        className="mx-auto"
                     >
                         {userFollowed ? '已关注' : '关注'}
                     </Button>
