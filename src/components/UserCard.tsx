@@ -3,7 +3,7 @@ import { SimpleUserInfo } from '../interfaces/user.ts';
 import { Card } from 'react-bootstrap';
 
 const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
-    const userLink = `/space.html?user_id=${user.id}`;
+    const userLink = `/space.html?id=${user.id}`;
 
     return (
         <Card style={{ padding: '10px' }}>
