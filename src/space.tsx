@@ -1,8 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { UserInfo } from './interfaces/user.ts';
+import { UserInfo, FollowUser } from './interfaces/user.ts';
 import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks } from './interfaces/space.ts';
-import { Tabs, Tab, Container, Stack, Card } from 'react-bootstrap';
+import { Tabs, Tab, Container, Stack, Card, Button } from 'react-bootstrap';
+import AutoCloseAlert from './components/AutoCloseAlert.tsx';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
 import { SmallWorkCard } from './components/WorkCard.tsx';
@@ -208,6 +209,25 @@ const SpacePage = () => {
     const [userSignature, setUserSignature] = React.useState('Loading...');
     const [userFollows, setUserFollows] = React.useState(0);
     const [userFans, setUserFans] = React.useState(0);
+    const [userFollowed, setUserFollowed] = React.useState(false);
+    const [isMySpace, setIsMySpace] = React.useState(true);
+    const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
+
+    const onClickFollow = async () => {
+        const response = await fetch('/api/space/follow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ followed_user_id: '30883073', state: !userFollowed }),
+        });
+        const responseData: FollowUser = await response.json();
+        setUserFollowed(!userFollowed);
+        setAlerts([
+            <AutoCloseAlert key={alerts.length + 1} variant="success">
+                {userFollowed ? '取消关注成功' : '关注成功'}
+            </AutoCloseAlert>,
+            ...alerts,
+        ]);
+    };
 
     React.useEffect(() => {
         let ignore = false;
@@ -221,6 +241,8 @@ const SpacePage = () => {
             setUserSignature(spaceProfileData.data.signature);
             setUserFollows(spaceProfileData.data.follows);
             setUserFans(spaceProfileData.data.fans);
+            setUserFollowed(spaceProfileData.data.is_follow);
+            setIsMySpace(spaceProfileData.data.is_my);
         };
 
         if (!ignore) func();
@@ -233,6 +255,8 @@ const SpacePage = () => {
         <>
             <NavbarComponent />
 
+            <div className="alert-list">{alerts}</div>
+
             <Stack className="mt-5 mx-auto width-fit-content text-center">
                 <img className="rounded-circle mx-auto" src={userAvatar} height={128} width={128} />
                 <span style={{ fontSize: '24px' }}>{username}</span>
@@ -240,6 +264,16 @@ const SpacePage = () => {
                 <span>
                     关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
                 </span>
+                {!isMySpace && (
+                    <Button
+                        variant={(userFollowed ? 'outline-' : '') + 'secondary'}
+                        onClick={() => onClickFollow()}
+                        style={{ width: '124px' }}
+                        className='mx-auto'
+                    >
+                        {userFollowed ? '已关注' : '关注'}
+                    </Button>
+                )}
             </Stack>
 
             <Tabs
