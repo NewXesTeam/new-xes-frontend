@@ -8,7 +8,7 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
     return (
         <Card style={{ padding: '10px' }}>
             <img src={user.avatar_path} alt={user.realname} height={80} width={80} style={{ borderRadius: '50%' }} />
-            <a className="stretched-link" href={userLink}>
+            <a className="stretched-link" href={userLink} target='_blank'>
                 {user.realname}
             </a>
         </Card>
