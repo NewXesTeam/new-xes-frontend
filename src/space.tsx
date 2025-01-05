@@ -172,6 +172,7 @@ const SpaceTabs = {
 const SpacePage = () => {
     const URLParams = new URLSearchParams(document.location.search);
     const userId = URLParams.get('id');
+    const [tab, setTab] = React.useState(URLParams.get('tab') || 'home');
 
     if (userId === null) {
         if (!checkLoggedIn()) {
@@ -197,6 +198,10 @@ const SpacePage = () => {
 
         return <div />;
     }
+
+    window.addEventListener('popstate', (event: PopStateEvent) => {
+        setTab(event.state?.tab || 'home');
+    });
 
     const [username, setUsername] = React.useState('Loading...');
     const [userAvatar, setUserAvatar] = React.useState('https://t.100tal.com/avatar/');
@@ -237,7 +242,18 @@ const SpacePage = () => {
                 </span>
             </Stack>
 
-            <Tabs className="mt-5 justify-content-center" transition={false}>
+            <Tabs
+                className="mt-5 justify-content-center"
+                transition={false}
+                activeKey={tab}
+                onSelect={(eventKey: string | null) => {
+                    if (eventKey) {
+                        // location.href = `/space.html?id=${userId}&tab=${eventKey}`;
+                        setTab(eventKey);
+                        history.pushState({ tab: eventKey }, '', `/space.html?id=${userId}&tab=${eventKey}`);
+                    }
+                }}
+            >
                 <Tab eventKey="home" title="主页" mountOnEnter unmountOnExit>
                     <SpaceTabs.HomeTab userId={userId} />
                 </Tab>
