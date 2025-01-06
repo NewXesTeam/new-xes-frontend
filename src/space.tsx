@@ -155,17 +155,61 @@ const SpaceTabs = {
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
-    FavoritesTab: () => {
+    FavoritesTab: ({ userId }: { userId: string }) => {
+        const [currentPage, setCurrentPage] = React.useState(1);
+        const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+
+        React.useEffect(() => {
+            let ignore = false;
+
+            const func = async () => {
+                const response = await fetch(
+                    `/api/space/favorites?user_id=${userId}&page=${currentPage}&per_page=20&order_type=time`,
+                );
+                const responseData: SpaceWorks = await response.json();
+
+                if (responseData.data.total === 0) {
+                    setPageComponent(<h2>暂无作品</h2>);
+                }
+
+                setPageComponent(
+                    <>
+                        <WorkList works={responseData.data.data} />
+                        {responseData.data.total > 20 && (
+                            <div style={{ width: '100%' }}>
+                                <Pagination
+                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    value={currentPage}
+                                    handlePageChange={page => {
+                                        setCurrentPage(page);
+                                    }}
+                                    className="m-auto width-fit-content"
+                                />
+                            </div>
+                        )}
+                    </>,
+                );
+            };
+
+            if (!ignore) func();
+            return () => {
+                ignore = true;
+            };
+        }, [currentPage]);
+
+        return <Container className="mt-2">{pageComponent}</Container>;
+    },
+    FollowsTab: () => {
         return (
             <Container>
-                <h1>收藏</h1>
+                <h1>关注</h1>
             </Container>
         );
     },
     FansTab: () => {
         return (
             <Container>
-                <h1>社交</h1>
+                <h1>粉丝</h1>
             </Container>
         );
     },
@@ -299,9 +343,12 @@ const SpacePage = () => {
                     <SpaceTabs.ProjectsTab userId={userId} />
                 </Tab>
                 <Tab eventKey="favorites" title="收藏" mountOnEnter unmountOnExit>
-                    <SpaceTabs.FavoritesTab />
+                    <SpaceTabs.FavoritesTab userId={userId} />
                 </Tab>
-                <Tab eventKey="fans" title="社交" mountOnEnter unmountOnExit>
+                <Tab eventKey="follows" title="关注" mountOnEnter unmountOnExit>
+                    <SpaceTabs.FollowsTab />
+                </Tab>
+                <Tab eventKey="fans" title="粉丝" mountOnEnter unmountOnExit>
                     <SpaceTabs.FansTab />
                 </Tab>
                 {/* 不打算支持垃圾勋章 */}
