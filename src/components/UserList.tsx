@@ -1,7 +1,13 @@
 import React from 'react';
-import { SmallUserCard } from './UserCard.tsx';
+import { HorizontalUserCard, SmallUserCard } from './UserCard.tsx';
 import { SimpleUserInfo } from '../interfaces/user.ts';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Stack } from 'react-bootstrap';
+
+const UserVerticalList = ({ users }: { users: SimpleUserInfo[] }) => {
+    const cards = users.map((user, index) => <HorizontalUserCard className={index >= 1 ? 'mt-2' : ''} user={user} />);
+
+    return <Stack>{cards}</Stack>;
+};
 
 const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {
     const cards = users.map(user => (
@@ -13,4 +19,4 @@ const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {
     return <Row xs="auto">{cards}</Row>;
 };
 
-export { UserHorizontalList };
+export { UserVerticalList, UserHorizontalList };
