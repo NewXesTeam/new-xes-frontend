@@ -107,3 +107,13 @@ export interface SpaceFavorites {
     /** 状态信息 */
     msg: string;
 }
+
+export interface SpaceSocial {
+    /** 数据 */
+    data: UserList;
+
+    /** 状态码 */
+    status: number;
+    /** 状态信息 */
+    msg: string;
+}

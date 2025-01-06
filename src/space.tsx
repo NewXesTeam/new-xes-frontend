@@ -1,13 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { UserInfo, FollowUser } from './interfaces/user.ts';
-import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks } from './interfaces/space.ts';
-import { Tabs, Tab, Container, Stack, Card, Button } from 'react-bootstrap';
+import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from './interfaces/space.ts';
+import { Tabs, Tab, Container, Stack, Card, Button, Nav } from 'react-bootstrap';
 import AutoCloseAlert from './components/AutoCloseAlert.tsx';
 import NavbarComponent from './components/Navbar.tsx';
 import WorkList from './components/WorkList.tsx';
+import Avatar from './components/Avatar.tsx';
 import { SmallWorkCard } from './components/WorkCard.tsx';
-import { UserHorizontalList } from './components/UserList.tsx';
+import { UserVerticalList, UserHorizontalList } from './components/UserList.tsx';
 import { Pagination } from './components/Pagination.tsx';
 import { checkLoggedIn } from './utils.ts';
 import { v4 as generateUUID } from 'uuid';
@@ -112,8 +113,8 @@ const SpaceTabs = {
         return <Container className="mt-2">{pageComponent}</Container>;
     },
     ProjectsTab: ({ userId }: { userId: string }) => {
-        const [currentPage, setCurrentPage] = React.useState(1);
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+        const [currentPage, setCurrentPage] = React.useState(1);
 
         React.useEffect(() => {
             let ignore = false;
@@ -156,8 +157,8 @@ const SpaceTabs = {
         return <Container className="mt-2">{pageComponent}</Container>;
     },
     FavoritesTab: ({ userId }: { userId: string }) => {
-        const [currentPage, setCurrentPage] = React.useState(1);
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+        const [currentPage, setCurrentPage] = React.useState(1);
 
         React.useEffect(() => {
             let ignore = false;
@@ -199,17 +200,65 @@ const SpaceTabs = {
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
-    FollowsTab: () => {
+    SocialTab: ({ userId }: { userId: string }) => {
+        const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+        const [currentTab, setCurrentTab] = React.useState('follows');
+        const [currentPage, setCurrentPage] = React.useState(1);
+
+        React.useEffect(() => {
+            let ignore = false;
+
+            const func = async () => {
+                const response = await fetch(
+                    `/api/space/${currentTab}?user_id=${userId}&page=${currentPage}&per_page=10`,
+                );
+                const responseData: SpaceSocial = await response.json();
+
+                if (responseData.data.total === 0) {
+                    setPageComponent(<h2>暂无作品</h2>);
+                }
+
+                setPageComponent(
+                    <>
+                        <UserVerticalList users={responseData.data.data} />
+                        {responseData.data.total > 20 && (
+                            <div style={{ width: '100%' }}>
+                                <Pagination
+                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    value={currentPage}
+                                    handlePageChange={page => {
+                                        setCurrentPage(page);
+                                    }}
+                                    className="mt-2 mx-auto width-fit-content"
+                                />
+                            </div>
+                        )}
+                    </>,
+                );
+            };
+
+            if (!ignore) func();
+            return () => {
+                ignore = true;
+            };
+        }, [currentTab, currentPage]);
+
         return (
-            <Container>
-                <h1>关注</h1>
-            </Container>
-        );
-    },
-    FansTab: () => {
-        return (
-            <Container>
-                <h1>粉丝</h1>
+            <Container className="mt-2">
+                <Nav
+                    className="mb-2"
+                    variant="pills"
+                    defaultActiveKey="follows"
+                    onSelect={(eventKey: string | null) => setCurrentTab(eventKey || 'follows')}
+                >
+                    <Nav.Item>
+                        <Nav.Link eventKey="follows">TA 的关注</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="fans">TA 的粉丝</Nav.Link>
+                    </Nav.Item>
+                </Nav>
+                {pageComponent}
             </Container>
         );
     },
@@ -303,7 +352,7 @@ const SpacePage = () => {
             <div className="alert-list">{alerts}</div>
 
             <Stack className="mt-5 mx-auto width-fit-content text-center">
-                <img className="rounded-circle mx-auto" src={userAvatar} height={128} width={128} />
+                <Avatar name={username} avatarUrl={userAvatar} size={128} />
                 <span style={{ fontSize: '24px' }}>{username}</span>
                 <span style={{ fontSize: '16px' }}>{userSignature}</span>
                 <span>
@@ -345,11 +394,8 @@ const SpacePage = () => {
                 <Tab eventKey="favorites" title="收藏" mountOnEnter unmountOnExit>
                     <SpaceTabs.FavoritesTab userId={userId} />
                 </Tab>
-                <Tab eventKey="follows" title="关注" mountOnEnter unmountOnExit>
-                    <SpaceTabs.FollowsTab />
-                </Tab>
-                <Tab eventKey="fans" title="粉丝" mountOnEnter unmountOnExit>
-                    <SpaceTabs.FansTab />
+                <Tab eventKey="social" title="社交" mountOnEnter unmountOnExit>
+                    <SpaceTabs.SocialTab userId={userId} />
                 </Tab>
                 {/* 不打算支持垃圾勋章 */}
             </Tabs>
