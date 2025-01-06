@@ -12,7 +12,7 @@ const WorkList = ({ works, className = '' }: { works: Work[]; className?: string
                     <RemovedWorkCard />
                 </Col>
             );
-        };
+        }
         return (
             <Col key={work.id}>
                 <WorkCard work={work} />
