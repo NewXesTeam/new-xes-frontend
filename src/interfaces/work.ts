@@ -9,7 +9,7 @@ export interface Work {
 
     /** 原作id */
     original_id: number;
-    /** 评论帖子id */
+    /** 评论帖子id，无论作品是否被下架此字段都存在 */
     topic_id: string;
 
     /** 作品类型 */

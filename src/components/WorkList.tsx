@@ -2,10 +2,17 @@ import React from 'react';
 import { Work } from '../interfaces/work.ts';
 import { Row, Col } from 'react-bootstrap';
 import WorkCard from './WorkCard.tsx';
+import { RemovedWorkCard } from './WorkCard.tsx';
 
 const WorkList = ({ works, className = '' }: { works: Work[]; className?: string }) => {
     const cards = works.map((work: Work) => {
-        if (work.removed) return null;
+        if (work.removed) {
+            return (
+                <Col key={work.topic_id}>
+                    <RemovedWorkCard />
+                </Col>
+            );
+        };
         return (
             <Col key={work.id}>
                 <WorkCard work={work} />

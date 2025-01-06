@@ -36,6 +36,14 @@ const WorkCard = ({ work }: { work: Work }) => {
     );
 };
 
+const RemovedWorkCard = () => {
+    return (
+        <Card className="mb-3" body>
+            作品已被下架
+        </Card>
+    );
+};
+
 const SmallWorkCard = ({ work }: { work: Work }) => {
     return (
         <OverlayTrigger
@@ -62,4 +70,4 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
 };
 
 export default WorkCard;
-export { SmallWorkCard };
+export { RemovedWorkCard, SmallWorkCard };
