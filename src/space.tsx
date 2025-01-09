@@ -215,16 +215,16 @@ const SpaceTabs = {
                 const responseData: SpaceSocial = await response.json();
 
                 if (responseData.data.total === 0) {
-                    setPageComponent(<h2>暂无作品</h2>);
+                    setPageComponent(<h2>暂无数据</h2>);
                 }
 
                 setPageComponent(
                     <>
                         <UserVerticalList users={responseData.data.data} />
-                        {responseData.data.total > 20 && (
+                        {responseData.data.total > 10 && (
                             <div style={{ width: '100%' }}>
                                 <Pagination
-                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    pageCount={Math.ceil(responseData.data.total / 10)}
                                     value={currentPage}
                                     handlePageChange={page => {
                                         setCurrentPage(page);
