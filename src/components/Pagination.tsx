@@ -22,7 +22,14 @@ const MyPagination = ({
 
     return (
         <Pagination className={className}>
-            <Pagination.Item href="#" onClick={() => setPage(currentPage - 1)} disabled={currentPage <= 1}>
+            <Pagination.Item
+                href="#"
+                onClick={() => {
+                    setPage(currentPage + 1);
+                    handlePageChange(currentPage + 1);
+                }}
+                disabled={currentPage <= 1}
+            >
                 上一页
             </Pagination.Item>
             <div className="page-item page-input mb-3">
@@ -43,10 +50,21 @@ const MyPagination = ({
                                 document.documentElement.scrollTop = 0;
                             }
                         }}
+                        onBlur={event => {
+                            setPage(parseInt(event.currentTarget.value));
+                            handlePageChange(parseInt(event.currentTarget.value));
+                        }}
                     />
                 </InputGroup>
             </div>
-            <Pagination.Item href="#" onClick={() => setPage(currentPage + 1)} disabled={currentPage >= pageCount}>
+            <Pagination.Item
+                href="#"
+                onClick={() => {
+                    setPage(currentPage + 1);
+                    handlePageChange(currentPage + 1);
+                }}
+                disabled={currentPage >= pageCount}
+            >
                 下一页
             </Pagination.Item>
         </Pagination>
