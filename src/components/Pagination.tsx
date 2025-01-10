@@ -27,6 +27,7 @@ const MyPagination = ({
                 onClick={() => {
                     setPage(currentPage - 1);
                     handlePageChange(currentPage - 1);
+                    document.documentElement.scrollTop = 0;
                 }}
                 disabled={currentPage <= 1}
             >
@@ -62,6 +63,7 @@ const MyPagination = ({
                 onClick={() => {
                     setPage(currentPage + 1);
                     handlePageChange(currentPage + 1);
+                    document.documentElement.scrollTop = 0;
                 }}
                 disabled={currentPage >= pageCount}
             >
