@@ -64,16 +64,16 @@ const SpaceTabs = {
                             </Card.Body>
                         </Card>
 
-                        <h2 className="mt-2">TA 的作品</h2>
+                        <h2 className="mt-2">TA 的作品 <span style={{ fontSize: '16px' }}>({responseData.data.works.total})</span></h2>
                         <WorkList works={responseData.data.works.data} />
 
-                        <h2 className="mt-2">TA 的收藏</h2>
+                        <h2 className="mt-2">TA 的收藏 <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span></h2>
                         <WorkList works={responseData.data.favorites.data} />
 
-                        <h2 className="mt-2">TA 的粉丝</h2>
+                        <h2 className="mt-2">TA 的粉丝 <span style={{ fontSize: '16px' }}>({responseData.data.fans.total})</span></h2>
                         <UserHorizontalList users={responseData.data.fans.data} />
 
-                        <h2 className="mt-2">TA 的关注</h2>
+                        <h2 className="mt-2">TA 的关注 <span style={{ fontSize: '16px' }}>({responseData.data.follows.total})</span></h2>
                         <UserHorizontalList users={responseData.data.follows.data} />
                     </>,
                 );
@@ -215,16 +215,16 @@ const SpaceTabs = {
                 const responseData: SpaceSocial = await response.json();
 
                 if (responseData.data.total === 0) {
-                    setPageComponent(<h2>暂无作品</h2>);
+                    setPageComponent(<h2>暂无数据</h2>);
                 }
 
                 setPageComponent(
                     <>
                         <UserVerticalList users={responseData.data.data} />
-                        {responseData.data.total > 20 && (
+                        {responseData.data.total > 10 && (
                             <div style={{ width: '100%' }}>
                                 <Pagination
-                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    pageCount={Math.ceil(responseData.data.total / 10)}
                                     value={currentPage}
                                     handlePageChange={page => {
                                         setCurrentPage(page);
