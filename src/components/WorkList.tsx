@@ -6,18 +6,21 @@ import { RemovedWorkCard } from './WorkCard.tsx';
 
 const WorkList = ({ works, className = '' }: { works: Work[]; className?: string }) => {
     const cards = works.map((work: Work) => {
-        if (work.removed) {
+        if (work === null) {
+            return null;
+        } else if (work.removed) {
             return (
                 <Col key={work.topic_id}>
                     <RemovedWorkCard />
                 </Col>
             );
+        } else {
+            return (
+                <Col key={work.id}>
+                    <WorkCard work={work} />
+                </Col>
+            );
         }
-        return (
-            <Col key={work.id}>
-                <WorkCard work={work} />
-            </Col>
-        );
     });
 
     return (
