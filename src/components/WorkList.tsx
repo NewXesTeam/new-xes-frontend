@@ -28,4 +28,3 @@ const WorkList = ({ works, className = '' }: { works: Work[]; className?: string
 };
 
 export default WorkList;
-export {WorkList2};
