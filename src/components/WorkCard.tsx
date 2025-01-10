@@ -12,7 +12,7 @@ const WorkCard = ({ work }: { work: Work }) => {
             <a href={link} className="text-decoration-none" target="_blank">
                 <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
                     <img
-                        src={work.thumbnail}
+                        src={work.thumbnail && "https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png"}
                         className="card-img-top padding-5px"
                         alt={work.name}
                         width={224}
