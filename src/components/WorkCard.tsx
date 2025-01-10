@@ -5,14 +5,14 @@ import { Work } from '../interfaces/work.ts';
 
 const WorkCard = ({ work }: { work: Work }) => {
     let link = getWorkLink(work);
-    let author_url = `/space.html?user_id=${work.user_id}`;
+    let author_url = `/space.html?id=${work.user_id}`;
 
     return (
         <Card className="mb-3">
             <a href={link} className="text-decoration-none" target="_blank">
                 <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
                     <img
-                        src={work.thumbnail}
+                        src={work.thumbnail==null ? "https://t.100tal.com/avatar/%E6%97%A0":work.thumbnail}
                         className="card-img-top padding-5px"
                         alt={work.name}
                         width={224}
@@ -32,6 +32,14 @@ const WorkCard = ({ work }: { work: Work }) => {
                     </Card.Text>
                 </Card.Body>
             </a>
+        </Card>
+    );
+};
+
+const RemovedWorkCard = () => {
+    return (
+        <Card className="mb-3" body>
+            作品已被下架
         </Card>
     );
 };
@@ -62,4 +70,4 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
 };
 
 export default WorkCard;
-export { SmallWorkCard };
+export { RemovedWorkCard, SmallWorkCard };

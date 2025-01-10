@@ -97,3 +97,23 @@ export interface SpaceWorks {
     /** 状态信息 */
     msg: string;
 }
+
+export interface SpaceFavorites {
+    /** 数据 */
+    data: WorkList;
+
+    /** 状态码 */
+    status: number;
+    /** 状态信息 */
+    msg: string;
+}
+
+export interface SpaceSocial {
+    /** 数据 */
+    data: UserList;
+
+    /** 状态码 */
+    status: number;
+    /** 状态信息 */
+    msg: string;
+}

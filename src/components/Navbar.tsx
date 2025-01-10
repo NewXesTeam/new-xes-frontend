@@ -36,7 +36,7 @@ const NavbarComponent = () => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href="/">主页</Nav.Link>
-                        <Nav.Link href="#">发现</Nav.Link>
+                        <Nav.Link href="/discover.html">发现</Nav.Link>
                         <Nav.Link href="/about.html">关于</Nav.Link>
                     </Nav>
 

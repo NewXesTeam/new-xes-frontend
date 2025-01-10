@@ -18,15 +18,21 @@ const MyPagination = ({
         if (page < 1) page = 1;
         if (page > pageCount) page = pageCount;
         setCurrentPage(page);
-        handlePageChange(page);
     };
 
     return (
         <Pagination className={className}>
-            <Pagination.Item href="#" onClick={() => setPage(currentPage - 1)} disabled={currentPage <= 1}>
+            <Pagination.Item
+                href="#"
+                onClick={() => {
+                    setPage(currentPage - 1);
+                    handlePageChange(currentPage - 1);
+                }}
+                disabled={currentPage <= 1}
+            >
                 上一页
             </Pagination.Item>
-            <Pagination.Item className="mb-3 page-input">
+            <div className="page-item page-input mb-3">
                 <InputGroup>
                     <InputGroup.Text>页码</InputGroup.Text>
                     <Form.Control
@@ -36,13 +42,29 @@ const MyPagination = ({
                         value={currentPage}
                         placeholder={`1~${pageCount}`}
                         style={{ width: '100px' }}
+                        onChange={event => setPage(parseInt(event.currentTarget.value))}
                         onKeyDown={event => {
-                            if (event.key === 'Enter') setPage(parseInt(event.currentTarget.value));
+                            if (event.key === 'Enter') {
+                                setPage(parseInt(event.currentTarget.value));
+                                handlePageChange(parseInt(event.currentTarget.value));
+                                document.documentElement.scrollTop = 0;
+                            }
+                        }}
+                        onBlur={event => {
+                            setPage(parseInt(event.currentTarget.value));
+                            handlePageChange(parseInt(event.currentTarget.value));
                         }}
                     />
                 </InputGroup>
-            </Pagination.Item>
-            <Pagination.Item href="#" onClick={() => setPage(currentPage + 1)} disabled={currentPage >= pageCount}>
+            </div>
+            <Pagination.Item
+                href="#"
+                onClick={() => {
+                    setPage(currentPage + 1);
+                    handlePageChange(currentPage + 1);
+                }}
+                disabled={currentPage >= pageCount}
+            >
                 下一页
             </Pagination.Item>
         </Pagination>
