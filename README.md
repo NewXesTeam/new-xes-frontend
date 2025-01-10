@@ -21,7 +21,7 @@
 1. 下载 nginx
 2. 复制 nginx 到根目录。_注意不要把 `conf/nginx.conf` 给覆盖了！！！_
 3. 运行 nginx。（请先构建后再运行）
-4. 访问 `http://localhost:8080`
+4. 访问 `http://127.0.0.1:8080`
 
 ## 关于使用
 
@@ -34,7 +34,7 @@
 - [ ] 发现 /discover.html
 - [ ] 搜索 /search.html
 - [ ] 我的作品 /user.html
-- [ ] 个人主页 /space.html
+- [x] 个人主页 /space.html
 - [ ] 消息中心 /messages.html
 - [x] 关于 /about.html
 - [ ] 最终用户协议（等待补充内容） /eula.html

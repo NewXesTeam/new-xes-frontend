@@ -19,4 +19,4 @@ const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {
     return <Row xs="auto">{cards}</Row>;
 };
 
-export { UserVerticalList, UserHorizontalList };
+export { UserHorizontalList };
