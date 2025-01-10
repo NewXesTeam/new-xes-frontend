@@ -35,11 +35,11 @@ const DiscoverPage = () => {
                         <Nav
                             className="mb-2 left-padding"
                             variant="pills"
-                            defaultActiveKey="all"
+                            defaultActiveKey=""
                             onSelect={(eventKey: string) => setLang(eventKey)}
                         >
                             <Nav.Item>
-                                <Nav.Link eventKey="all">全部</Nav.Link>
+                                <Nav.Link eventKey="">全部</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link eventKey="scratch">TurboWarp</Nav.Link>
