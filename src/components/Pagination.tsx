@@ -25,8 +25,8 @@ const MyPagination = ({
             <Pagination.Item
                 href="#"
                 onClick={() => {
-                    setPage(currentPage + 1);
-                    handlePageChange(currentPage + 1);
+                    setPage(currentPage - 1);
+                    handlePageChange(currentPage - 1);
                 }}
                 disabled={currentPage <= 1}
             >
