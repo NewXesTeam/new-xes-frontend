@@ -12,8 +12,11 @@ const WorkCard = ({ work }: { work: Work }) => {
             <a href={link} className="text-decoration-none" target="_blank">
                 <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
                     <img
-                        src={work.thumbnail || "https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png"}
-                        className="card-img-top padding-5px"
+                        src={
+                            work.thumbnail ||
+                            'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
+                        }
+                        className="card-img-top"
                         alt={work.name}
                         width={224}
                         height={168}
@@ -22,12 +25,12 @@ const WorkCard = ({ work }: { work: Work }) => {
 
                 <Card.Body>
                     <Card.Title>{work.name}</Card.Title>
-                    <Card.Text style={{ transform: 'rotate(0)' }}>
-                        <a href={author_url} target="_blank">
+                    <Card.Text className='d-flex justify-content-between align-items-center'>
+                        <a href={author_url} target="_blank" style={{ maxWidth: '114px' }}>
                             <span style={{ fontSize: '14px' }}>{work.username}</span>
                         </a>
                         <span style={{ fontSize: '12px' }}>
-                            👀{work.views} 👍{work.likes} 👎{work.unlikes}
+                            👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
                         </span>
                     </Card.Text>
                 </Card.Body>
