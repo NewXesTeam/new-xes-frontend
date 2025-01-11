@@ -420,9 +420,11 @@ const SpacePage = () => {
                     )}
                 </span>
                 <Modal show={show}>
-                    <Modal.Title>
-                        &nbsp;&nbsp;&nbsp;请修改个性签名
-                    </Modal.Title>
+                    <Modal.Header>
+                        <Modal.Title>
+                            请修改个性签名
+                        </Modal.Title>
+                    </Modal.Header>
                     <Modal.Body>
                         <Form.Control type='text' value={inputValue} onChange={handleInputChange}></Form.Control>
                     </Modal.Body>
