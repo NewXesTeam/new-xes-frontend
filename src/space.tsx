@@ -351,8 +351,8 @@ const SpacePage = () => {
         ]);
     };
     const [inputValue, setInputValue] = React.useState<string>('');
- 
-    const handleInputChange = (event) => {
+
+    const handleInputChange = event => {
         setInputValue(event.target.value);
         // console.log(inputValue)
     };
@@ -368,16 +368,11 @@ const SpacePage = () => {
         const response = await fetch('/api/space/edit_signature', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({signature: inputValue}),
+            body: JSON.stringify({ signature: inputValue }),
         });
         const responseData = await response.json();
-        setAlerts([
-            <AutoCloseAlert variant="success">
-                更改签名成功
-            </AutoCloseAlert>,
-            ...alerts,
-        ]);
-        setUserSignature(inputValue)
+        setAlerts([<AutoCloseAlert variant="success">更改签名成功</AutoCloseAlert>, ...alerts]);
+        setUserSignature(inputValue);
     };
 
     React.useEffect(() => {
@@ -414,23 +409,29 @@ const SpacePage = () => {
                 <span style={{ fontSize: '16px' }}>
                     {userSignature}&nbsp;&nbsp;&nbsp;
                     {isMySpace && (
-                        <Button onClick={()=>{
-                            handleShow();
-                        }}>修改签名</Button>
+                        <Button
+                            onClick={() => {
+                                handleShow();
+                            }}
+                        >
+                            修改签名
+                        </Button>
                     )}
                 </span>
                 <Modal show={show}>
                     <Modal.Header>
-                        <Modal.Title>
-                            请修改个性签名
-                        </Modal.Title>
+                        <Modal.Title>请修改个性签名</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form.Control type='text' value={inputValue} onChange={handleInputChange}></Form.Control>
+                        <Form.Control type="text" value={inputValue} onChange={handleInputChange}></Form.Control>
                     </Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={handleOk}>确定</Button>
-                    <Button variant="secondary" onClick={handleClose}>取消</Button>
+                        <Button variant="primary" onClick={handleOk}>
+                            确定
+                        </Button>
+                        <Button variant="secondary" onClick={handleClose}>
+                            取消
+                        </Button>
                     </Modal.Footer>
                 </Modal>
                 <span>
