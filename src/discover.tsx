@@ -36,7 +36,7 @@ const DiscoverPage = () => {
                             className="mb-2 left-padding"
                             variant="pills"
                             defaultActiveKey=""
-                            onSelect={(eventKey: string) => setLang(eventKey)}
+                            onSelect={(eventKey: string | null) => setLang(eventKey || '')}
                         >
                             <Nav.Item>
                                 <Nav.Link eventKey="">全部</Nav.Link>
@@ -56,7 +56,7 @@ const DiscoverPage = () => {
                             className="mb-2 right-padding"
                             variant="pills"
                             defaultActiveKey="latest"
-                            onSelect={(eventKey: string) => setType(eventKey)}
+                            onSelect={(eventKey: string | null) => setType(eventKey ?? 'latest')}
                         >
                             <Nav.Item>
                                 <Nav.Link eventKey="latest">最新发布</Nav.Link>
