@@ -1,0 +1,17 @@
+# Dependabot（依赖项管理 bot）配置文件
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "06:00"
+      timezone: "Asia/Shanghai"
+    reviewers:
+      - "lrsgzs"
+    labels:
+      - "依赖项"
+    commit-message:
+      prefix: "🎯npm: "
