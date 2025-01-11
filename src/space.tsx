@@ -64,16 +64,24 @@ const SpaceTabs = {
                             </Card.Body>
                         </Card>
 
-                        <h2 className="mt-2">TA 的作品 <span style={{ fontSize: '16px' }}>({responseData.data.works.total})</span></h2>
+                        <h2 className="mt-2">
+                            TA 的作品 <span style={{ fontSize: '16px' }}>({responseData.data.works.total})</span>
+                        </h2>
                         <WorkList works={responseData.data.works.data} />
 
-                        <h2 className="mt-2">TA 的收藏 <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span></h2>
+                        <h2 className="mt-2">
+                            TA 的收藏 <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span>
+                        </h2>
                         <WorkList works={responseData.data.favorites.data} />
 
-                        <h2 className="mt-2">TA 的粉丝 <span style={{ fontSize: '16px' }}>({responseData.data.fans.total})</span></h2>
+                        <h2 className="mt-2">
+                            TA 的粉丝 <span style={{ fontSize: '16px' }}>({responseData.data.fans.total})</span>
+                        </h2>
                         <UserHorizontalList users={responseData.data.fans.data} />
 
-                        <h2 className="mt-2">TA 的关注 <span style={{ fontSize: '16px' }}>({responseData.data.follows.total})</span></h2>
+                        <h2 className="mt-2">
+                            TA 的关注 <span style={{ fontSize: '16px' }}>({responseData.data.follows.total})</span>
+                        </h2>
                         <UserHorizontalList users={responseData.data.follows.data} />
                     </>,
                 );
@@ -114,6 +122,7 @@ const SpaceTabs = {
     },
     ProjectsTab: ({ userId }: { userId: string }) => {
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+        const [orderType, setOrderType] = React.useState('time');
         const [currentPage, setCurrentPage] = React.useState(1);
 
         React.useEffect(() => {
@@ -121,7 +130,7 @@ const SpaceTabs = {
 
             const func = async () => {
                 const response = await fetch(
-                    `/api/space/works?user_id=${userId}&page=${currentPage}&per_page=20&order_type=time`,
+                    `/api/space/works?user_id=${userId}&page=${currentPage}&per_page=20&order_type=${orderType}`,
                 );
                 const responseData: SpaceWorks = await response.json();
 
@@ -131,6 +140,25 @@ const SpaceTabs = {
 
                 setPageComponent(
                     <>
+                        <Nav
+                            className="mb-2 right-padding"
+                            variant="pills"
+                            defaultActiveKey="time"
+                            onSelect={(eventKey: string | null) => {
+                                setOrderType(eventKey ?? 'latest');
+                                setCurrentPage(1);
+                            }}
+                        >
+                            <Nav.Item>
+                                <Nav.Link eventKey="time">最新发布</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="likes">点赞最多</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="comments">评论最多</Nav.Link>
+                            </Nav.Item>
+                        </Nav>
                         <WorkList works={responseData.data.data} />
                         {responseData.data.total > 20 && (
                             <div style={{ width: '100%' }}>
