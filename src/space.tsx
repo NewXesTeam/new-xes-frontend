@@ -180,7 +180,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, [currentPage]);
+        }, [currentPage, orderType]);
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
