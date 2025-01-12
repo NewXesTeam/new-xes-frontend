@@ -1,7 +1,9 @@
-const webpackMerge = require('webpack-merge');
-const baseConfig = require('./webpack.base.js');
+import webpackMerge from 'webpack-merge';
+import baseConfig from './webpack.base.js';
 
-module.exports = webpackMerge.merge(baseConfig, {
+const devConfig = webpackMerge.merge(baseConfig, {
     mode: 'development',
     devtool: 'source-map',
 });
+
+export default devConfig;

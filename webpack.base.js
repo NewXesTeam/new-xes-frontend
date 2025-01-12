@@ -1,6 +1,11 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'path';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const entriesName = ['index', 'about', 'login', 'eula', 'space', 'userInfo', 'discover'];
 
@@ -19,7 +24,7 @@ for (let entry of entriesName) {
     );
 }
 
-module.exports = {
+const baseConfig = {
     entry: entries,
     mode: 'development',
     devtool: 'source-map',
@@ -65,3 +70,5 @@ module.exports = {
         type: 'filesystem',
     },
 };
+
+export default baseConfig;
