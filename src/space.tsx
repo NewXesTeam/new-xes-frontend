@@ -339,7 +339,7 @@ const SpacePage = () => {
         const response = await fetch('/api/space/follow', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ followed_user_id: '30883073', state: !userFollowed }),
+            body: JSON.stringify({ followed_user_id: userId, state: !userFollowed }),
         });
         const responseData: FollowUser = await response.json();
         setUserFollowed(!userFollowed);
@@ -359,6 +359,7 @@ const SpacePage = () => {
     const [show, setShow] = React.useState<boolean>(false);
     const handleClose = () => {
         setShow(false);
+        setInputValue('');
     };
     const handleShow = () => {
         setShow(true);
@@ -373,6 +374,7 @@ const SpacePage = () => {
         const responseData = await response.json();
         setAlerts([<AutoCloseAlert variant="success">更改签名成功</AutoCloseAlert>, ...alerts]);
         setUserSignature(inputValue);
+        setInputValue('');
     };
 
     React.useEffect(() => {
