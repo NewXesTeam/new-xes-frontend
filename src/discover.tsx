@@ -14,15 +14,15 @@ const DiscoverPage = () => {
         return null;
     }
     const [currentPage, setCurrentPage] = React.useState(1);
-    const [lang, setLang] = React.useState<string>('');
-    const [type, setType] = React.useState<string>('latest');
+    const [orderLang, setOrderLang] = React.useState<string>('');
+    const [orderType, setOrderType] = React.useState<string>('latest');
     const [works, setWorks] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
 
     React.useEffect(() => {
         let ignore = false;
 
         const func = async () => {
-            const response = await fetch(`/api/works/${type}?lang=${lang}&page=${currentPage}&per_page=50`);
+            const response = await fetch(`/api/works/${orderType}?lang=${orderLang}&page=${currentPage}&per_page=50`);
             const responseData: IWorkList = await response.json();
             // console.log(responseData);
 
@@ -36,7 +36,12 @@ const DiscoverPage = () => {
                             className="mb-2 left-padding"
                             variant="pills"
                             defaultActiveKey=""
-                            onSelect={(eventKey: string | null) => setLang(eventKey || '')}
+                            onSelect={(eventKey: string | null) => {
+                                if (eventKey !== orderLang) {
+                                    setOrderLang(eventKey ?? '');
+                                    setCurrentPage(1);
+                                }
+                            }}
                         >
                             <Nav.Item>
                                 <Nav.Link eventKey="">全部</Nav.Link>
@@ -56,7 +61,12 @@ const DiscoverPage = () => {
                             className="mb-2 right-padding"
                             variant="pills"
                             defaultActiveKey="latest"
-                            onSelect={(eventKey: string | null) => setType(eventKey ?? 'latest')}
+                            onSelect={(eventKey: string | null) => {
+                                if (eventKey !== orderType) {
+                                    setOrderType(eventKey ?? 'latest');
+                                    setCurrentPage(1);
+                                }
+                            }}
                         >
                             <Nav.Item>
                                 <Nav.Link eventKey="latest">最新发布</Nav.Link>
@@ -91,7 +101,7 @@ const DiscoverPage = () => {
         return () => {
             ignore = true;
         };
-    }, [currentPage, lang, type]);
+    }, [currentPage, orderLang, orderType]);
 
     return (
         <>
