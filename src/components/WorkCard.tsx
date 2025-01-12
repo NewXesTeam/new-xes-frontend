@@ -25,7 +25,7 @@ const WorkCard = ({ work }: { work: Work }) => {
 
                 <Card.Body>
                     <Card.Title>{work.name}</Card.Title>
-                    <Card.Text className='d-flex justify-content-between align-items-center'>
+                    <Card.Text className="d-flex justify-content-between align-items-center">
                         <a href={author_url} target="_blank" style={{ maxWidth: '114px' }}>
                             <span style={{ fontSize: '14px' }}>{work.username}</span>
                         </a>

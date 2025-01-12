@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { UserInfo, FollowUser } from '@/interfaces/user';
 import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
-import { Tabs, Tab, Container, Stack, Card, Button, Nav } from 'react-bootstrap';
+import { Tabs, Tab, Container, Stack, Card, Button, Nav, Modal, Form } from 'react-bootstrap';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -350,6 +350,30 @@ const SpacePage = () => {
             ...alerts,
         ]);
     };
+    const [inputValue, setInputValue] = React.useState<string>('');
+
+    const handleInputChange = event => {
+        setInputValue(event.target.value);
+        // console.log(inputValue)
+    };
+    const [show, setShow] = React.useState<boolean>(false);
+    const handleClose = () => {
+        setShow(false);
+    };
+    const handleShow = () => {
+        setShow(true);
+    };
+    const handleOk = async () => {
+        setShow(false);
+        const response = await fetch('/api/space/edit_signature', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ signature: inputValue }),
+        });
+        const responseData = await response.json();
+        setAlerts([<AutoCloseAlert variant="success">更改签名成功</AutoCloseAlert>, ...alerts]);
+        setUserSignature(inputValue);
+    };
 
     React.useEffect(() => {
         let ignore = false;
@@ -382,7 +406,34 @@ const SpacePage = () => {
             <Stack className="mt-5 mx-auto width-fit-content text-center">
                 <Avatar name={username} avatarUrl={userAvatar} size={128} />
                 <span style={{ fontSize: '24px' }}>{username}</span>
-                <span style={{ fontSize: '16px' }}>{userSignature}</span>
+                <span style={{ fontSize: '16px' }}>
+                    {userSignature}&nbsp;&nbsp;&nbsp;
+                    {isMySpace && (
+                        <Button
+                            onClick={() => {
+                                handleShow();
+                            }}
+                        >
+                            修改签名
+                        </Button>
+                    )}
+                </span>
+                <Modal show={show}>
+                    <Modal.Header>
+                        <Modal.Title>请修改个性签名</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Control type="text" value={inputValue} onChange={handleInputChange}></Form.Control>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleOk}>
+                            确定
+                        </Button>
+                        <Button variant="secondary" onClick={handleClose}>
+                            取消
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 <span>
                     关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
                 </span>

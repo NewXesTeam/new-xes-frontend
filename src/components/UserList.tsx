@@ -4,7 +4,9 @@ import { SimpleUserInfo } from '@/interfaces/user';
 import { Row, Col, Stack } from 'react-bootstrap';
 
 const UserVerticalList = ({ users }: { users: SimpleUserInfo[] }) => {
-    const cards = users.map((user, index) => <HorizontalUserCard key={user.id} className={index >= 1 ? 'mt-2' : ''} user={user} />);
+    const cards = users.map((user, index) => (
+        <HorizontalUserCard key={user.id} className={index >= 1 ? 'mt-2' : ''} user={user} />
+    ));
 
     return <Stack>{cards}</Stack>;
 };
