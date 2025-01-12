@@ -1,11 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { UserInfo } from './interfaces/user.ts';
-import { SpaceProfile } from './interfaces/space.ts';
-import { checkLoggedIn } from './utils.ts';
+import { UserInfo } from '@/interfaces/user';
+import { SpaceProfile } from '@/interfaces/space';
+import { checkLoggedIn } from '@/utils';
 import { Table, Container } from 'react-bootstrap';
-import NavbarComponent from './components/Navbar.tsx';
-import './styles/common.scss';
+import NavbarComponent from '@/components/Navbar';
+import '@/styles/common.scss';
 
 const UserInfoPage = () => {
     if (!checkLoggedIn()) {

@@ -52,6 +52,9 @@ module.exports = {
             },
         ],
     },
+    resolve: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    },
     plugins: plugins,
     optimization: {
         splitChunks: {

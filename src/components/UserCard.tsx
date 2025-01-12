@@ -1,7 +1,7 @@
 import React from 'react';
-import { SimpleUserInfo, FollowUser } from '../interfaces/user.ts';
+import { SimpleUserInfo, FollowUser } from '@/interfaces/user';
 import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
-import Avatar from './Avatar.tsx';
+import Avatar from './Avatar';
 
 const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; className?: string }) => {
     const [userFollowed, setUserFollowed] = React.useState(user.is_follow);

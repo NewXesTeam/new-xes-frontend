@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Work } from './interfaces/work.ts';
+import { Work } from '@/interfaces/work';
 import { Carousel, Container } from 'react-bootstrap';
-import NavbarComponent from './components/Navbar.tsx';
-import WorkList from './components/WorkList.tsx';
-import './styles/index.scss';
+import NavbarComponent from '@/components/Navbar';
+import WorkList from '@/components/WorkList';
+import '@/styles/index.scss';
 
 const IndexPage = () => {
     const [cards, setCards] = React.useState<React.JSX.Element | null>(null);

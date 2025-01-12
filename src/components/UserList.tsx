@@ -1,6 +1,6 @@
 import React from 'react';
-import { HorizontalUserCard, SmallUserCard } from './UserCard.tsx';
-import { SimpleUserInfo } from '../interfaces/user.ts';
+import { HorizontalUserCard, SmallUserCard } from './UserCard';
+import { SimpleUserInfo } from '@/interfaces/user';
 import { Row, Col, Stack } from 'react-bootstrap';
 
 const UserVerticalList = ({ users }: { users: SimpleUserInfo[] }) => {

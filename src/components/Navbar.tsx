@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
-import { checkLoggedIn } from '../utils.ts';
-import Avatar from './Avatar.tsx';
-import { UserInfo } from '../interfaces/user';
+import { checkLoggedIn } from '@/utils';
+import Avatar from './Avatar';
+import { UserInfo } from '@/interfaces/user';
 
 const NavbarComponent = () => {
     const logoutEvent = async () => {

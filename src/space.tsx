@@ -1,18 +1,18 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { UserInfo, FollowUser } from './interfaces/user.ts';
-import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from './interfaces/space.ts';
+import { UserInfo, FollowUser } from '@/interfaces/user';
+import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
 import { Tabs, Tab, Container, Stack, Card, Button, Nav } from 'react-bootstrap';
-import AutoCloseAlert from './components/AutoCloseAlert.tsx';
-import NavbarComponent from './components/Navbar.tsx';
-import WorkList from './components/WorkList.tsx';
-import Avatar from './components/Avatar.tsx';
-import { SmallWorkCard } from './components/WorkCard.tsx';
-import { UserVerticalList, UserHorizontalList } from './components/UserList.tsx';
-import { Pagination } from './components/Pagination.tsx';
-import { checkLoggedIn } from './utils.ts';
+import AutoCloseAlert from '@/components/AutoCloseAlert';
+import NavbarComponent from '@/components/Navbar';
+import WorkList from '@/components/WorkList';
+import Avatar from '@/components/Avatar';
+import { SmallWorkCard } from '@/components/WorkCard';
+import { UserVerticalList, UserHorizontalList } from '@/components/UserList';
+import { Pagination } from '@/components/Pagination';
+import { checkLoggedIn } from '@/utils';
 import { v4 as generateUUID } from 'uuid';
-import './styles/common.scss';
+import '@/styles/common.scss';
 
 const SpaceTabs = {
     HomeTab: ({ userId }: { userId: string }) => {

@@ -1,5 +1,5 @@
-import { Work, WorkList } from './work.ts';
-import { UserList } from './user.ts';
+import { Work, WorkList } from './work';
+import { UserList } from './user';
 
 export interface SpaceProfile {
     /** 数据 */

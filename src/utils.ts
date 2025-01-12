@@ -1,4 +1,4 @@
-import { Work } from './interfaces/work.ts';
+import { Work } from '@/interfaces/work';
 
 export function checkLoggedIn() {
     return document.cookie.includes('is_login=1;');

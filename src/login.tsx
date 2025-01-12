@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { CaptchaPacket, LoginPacket } from './interfaces/login.ts';
+import { CaptchaPacket, LoginPacket } from '@/interfaces/login';
 import { Form, Row, Col, Button, InputGroup, Alert } from 'react-bootstrap';
-import { checkLoggedIn } from './utils.ts';
-import './styles/login.scss';
+import { checkLoggedIn } from '@/utils';
+import '@/styles/login.scss';
 
 const LoginPage = () => {
     const [symbolValue, setSymbolValue] = React.useState('');

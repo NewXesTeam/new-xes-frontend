@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { getWorkLink } from '../utils.ts';
-import { Work } from '../interfaces/work.ts';
+import { getWorkLink } from '@/utils';
+import { Work } from '@/interfaces/work';
 
 const WorkCard = ({ work }: { work: Work }) => {
     let link = getWorkLink(work);

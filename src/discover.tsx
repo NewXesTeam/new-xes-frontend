@@ -1,12 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Container, Nav } from 'react-bootstrap';
-import NavbarComponent from './components/Navbar.tsx';
-import WorkList from './components/WorkList.tsx';
-import { WorkList as IWorkList } from './interfaces/work.ts';
-import { Pagination } from './components/Pagination.tsx';
-import { checkLoggedIn } from './utils.ts';
-import './styles/common.scss';
+import NavbarComponent from '@/components/Navbar';
+import WorkList from '@/components/WorkList';
+import { WorkList as IWorkList } from '@/interfaces/work';
+import { Pagination } from '@/components/Pagination';
+import { checkLoggedIn } from '@/utils';
+import '@/styles/common.scss';
 
 const DiscoverPage = () => {
     if (!checkLoggedIn()) {
