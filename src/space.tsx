@@ -2,7 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { UserInfo, FollowUser } from '@/interfaces/user';
 import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
-import { Tabs, Tab, Container, Stack, Card, Button, Nav, Modal, Form } from 'react-bootstrap';
+import { ErrorResponse } from '@/interfaces/common';
+import { Tabs, Tab, Container, Stack, Card, Button, Nav, Form } from 'react-bootstrap';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -333,7 +334,11 @@ const SpacePage = () => {
     const [userFans, setUserFans] = React.useState(0);
     const [userFollowed, setUserFollowed] = React.useState(false);
     const [isMySpace, setIsMySpace] = React.useState(true);
+    const [signatureInputValue, setSignatureInputValue] = React.useState('');
+    const [isChangingSignature, setIsChangingSignature] = React.useState(false);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
+
+    const signatureInputRef = React.useRef<HTMLInputElement | null>(null);
 
     const onClickFollow = async () => {
         const response = await fetch('/api/space/follow', {
@@ -350,31 +355,33 @@ const SpacePage = () => {
             ...alerts,
         ]);
     };
-    const [inputValue, setInputValue] = React.useState<string>('');
 
-    const handleInputChange = event => {
-        setInputValue(event.target.value);
-        // console.log(inputValue)
-    };
-    const [show, setShow] = React.useState<boolean>(false);
-    const handleClose = () => {
-        setShow(false);
-        setInputValue('');
-    };
-    const handleShow = () => {
-        setShow(true);
-    };
-    const handleOk = async () => {
-        setShow(false);
+    const handleChangeSignature = async () => {
+        setIsChangingSignature(false);
+        setSignatureInputValue('');
+
         const response = await fetch('/api/space/edit_signature', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ signature: inputValue }),
+            body: JSON.stringify({ signature: signatureInputValue }),
         });
-        const responseData = await response.json();
-        setAlerts([<AutoCloseAlert variant="success">更改签名成功</AutoCloseAlert>, ...alerts]);
-        setUserSignature(inputValue);
-        setInputValue('');
+        if (response.ok) {
+            setUserSignature(signatureInputValue);
+            setAlerts([
+                <AutoCloseAlert variant="success" key={generateUUID().slice(0, 8)}>
+                    更改签名成功
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
+        } else {
+            const responseData: ErrorResponse = await response.json();
+            setAlerts([
+                <AutoCloseAlert variant="danger" key={generateUUID().slice(0, 8)}>
+                    {responseData.message}
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
+        }
     };
 
     React.useEffect(() => {
@@ -408,34 +415,47 @@ const SpacePage = () => {
             <Stack className="mt-5 mx-auto width-fit-content text-center">
                 <Avatar name={username} avatarUrl={userAvatar} size={128} />
                 <span style={{ fontSize: '24px' }}>{username}</span>
-                <span style={{ fontSize: '16px' }}>
-                    {userSignature}&nbsp;&nbsp;&nbsp;
-                    {isMySpace && (
-                        <Button
-                            onClick={() => {
-                                handleShow();
-                            }}
-                        >
-                            修改签名
-                        </Button>
-                    )}
-                </span>
-                <Modal show={show}>
-                    <Modal.Header>
-                        <Modal.Title>请修改个性签名</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form.Control type="text" value={inputValue} onChange={handleInputChange}></Form.Control>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={handleOk}>
-                            确定
-                        </Button>
-                        <Button variant="secondary" onClick={handleClose}>
-                            取消
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                {isChangingSignature ? (
+                    <Form.Control
+                        type="text"
+                        value={signatureInputValue}
+                        onChange={event => setSignatureInputValue(event.target.value)}
+                        onKeyDown={event => {
+                            if (event.key === 'Enter') {
+                                handleChangeSignature();
+                            } else if (event.key === 'Escape') {
+                                setIsChangingSignature(false);
+                                setSignatureInputValue('');
+                            }
+                        }}
+                        onBlur={() => {
+                            handleChangeSignature();
+                        }}
+                        ref={signatureInputRef}
+                    />
+                ) : (
+                    <div>
+                        <span style={{ fontSize: '16px' }}>{userSignature}</span>
+                        {isMySpace && (
+                            <>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <Button
+                                    size="sm"
+                                    variant="outline-secondary"
+                                    onClick={() => {
+                                        setSignatureInputValue(userSignature);
+                                        setIsChangingSignature(true);
+                                        console.log(signatureInputRef.current);
+                                        signatureInputRef.current?.focus();
+                                        signatureInputRef.current?.select();
+                                    }}
+                                >
+                                    修改签名
+                                </Button>
+                            </>
+                        )}
+                    </div>
+                )}
                 <span>
                     关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
                 </span>
