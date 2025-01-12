@@ -11,7 +11,7 @@ const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; cl
         const response = await fetch('/api/space/follow', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ followed_user_id: '30883073', state: !userFollowed }),
+            body: JSON.stringify({ followed_user_id: user.user_id, state: !userFollowed }),
         });
         const responseData: FollowUser = await response.json();
         setUserFollowed(!userFollowed);
