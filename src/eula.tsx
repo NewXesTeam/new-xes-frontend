@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 
 const eula = `我们感谢您选择使用 NewXesFrontend 平台！

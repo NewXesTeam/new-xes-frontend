@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 const Avatar = ({ name, avatarUrl, size }: { name: string; avatarUrl: string; size: number }) => {
     if (avatarUrl === '') avatarUrl = null;

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 import { checkLoggedIn } from '@/utils';
 import Avatar from './Avatar';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { SimpleUserInfo } from '@/interfaces/user';
 import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import Avatar from './Avatar';

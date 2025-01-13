@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { UserInfo } from '@/interfaces/user';
 import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';

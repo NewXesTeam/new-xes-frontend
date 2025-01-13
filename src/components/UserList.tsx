@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { HorizontalUserCard, SmallUserCard } from './UserCard';
 import { SimpleUserInfo } from '@/interfaces/user';
 import { Row, Col, Stack } from 'react-bootstrap';

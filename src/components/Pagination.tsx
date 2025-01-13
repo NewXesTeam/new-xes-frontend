@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Pagination, Form, InputGroup } from 'react-bootstrap';
 import './Pagination.scss';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Alert } from 'react-bootstrap';
 import { Variant } from 'react-bootstrap/esm/types';
 

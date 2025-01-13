@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Work } from '@/interfaces/work';
 import { Row, Col } from 'react-bootstrap';
 import WorkCard from './WorkCard';

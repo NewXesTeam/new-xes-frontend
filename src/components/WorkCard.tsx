@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { getWorkLink } from '@/utils';
 import { Work } from '@/interfaces/work';
