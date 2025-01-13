@@ -117,10 +117,10 @@ const LoginPage = () => {
                     <h1>欢迎登录 NewXesFrontend</h1>
 
                     <Form onSubmit={loginEvent}>
-                        <Alert variant="danger" hidden={errorValue ? false : true}>
+                        <Alert variant="danger" hidden={!errorValue}>
                             {errorValue}
                         </Alert>
-                        <Alert variant="success" hidden={successValue ? false : true}>
+                        <Alert variant="success" hidden={!successValue}>
                             {successValue}
                         </Alert>
 

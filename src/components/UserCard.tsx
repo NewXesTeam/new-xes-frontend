@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleUserInfo, FollowUser } from '@/interfaces/user';
+import { SimpleUserInfo } from '@/interfaces/user';
 import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import Avatar from './Avatar';
 
@@ -8,12 +8,11 @@ const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; cl
     const userLink = `/space.html?id=${user.id}`;
 
     const onClickFollow = async () => {
-        const response = await fetch('/api/space/follow', {
+        await fetch('/api/space/follow', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ followed_user_id: user.user_id, state: !userFollowed }),
         });
-        const responseData: FollowUser = await response.json();
         setUserFollowed(!userFollowed);
     };
 

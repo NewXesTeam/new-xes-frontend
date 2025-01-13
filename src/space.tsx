@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { UserInfo, FollowUser } from '@/interfaces/user';
+import { UserInfo } from '@/interfaces/user';
 import { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
 import { ErrorResponse } from '@/interfaces/common';
 import { Tabs, Tab, Container, Stack, Card, Button, Nav, Form } from 'react-bootstrap';
@@ -341,12 +341,11 @@ const SpacePage = () => {
     const signatureInputRef = React.useRef<HTMLInputElement | null>(null);
 
     const onClickFollow = async () => {
-        const response = await fetch('/api/space/follow', {
+        await fetch('/api/space/follow', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ followed_user_id: userId, state: !userFollowed }),
         });
-        const responseData: FollowUser = await response.json();
         setUserFollowed(!userFollowed);
         setAlerts([
             <AutoCloseAlert key={generateUUID().slice(0, 8)} variant="success">

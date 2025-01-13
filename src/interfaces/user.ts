@@ -72,9 +72,3 @@ export interface UserList {
     /** 每页数量 */
     per_page: number;
 }
-
-export interface FollowUser {
-    data: [];
-    msg: string;
-    status: number;
-}
