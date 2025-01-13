@@ -67,7 +67,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
                     </a>
                 </Card.Header>
                 <Card.Body className="py-0">
-                    <img src={work.thumbnail} height={138} className="m-auto" />
+                    <img src={work.thumbnail} height={138} className="m-auto" alt={work.name} />
                 </Card.Body>
             </Card>
         </OverlayTrigger>

@@ -16,7 +16,7 @@ const WorkList = ({ works, className = '' }: { works: Work[]; className?: string
             );
         } else {
             return (
-                <Col key={work.id}>
+                <Col key={work.topic_id}>
                     <WorkCard work={work} />
                 </Col>
             );
