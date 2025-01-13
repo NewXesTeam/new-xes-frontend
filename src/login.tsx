@@ -112,8 +112,14 @@ const LoginPage = () => {
 
     return (
         <>
-            <Row className="justify-content-md-center width-100 height-100">
-                <Col xs={12} sm={8} md={6} lg={4} className="login-form-container shadow margin-auto">
+            <Row className="justify-content-md-center width-100 height-100" style={{ background: '#ff4d45' }}>
+                <Col
+                    xs={12}
+                    sm={8}
+                    md={6}
+                    lg={4}
+                    className="blur-glass-background login-form-container shadow margin-auto"
+                >
                     <h1>欢迎登录 NewXesFrontend</h1>
 
                     <Form onSubmit={loginEvent}>
@@ -179,7 +185,6 @@ const LoginPage = () => {
                                     <a href="/eula.html" target="_blank">
                                         《NewXesFrontend 最终用户协议》
                                     </a>
-                                    、
                                 </div>
                             }
                             value={Number(privacyValue)}

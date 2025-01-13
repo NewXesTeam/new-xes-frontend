@@ -26,3 +26,12 @@
     right: 10px;
     z-index: 1000;
 }
+
+.blur-glass-background {
+    color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    box-shadow: rgba(142, 142, 142, 0.19) 0 6px 15px 0;
+}
