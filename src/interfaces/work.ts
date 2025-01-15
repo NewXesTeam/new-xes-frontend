@@ -26,8 +26,8 @@ export interface Work {
     /** 创建者头像url */
     user_avatar: string;
 
-    /** 是否发布 */
-    published: boolean;
+    /** 是否发布，0 未发布，1 发布，2 审核中，removed 已下架 */
+    published: 0 | 1 | 2 | 'removed';
     /** 是否删除 */
     removed: boolean;
 
