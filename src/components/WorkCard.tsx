@@ -8,8 +8,8 @@ const WorkCard = ({ work }: { work: Work }) => {
     let author_url = `/space.html?id=${work.user_id}`;
 
     return (
-        <Card className="mb-3">
-            <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+            <Card className="mb-3">
                 <img
                     src={
                         work.thumbnail ||
@@ -20,24 +20,24 @@ const WorkCard = ({ work }: { work: Work }) => {
                     width={224}
                     height={168}
                 />
-            </OverlayTrigger>
 
-            <Card.Body>
-                <Card.Title>
-                    <a href={link} className="text-decoration-none stretched-link" target="_blank">
-                        {work.name}
-                    </a>
-                </Card.Title>
-                <Card.Text className="d-flex justify-content-between align-items-center">
-                    <a href={author_url} target="_blank" style={{ maxWidth: '114px', zIndex: 2 }}>
-                        <span style={{ fontSize: '14px' }}>{work.username}</span>
-                    </a>
-                    <span style={{ fontSize: '12px' }}>
-                        👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
-                    </span>
-                </Card.Text>
-            </Card.Body>
-        </Card>
+                <Card.Body>
+                    <Card.Title>
+                        <a href={link} className="text-decoration-none stretched-link" target="_blank">
+                            {work.name}
+                        </a>
+                    </Card.Title>
+                    <Card.Text className="d-flex justify-content-between align-items-center">
+                        <a href={author_url} target="_blank" style={{ maxWidth: '114px', zIndex: 2 }}>
+                            <span style={{ fontSize: '14px' }}>{work.username}</span>
+                        </a>
+                        <span style={{ fontSize: '12px' }}>
+                            👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
+                        </span>
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        </OverlayTrigger>
     );
 };
 
