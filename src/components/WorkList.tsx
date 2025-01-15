@@ -4,7 +4,17 @@ import { Row, Col } from 'react-bootstrap';
 import WorkCard from './WorkCard';
 import { RemovedWorkCard } from './WorkCard';
 
-const WorkList = ({ works, className = '' }: { works: Work[]; className?: string }) => {
+const WorkList = ({
+    works,
+    className = '',
+    enableRemoved = true,
+    WorkCardInterface = WorkCard,
+}: {
+    works: Work[];
+    className?: string;
+    enableRemoved?: boolean;
+    WorkCardInterface?: ({ work: Work }) => React.JSX.Element;
+}) => {
     const cards = works.map((work: Work) => {
         if (work === null) {
             return null;
@@ -17,7 +27,7 @@ const WorkList = ({ works, className = '' }: { works: Work[]; className?: string
         } else {
             return (
                 <Col key={work.topic_id}>
-                    <WorkCard work={work} />
+                    <WorkCardInterface work={work} />
                 </Col>
             );
         }
