@@ -1,3 +1,5 @@
+import { WorkList } from './work';
+
 /** 用户信息 */
 export interface UserInfo {
     /** 数据 */
@@ -71,4 +73,16 @@ export interface UserList {
     current_page: number;
     /** 每页数量 */
     per_page: number;
+}
+
+export interface UserWorkList {
+    /** 作品列表 */
+    data: {
+        /** 当前页码 */
+        current_page: number;
+    } & WorkList;
+    /** 状态信息 */
+    msg: string;
+    /** 状态码 */
+    status: number;
 }
