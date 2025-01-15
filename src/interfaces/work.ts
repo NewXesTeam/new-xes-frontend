@@ -13,7 +13,7 @@ export interface Work {
     topic_id: string;
 
     /** 作品类型 */
-    project_type: 'scratch' | 'compiler';
+    project_type: 'scratch' | 'compiler' | 'code';
     /** 作品语言 */
     lang: 'scratch' | 'python' | 'webpy' | 'cpp';
     /** 语言版本 */
