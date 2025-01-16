@@ -16,10 +16,7 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
     let editLink = getEditWorkLink(work);
 
     return (
-        <OverlayTrigger
-            overlay={<Tooltip>{work.created_at}</Tooltip>}
-            onToggle={(value) => setIsShowOperators(value)}
-        >
+        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>} onToggle={value => setIsShowOperators(value)}>
             <div style={{ position: 'relative' }} className="mb-3">
                 <Card>
                     <img
