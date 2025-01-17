@@ -12,7 +12,7 @@ const NavbarComponent = () => {
     };
     const [userName, setUserName] = React.useState<string>('');
     const [userAvatar, setUserAvatar] = React.useState<string>('');
-    const [message, setMessage] = React.useState<React.JSX.Element>(<p>加载中</p>);
+    const [message, setMessage] = React.useState<React.JSX.Element>(<p className="navbar-nav">加载中</p>);
     let userComponent: React.JSX.Element;
 
     if (checkLoggedIn()) {
@@ -29,7 +29,7 @@ const NavbarComponent = () => {
                 // console.log(messageData.data[0].count);
                 setMessage(
                     <NavDropdown title={'消息'} align={'end'}>
-                        <NavDropdown.Item href="/message.html" target="_blank">
+                        <NavDropdown.Item href="/message.html?category=1" target="_blank">
                             评论和回复{' '}
                             <span
                                 className="badge rounded-pill text-bg-danger"
@@ -38,40 +38,13 @@ const NavbarComponent = () => {
                                 {messageData.data[0].count}
                             </span>
                         </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html" target="_blank">
-                            点赞与收藏{' '}
-                            <span
-                                className="badge rounded-pill text-bg-danger"
-                                style={{ display: messageData.data[1].count == 0 ? 'none' : 'inline' }}
-                            >
-                                {messageData.data[1].count}
-                            </span>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html" target="_blank">
+                        <NavDropdown.Item href="/message.html?category=3" target="_blank">
                             关注{' '}
                             <span
                                 className="badge rounded-pill text-bg-danger"
                                 style={{ display: messageData.data[2].count == 0 ? 'none' : 'inline' }}
                             >
                                 {messageData.data[2].count}
-                            </span>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html" target="_blank">
-                            反馈和审核{' '}
-                            <span
-                                className="badge rounded-pill text-bg-danger"
-                                style={{ display: messageData.data[3].count == 0 ? 'none' : 'inline' }}
-                            >
-                                {messageData.data[3].count}
-                            </span>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html" target="_blank">
-                            系统消息{' '}
-                            <span
-                                className="badge rounded-pill text-bg-danger"
-                                style={{ display: messageData.data[4].count == 0 ? 'none' : 'inline' }}
-                            >
-                                {messageData.data[4].count}
                             </span>
                         </NavDropdown.Item>
                     </NavDropdown>,
