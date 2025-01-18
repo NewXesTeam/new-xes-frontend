@@ -2,12 +2,28 @@ import * as React from 'react';
 import { DataItem, DataItem2 } from '@/interfaces/message';
 import { Button, Card, Stack } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
+import { parse } from 'uuid';
 import Avatar from './Avatar';
 
 const CommentCard = ({ message, className = '' }: { message: DataItem; className?: string }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [isShow, setIsShow] = React.useState<boolean>(true);
     const senduserLink = `/space.html?id=${message.send_user_id}`;
+    const message_topic_text = React.useRef(null);
+    const message_content_sub = React.useRef(null);
+    const message_content_main = React.useRef(null);
+
+    React.useEffect(()=>{
+        if (message_topic_text.current){
+            message_topic_text.current.innerHTML = message.topic.text;
+        }
+        if (message_content_sub.current){
+            message_content_sub.current.innerHTML = message.content.sub.content;
+        }
+        if (message_content_main.current){
+            message_content_main.current.innerHTML = message.content.main.content;
+        }
+    },[])
     return (
         <>
             <div className="alert-list">{alerts}</div>
@@ -31,7 +47,7 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                             href={message.topic.link}
                                             target="_blank"
                                         >
-                                            {message.topic.text}
+                                            <span ref={message_topic_text}></span>
                                         </a>
                                     </p>
                                 )}
@@ -43,9 +59,8 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                             style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
                                             href={message.topic.link}
                                             target="_blank"
-                                        >
-                                            {message.content.sub.content}
-                                        </a>
+                                            ref={message_content_sub}
+                                        ></a>
                                     </p>
                                 )}
                             </div>
@@ -57,9 +72,8 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                     textDecoration: 'none',
                                     paddingBottom: '5px',
                                 }}
-                            >
-                                {message.content.main.content}
-                            </a>
+                                dangerouslySetInnerHTML={{__html:message.content.main.content}}
+                            ></a>
                             <Button
                                 size="sm"
                                 variant="outline-secondary"

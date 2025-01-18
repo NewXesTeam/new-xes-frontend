@@ -38,7 +38,7 @@ const NavbarComponent = () => {
                                 {messageData.data[0].count}
                             </span>
                         </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html?category=3" target="_blank">
+                        <NavDropdown.Item href="/message.html?category=5" target="_blank">
                             关注{' '}
                             <span
                                 className="badge rounded-pill text-bg-danger"
