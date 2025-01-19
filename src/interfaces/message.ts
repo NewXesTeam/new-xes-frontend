@@ -1,64 +1,20 @@
+import { Medal } from './medal';
+
 export interface MessageData {
     /** 数据 */
-    data: Array<{
+    data: {
+        /** 消息类别 */
         category: number;
+        /** 消息可读文字 */
         text: string;
+        /** 消息数量 */
         count: number;
-    }>;
+    }[];
 
     /** 状态码 */
     status: number;
     /** 状态信息 */
     msg: string;
-}
-
-interface ContentMain {
-    id: number;
-    topic_id: string;
-    parent_id: number;
-    target_id: number;
-    user_id: string;
-    reply_user_id: string;
-    content: string;
-    likes: number;
-    unlikes: number;
-    replies: number;
-    top: number;
-    removed: number;
-    links: null | string;
-    created_at: string;
-    comment_from: string;
-    username: string;
-    user_avatar_path: string;
-    reply_username: string;
-    emojis: any[];
-}
-
-interface ContentSub {
-    id: number;
-    topic_id: string;
-    parent_id: number;
-    target_id: number;
-    user_id: string;
-    reply_user_id: string;
-    content: string;
-    likes: number;
-    unlikes: number;
-    replies: number;
-    top: number;
-    removed: number;
-    links: null | string;
-    created_at: string;
-    comment_from: string;
-    username: string;
-    user_avatar_path: string;
-    reply_username: string;
-    emojis: any[];
-}
-
-interface Content {
-    main: ContentMain;
-    sub: ContentSub | null;
 }
 
 interface Topic {
@@ -76,12 +32,37 @@ interface Topic {
     resource_type: string;
 }
 
-export interface DataItem {
+interface Content {
+    id: number;
+    topic_id: string;
+    parent_id: number;
+    target_id: number;
+    user_id: string;
+    reply_user_id: string;
+    content: string;
+    likes: number;
+    unlikes: number;
+    replies: number;
+    top: number;
+    removed: number;
+    links: null | string;
+    created_at: string;
+    comment_from: string;
+    username: string;
+    user_avatar_path: string;
+    reply_username: string;
+    emojis: any[];
+}
+
+export interface CommentDataItem {
     id: number;
     send_user_id: number;
     receive_user_id: number;
     title: null | string;
-    content: Content;
+    content: {
+        main: Content;
+        sub: Content | null;
+    };
     status: number;
     category: number;
     subtype: string;
@@ -101,7 +82,7 @@ export interface DataItem {
     has_reply: boolean;
 }
 
-export interface ContentInfo {
+export interface CommentMessageInfo {
     stat: number;
     status: number;
     msg: string;
@@ -114,27 +95,11 @@ export interface ContentInfo {
         prev_page_url: string | null;
         from: number;
         to: number;
-        data: DataItem[];
+        data: CommentDataItem[];
     };
 }
 
-interface Medal {
-    id: number;
-    user_id: number;
-    medal_id: number;
-    get_at: string;
-    is_wear: number;
-    name: string;
-    thumbnail: string;
-    thumbnail2: string;
-    source_type: string;
-    source_id: string;
-    source_text: string;
-    get_condition: string;
-    source_link: string | null;
-}
-
-export interface DataItem2 {
+export interface FollowDataItem {
     id: number;
     send_user_id: number;
     receive_user_id: number;
@@ -159,7 +124,7 @@ export interface DataItem2 {
     medals: Medal[];
 }
 
-export interface FollowInfo {
+export interface FollowMessageInfo {
     stat: number;
     status: number;
     msg: string;
@@ -172,6 +137,6 @@ export interface FollowInfo {
         prev_page_url: string | null;
         from: number;
         to: number;
-        data: DataItem2[];
+        data: FollowDataItem[];
     };
 }
