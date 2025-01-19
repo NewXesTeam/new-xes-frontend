@@ -2,10 +2,9 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Container, Nav } from 'react-bootstrap';
 import NavbarComponent from '@/components/Navbar';
-import { checkLoggedIn } from '@/utils';
 import { CommentList, FollowList } from '@/components/MessageList';
-import { ContentInfo } from './interfaces/message';
-import { Pagination } from './components/Pagination';
+import { Pagination } from '@/components/Pagination';
+import { checkLoggedIn } from '@/utils';
 import '@/styles/common.scss';
 
 const MessagePage = () => {
@@ -13,19 +12,24 @@ const MessagePage = () => {
         location.href = '/login.html';
         return null;
     }
-    const [currentPage, setCurrentPage] = React.useState(1);
+
+    let params = new URLSearchParams(location.search);
+    const category: string = params.get('category');
     const [messages, setMessages] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+    const [currentTab, setCurrentTab] = React.useState(category);
+    const [currentPage, setCurrentPage] = React.useState(1);
+
+    window.addEventListener('popstate', (event: PopStateEvent) => {
+        setCurrentTab(event.state?.category || '1');
+        setCurrentPage(1);
+    });
 
     React.useEffect(() => {
         let ignore = false;
 
         const func = async () => {
-            let params = new URLSearchParams(location.search);
-            const category: string = params.get('category');
-
-            const response = await fetch(`/api/messages?category=${category}&page=${currentPage}&per_page=10`);
+            const response = await fetch(`/api/messages?category=${currentTab}&page=${currentPage}&per_page=10`);
             const responseData = await response.json();
-            // console.log(responseData);
 
             if (responseData.data['total'] === 0) {
                 setMessages(<h2>暂无消息</h2>);
@@ -35,11 +39,18 @@ const MessagePage = () => {
                     <Nav
                         className="mb-2 left-padding"
                         variant="pills"
-                        defaultActiveKey={category}
+                        defaultActiveKey={currentTab}
                         onSelect={(eventKey: string | null) => {
-                            if (eventKey !== category) {
-                                params.set('category', eventKey);
-                                location.search = params.toString();
+                            if (eventKey !== currentTab) {
+                                history.pushState(
+                                    {
+                                        category: eventKey,
+                                    },
+                                    null,
+                                    `/message.html?category=${eventKey}`,
+                                );
+                                setCurrentTab(eventKey);
+                                setCurrentPage(1);
                             }
                         }}
                     >
@@ -72,7 +83,7 @@ const MessagePage = () => {
         return () => {
             ignore = true;
         };
-    }, [currentPage]);
+    }, [currentTab, currentPage]);
 
     return (
         <>
