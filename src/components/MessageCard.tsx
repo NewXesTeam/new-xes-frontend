@@ -3,17 +3,53 @@ import { CommentDataItem, FollowDataItem } from '@/interfaces/message';
 import { Button, Card, Stack } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
 import Avatar from './Avatar';
+import '@/styles/message.scss';
 
 const CommentCard = ({ message, className = '' }: { message: CommentDataItem; className?: string }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [isShow, setIsShow] = React.useState<boolean>(true);
     const sendUserLink = `/space.html?id=${message.send_user_id}`;
+    const message_topic_text = React.useRef(null);
+    const message_content_sub = React.useRef(null);
+    const message_content_main = React.useRef(null);
+    const [NeedRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
+    const onClickRead = async () => {
+        await fetch('/api/messages/read', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category: 1, id: message.id }),
+        });
+        setNeedRead(false);
+        setAlerts([<AutoCloseAlert variant="success">已阅读</AutoCloseAlert>, ...alerts]);
+    };
+
+    React.useEffect(() => {
+        if (message_topic_text.current) {
+            message_topic_text.current.innerHTML = message.topic.text;
+        }
+        if (message_content_sub.current) {
+            message_content_sub.current.innerHTML = message.content.sub.content;
+        }
+        if (message_content_main.current) {
+            message_content_main.current.innerHTML = message.content.main.content;
+        }
+    }, []);
     return (
         <>
             <div className="alert-list">{alerts}</div>
             <Card style={{ padding: '10px', display: isShow ? 'block' : 'none' }} className={className}>
                 <Card.Body>
-                    <Stack direction="horizontal">
+                    <Stack
+                        direction="horizontal"
+                        onClick={
+                            NeedRead
+                                ? () => {
+                                      onClickRead();
+                                  }
+                                : null
+                        }
+                    >
+                        <div className="notifition-dot" style={{ display: NeedRead ? 'block' : 'none' }}></div>
                         <a href={sendUserLink} target="_blank">
                             <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={108} />
                         </a>
@@ -30,9 +66,8 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
                                             style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
                                             href={message.topic.link}
                                             target="_blank"
-                                        >
-                                            {message.topic.text}
-                                        </a>
+                                            ref={message_topic_text}
+                                        />
                                     </p>
                                 )}
                                 {message.content.sub != null && (
@@ -43,9 +78,8 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
                                             style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
                                             href={message.topic.link}
                                             target="_blank"
-                                        >
-                                            {message.content.sub.content}
-                                        </a>
+                                            ref={message_content_sub}
+                                        />
                                     </p>
                                 )}
                             </div>
@@ -57,9 +91,8 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
                                     textDecoration: 'none',
                                     paddingBottom: '5px',
                                 }}
-                            >
-                                {message.content.main.content}
-                            </a>
+                                ref={message_content_main}
+                            />
                             <Button
                                 size="sm"
                                 variant="outline-secondary"
@@ -96,6 +129,16 @@ const FollowCard = ({ message, className = '' }: { message: FollowDataItem; clas
     const [userFollowed, setUserFollowed] = React.useState(message.follow_status === 1);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const userLink = `/space.html?id=${message.send_user_id}`;
+    const [NeedRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
+    const onClickRead = async () => {
+        await fetch('/api/messages/read', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category: 1, id: message.id }),
+        });
+        setNeedRead(false);
+        setAlerts([<AutoCloseAlert variant="success">已阅读</AutoCloseAlert>, ...alerts]);
+    };
 
     const onClickFollow = async () => {
         await fetch('/api/space/follow', {
@@ -112,7 +155,17 @@ const FollowCard = ({ message, className = '' }: { message: FollowDataItem; clas
             <div className="alert-list">{alerts}</div>
             <Card style={{ padding: '10px' }} className={className}>
                 <Card.Body>
-                    <Stack direction="horizontal">
+                    <Stack
+                        direction="horizontal"
+                        onClick={
+                            NeedRead
+                                ? () => {
+                                      onClickRead();
+                                  }
+                                : null
+                        }
+                    >
+                        <div className="notifition-dot" style={{ display: NeedRead ? 'block' : 'none' }}></div>
                         <a href={userLink} target="_blank">
                             <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={108} />
                         </a>

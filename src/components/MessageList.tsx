@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CommentCard, FollowCard } from '@/components/MessageCard';
 import { CommentMessageInfo, FollowMessageInfo } from '@/interfaces/message';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Stack } from 'react-bootstrap';
 
 const CommentList = ({ messages }: { messages: CommentMessageInfo }) => {
     const cards = messages.data.data.map((message, index) => (
@@ -10,7 +10,7 @@ const CommentList = ({ messages }: { messages: CommentMessageInfo }) => {
         </Col>
     ));
 
-    return <Row>{cards}</Row>;
+    return <Stack>{cards}</Stack>;
 };
 const FollowList = ({ messages }: { messages: FollowMessageInfo }) => {
     const cards = messages.data.data.map((message, index) => (
@@ -19,7 +19,7 @@ const FollowList = ({ messages }: { messages: FollowMessageInfo }) => {
         </Col>
     ));
 
-    return <Row>{cards}</Row>;
+    return <Stack>{cards}</Stack>;
 };
 
 export { CommentList, FollowList };
