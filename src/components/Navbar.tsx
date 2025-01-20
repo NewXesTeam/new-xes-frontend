@@ -27,8 +27,9 @@ const NavbarComponent = () => {
                 const messageresponse = await fetch(`/api/messages/overview`);
                 const messageData: MessageData = await messageresponse.json();
                 // console.log(messageData.data[0].count);
+                const AllMessageCount = messageData.data[0].count+messageData.data[2].count;
                 setMessage(
-                    <NavDropdown title={'消息'} align={'end'}>
+                    <NavDropdown title={<>消息 <span className="badge rounded-pill text-bg-danger" style={{ display: AllMessageCount == 0 ? 'none' : 'inline' }}>{AllMessageCount}</span></>} align={'end'}>
                         <NavDropdown.Item href="/message.html?category=1" target="_blank">
                             评论和回复{' '}
                             <span

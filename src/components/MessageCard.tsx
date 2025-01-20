@@ -1,41 +1,25 @@
 import * as React from 'react';
-import { DataItem, DataItem2 } from '@/interfaces/message';
+import { CommentDataItem, FollowDataItem } from '@/interfaces/message';
 import { Button, Card, Stack } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
-import { parse } from 'uuid';
 import Avatar from './Avatar';
 
-const CommentCard = ({ message, className = '' }: { message: DataItem; className?: string }) => {
+const CommentCard = ({ message, className = '' }: { message: CommentDataItem; className?: string }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [isShow, setIsShow] = React.useState<boolean>(true);
-    const senduserLink = `/space.html?id=${message.send_user_id}`;
-    const message_topic_text = React.useRef(null);
-    const message_content_sub = React.useRef(null);
-    const message_content_main = React.useRef(null);
-
-    React.useEffect(()=>{
-        if (message_topic_text.current){
-            message_topic_text.current.innerHTML = message.topic.text;
-        }
-        if (message_content_sub.current){
-            message_content_sub.current.innerHTML = message.content.sub.content;
-        }
-        if (message_content_main.current){
-            message_content_main.current.innerHTML = message.content.main.content;
-        }
-    },[])
+    const sendUserLink = `/space.html?id=${message.send_user_id}`;
     return (
         <>
             <div className="alert-list">{alerts}</div>
             <Card style={{ padding: '10px', display: isShow ? 'block' : 'none' }} className={className}>
                 <Card.Body>
                     <Stack direction="horizontal">
-                        <a href={senduserLink} target="_blank">
+                        <a href={sendUserLink} target="_blank">
                             <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={108} />
                         </a>
                         <div style={{ margin: '26px 20px' }}>
                             <div style={{ display: 'block', paddingBottom: '5px' }}>
-                                <a href={senduserLink} target="_blank" style={{ fontSize: '18px' }}>
+                                <a href={sendUserLink} target="_blank" style={{ fontSize: '18px' }}>
                                     {message.send_username}
                                 </a>
                                 {message.content.sub == null && (
@@ -47,7 +31,7 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                             href={message.topic.link}
                                             target="_blank"
                                         >
-                                            <span ref={message_topic_text}></span>
+                                            {message.topic.text}
                                         </a>
                                     </p>
                                 )}
@@ -59,8 +43,9 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                             style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
                                             href={message.topic.link}
                                             target="_blank"
-                                            ref={message_content_sub}
-                                        ></a>
+                                        >
+                                            {message.content.sub.content}
+                                        </a>
                                     </p>
                                 )}
                             </div>
@@ -72,8 +57,9 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                                     textDecoration: 'none',
                                     paddingBottom: '5px',
                                 }}
-                                dangerouslySetInnerHTML={{__html:message.content.main.content}}
-                            ></a>
+                            >
+                                {message.content.main.content}
+                            </a>
                             <Button
                                 size="sm"
                                 variant="outline-secondary"
@@ -91,7 +77,13 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
                             </Button>
                         </div>
                         <a className="ms-auto" href={message.topic.link}>
-                            <img src={message.topic.thumbnail} width={224} height={168} />
+                            <img
+                                src={message.topic.thumbnail}
+                                alt={message.topic.text}
+                                width={107}
+                                height={80}
+                                style={{ borderRadius: '6px' }}
+                            />
                         </a>
                     </Stack>
                 </Card.Body>
@@ -99,7 +91,8 @@ const CommentCard = ({ message, className = '' }: { message: DataItem; className
         </>
     );
 };
-const FollowCard = ({ message, className = '' }: { message: DataItem2; className?: string }) => {
+
+const FollowCard = ({ message, className = '' }: { message: FollowDataItem; className?: string }) => {
     const [userFollowed, setUserFollowed] = React.useState(message.follow_status === 1);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const userLink = `/space.html?id=${message.send_user_id}`;
