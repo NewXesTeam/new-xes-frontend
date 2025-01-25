@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { CommentDataItem, FollowDataItem } from '@/interfaces/message';
+import DOMPurify from 'dompurify';
 import { Button, Card, Stack } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
 import Avatar from './Avatar';
@@ -25,13 +26,27 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
 
     React.useEffect(() => {
         if (message_topic_text.current) {
-            message_topic_text.current.innerHTML = message.topic.text;
+            message_topic_text.current.innerHTML = DOMPurify.sanitize(message.topic.text);
         }
         if (message_content_sub.current) {
-            message_content_sub.current.innerHTML = message.content.sub.content;
+            var content = message.content.sub.content;
+            var emojis = message.content.sub.emojis
+            if (emojis.length !== 0){
+                for (var i=0;i<emojis.length;i++){
+                    content = content.replace(emojis[i].id,`<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`)
+                }
+            }
+            message_content_sub.current.innerHTML = DOMPurify.sanitize(content);
         }
         if (message_content_main.current) {
-            message_content_main.current.innerHTML = message.content.main.content;
+            var content = message.content.main.content;
+            var emojis = message.content.main.emojis
+            if (emojis.length !== 0){
+                for (var i=0;i<emojis.length;i++){
+                    content = content.replace(emojis[i].id,`<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`)
+                }
+            }
+            message_content_main.current.innerHTML = DOMPurify.sanitize(content);
         }
     }, []);
     return (
