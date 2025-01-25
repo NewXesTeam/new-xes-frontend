@@ -30,20 +30,26 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
         }
         if (message_content_sub.current) {
             var content = message.content.sub.content;
-            var emojis = message.content.sub.emojis
-            if (emojis.length !== 0){
-                for (var i=0;i<emojis.length;i++){
-                    content = content.replace(emojis[i].id,`<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`)
+            var emojis = message.content.sub.emojis;
+            if (emojis.length !== 0) {
+                for (var i = 0; i < emojis.length; i++) {
+                    content = content.replace(
+                        emojis[i].id,
+                        `<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
+                    );
                 }
             }
             message_content_sub.current.innerHTML = DOMPurify.sanitize(content);
         }
         if (message_content_main.current) {
             var content = message.content.main.content;
-            var emojis = message.content.main.emojis
-            if (emojis.length !== 0){
-                for (var i=0;i<emojis.length;i++){
-                    content = content.replace(emojis[i].id,`<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`)
+            var emojis = message.content.main.emojis;
+            if (emojis.length !== 0) {
+                for (var i = 0; i < emojis.length; i++) {
+                    content = content.replace(
+                        emojis[i].id,
+                        `<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
+                    );
                 }
             }
             message_content_main.current.innerHTML = DOMPurify.sanitize(content);
