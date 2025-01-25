@@ -31,11 +31,11 @@
 
 - [x] 主页 /index.html
 - [x] 登录 /login.html
-- [ ] 发现 /discover.html
+- [x] 发现 /discover.html
 - [ ] 搜索 /search.html
 - [ ] 我的作品 /user.html
 - [x] 个人主页 /space.html
-- [ ] 消息中心 /messages.html
+- [x] 消息中心 /messages.html
 - [x] 关于 /about.html
 - [ ] 最终用户协议（等待补充内容） /eula.html
 - [x] 用户信息展示 /userInfo.html
