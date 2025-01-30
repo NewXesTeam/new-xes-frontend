@@ -29,17 +29,27 @@
 
 ## 开发进度
 
+### 功能部分
 - [x] 主页 /index.html
 - [x] 登录 /login.html
 - [x] 发现 /discover.html
 - [ ] 搜索 /search.html
 - [x] 我的作品 /user.html
 - [x] 个人主页 /space.html
-- [x] 消息中心 /messages.html
+- [ ] 消息中心 /messages.html
 - [x] 关于 /about.html
 - [ ] 最终用户协议（等待补充内容） /eula.html
 - [x] 用户信息展示 /userInfo.html
-- [ ] ...
+- [ ] 作品展示页面 /project.html
+- [ ] 作品发布页面 /project-publish.html
+
+### 作品部分
+- [ ] 作品重定向页面 /ide.html /embed.html
+- [ ] TurboWarp  /ide/turbowarp.html /embed/turbowarp.html
+- [ ] Python 基础 /ide/python.html /embed/python.html
+- [ ] Python 海龟 /ide/webpy.html /embed/webpy.html
+- [ ] Python 高阶 /ide/pygame.html /embed/pygame.html
+- [ ] C++ /ide/cpp.html /embed/cpp.html
 
 ## 关于贡献
 
