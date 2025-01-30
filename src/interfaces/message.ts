@@ -1,3 +1,4 @@
+import { Emoji } from './common';
 import { Medal } from './medal';
 
 export interface MessageData {
@@ -51,7 +52,7 @@ interface Content {
     username: string;
     user_avatar_path: string;
     reply_username: string;
-    emojis: any[];
+    emojis: Emoji[];
 }
 
 export interface CommentDataItem {

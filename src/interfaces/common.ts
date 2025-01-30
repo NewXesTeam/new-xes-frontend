@@ -4,3 +4,8 @@ export interface ErrorResponse {
     /** 状态码 */
     status_code: number;
 }
+
+export interface Emoji {
+    id: string;
+    url: string;
+}
