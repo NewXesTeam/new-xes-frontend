@@ -1,4 +1,5 @@
 import { Work } from '@/interfaces/work';
+import { Emoji } from '@/interfaces/common';
 
 export function checkLoggedIn() {
     return document.cookie.includes('is_login=1;');
@@ -18,4 +19,17 @@ export function getEditWorkLink(work: Work) {
     } else {
         return `https://code.xueersi.com/ide/code/${work.id}`;
     }
+}
+
+export function processEmojiReplace(text: string, emojis: Emoji[]) {
+    let content = text;
+    if (emojis.length !== 0) {
+        for (let i = 0; i < emojis.length; i++) {
+            content = content.replace(
+                emojis[i].id,
+                `<img alt="${emojis[i].id}" style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
+            );
+        }
+    }
+    return content;
 }

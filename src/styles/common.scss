@@ -27,6 +27,11 @@
     z-index: 1000;
 }
 
+.badge {
+    font-size: 11px;
+    margin-left: 5px;
+}
+
 .blur-glass-background {
     color: rgba(255, 255, 255, 0.75);
     background-color: rgba(255, 255, 255, 0.25);
@@ -34,4 +39,14 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 12px;
     box-shadow: rgba(142, 142, 142, 0.19) 0 6px 15px 0;
+}
+
+.nxf-btn-primary {
+    color: black;
+    border: none;
+    background: none;
+}
+.nxf-btn-primary:hover {
+    color: var(--bs-primary);
+    background: none;
 }

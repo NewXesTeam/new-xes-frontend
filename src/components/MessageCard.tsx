@@ -1,19 +1,26 @@
 import * as React from 'react';
 import { CommentDataItem, FollowDataItem } from '@/interfaces/message';
-import DOMPurify from 'dompurify';
 import { Button, Card, Stack } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
 import Avatar from './Avatar';
-import '@/styles/message.scss';
+import { processEmojiReplace } from '@/utils';
+import { v4 as uuidV4 } from 'uuid';
+import DOMPurify from 'dompurify';
 
-const CommentCard = ({ message, className = '' }: { message: CommentDataItem; className?: string }) => {
+const CommentCard = ({
+    message,
+    className = '',
+    onRead = () => {},
+}: {
+    message: CommentDataItem;
+    className?: string;
+    onRead: () => void;
+}) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [isShow, setIsShow] = React.useState<boolean>(true);
+    const [needRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
     const sendUserLink = `/space.html?id=${message.send_user_id}`;
-    const message_topic_text = React.useRef(null);
-    const message_content_sub = React.useRef(null);
-    const message_content_main = React.useRef(null);
-    const [NeedRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
+
     const onClickRead = async () => {
         await fetch('/api/messages/read', {
             method: 'POST',
@@ -21,116 +28,117 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
             body: JSON.stringify({ category: 1, id: message.id }),
         });
         setNeedRead(false);
-        setAlerts([<AutoCloseAlert variant="success">已阅读</AutoCloseAlert>, ...alerts]);
+        setAlerts([<AutoCloseAlert variant="success" key={uuidV4()}>已阅读</AutoCloseAlert>, ...alerts]);
+        onRead();
     };
 
-    React.useEffect(() => {
-        if (message_topic_text.current) {
-            message_topic_text.current.innerHTML = DOMPurify.sanitize(message.topic.text);
-        }
-        if (message_content_sub.current) {
-            var content = message.content.sub.content;
-            var emojis = message.content.sub.emojis;
-            if (emojis.length !== 0) {
-                for (var i = 0; i < emojis.length; i++) {
-                    content = content.replace(
-                        emojis[i].id,
-                        `<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
-                    );
-                }
-            }
-            message_content_sub.current.innerHTML = DOMPurify.sanitize(content);
-        }
-        if (message_content_main.current) {
-            var content = message.content.main.content;
-            var emojis = message.content.main.emojis;
-            if (emojis.length !== 0) {
-                for (var i = 0; i < emojis.length; i++) {
-                    content = content.replace(
-                        emojis[i].id,
-                        `<img style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
-                    );
-                }
-            }
-            message_content_main.current.innerHTML = DOMPurify.sanitize(content);
-        }
-    }, []);
     return (
         <>
             <div className="alert-list">{alerts}</div>
-            <Card style={{ padding: '10px', display: isShow ? 'block' : 'none' }} className={className}>
+            <Card
+                className={className}
+                style={{
+                    display: isShow ? 'block' : 'none',
+                    borderLeftColor: needRead ? 'red' : 'var(--bs-border-color-translucent)',
+                    borderLeftWidth: needRead ? '3px' : '1px',
+                }}
+                onClick={needRead ? onClickRead : null}
+            >
                 <Card.Body>
-                    <Stack
-                        direction="horizontal"
-                        onClick={
-                            NeedRead
-                                ? () => {
-                                      onClickRead();
-                                  }
-                                : null
-                        }
-                    >
-                        <div className="notifition-dot" style={{ display: NeedRead ? 'block' : 'none' }}></div>
-                        <a href={sendUserLink} target="_blank">
-                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={108} />
+                    <Stack direction="horizontal">
+                        <a href={sendUserLink} target="_blank" style={{ alignSelf: 'flex-start' }}>
+                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={50} />
                         </a>
-                        <div style={{ margin: '26px 20px' }}>
+                        <div style={{ marginLeft: '10px', marginRight: '10px' }}>
                             <div style={{ display: 'block', paddingBottom: '5px' }}>
                                 <a href={sendUserLink} target="_blank" style={{ fontSize: '18px' }}>
                                     {message.send_username}
                                 </a>
                                 {message.content.sub == null && (
-                                    <p style={{ color: 'grey', fontSize: 'small', display: 'inline' }}>
-                                        {' '}
-                                        评论了你的作品：
+                                    <div style={{ display: 'inline' }}>
+                                        <span style={{ color: 'grey', fontSize: 'small', marginLeft: '5px' }}>
+                                            评论了你的作品：
+                                        </span>
                                         <a
-                                            style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
                                             href={message.topic.link}
                                             target="_blank"
-                                            ref={message_topic_text}
-                                        />
-                                    </p>
+                                            style={{ textDecoration: 'none', fontSize: '15px' }}
+                                        >
+                                            {message.topic.text}
+                                        </a>
+                                    </div>
                                 )}
                                 {message.content.sub != null && (
-                                    <p style={{ color: 'grey', fontSize: 'small', display: 'inline' }}>
-                                        {' '}
-                                        回复了你的评论：
-                                        <a
-                                            style={{ color: 'black', textDecoration: 'none', fontSize: '15px' }}
-                                            href={message.topic.link}
-                                            target="_blank"
-                                            ref={message_content_sub}
+                                    <div style={{ display: 'inline' }}>
+                                        <span style={{ color: 'grey', fontSize: 'small', marginLeft: '5px' }}>
+                                            回复了你的评论：
+                                        </span>
+                                        <div
+                                            style={{
+                                                display: 'inline',
+                                                color: 'black',
+                                                textDecoration: 'none',
+                                                fontSize: '15px',
+                                            }}
+                                            ref={node => {
+                                                if (node) {
+                                                    node.innerHTML = processEmojiReplace(
+                                                        DOMPurify.sanitize(message.content.sub.content),
+                                                        message.content.sub.emojis,
+                                                    );
+                                                }
+                                            }}
                                         />
-                                    </p>
+                                    </div>
                                 )}
                             </div>
-                            <a
-                                href={message.topic.link}
+                            <div
                                 style={{
                                     display: 'block',
                                     color: 'black',
                                     textDecoration: 'none',
                                     paddingBottom: '5px',
                                 }}
-                                ref={message_content_main}
-                            />
-                            <Button
-                                size="sm"
-                                variant="outline-secondary"
-                                onClick={async () => {
-                                    await fetch('/api/messages/delete', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ category: message.category, id: message.id }),
-                                    });
-                                    setAlerts([<AutoCloseAlert variant="success">删除成功</AutoCloseAlert>, ...alerts]);
-                                    setIsShow(false);
+                                ref={node => {
+                                    if (node) {
+                                        node.innerHTML = processEmojiReplace(
+                                            DOMPurify.sanitize(message.content.main.content),
+                                            message.content.main.emojis,
+                                        );
+                                    }
                                 }}
-                            >
-                                删除
-                            </Button>
+                            />
+                            <div>
+                                <span
+                                    style={{
+                                        color: 'grey',
+                                        fontSize: '12px',
+                                        marginRight: '10px',
+                                    }}
+                                >
+                                    {message.created_at}
+                                </span>
+                                <Button
+                                    size="sm"
+                                    className="nxf-btn-primary"
+                                    onClick={async () => {
+                                        await fetch('/api/messages/delete', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ category: message.category, id: message.id }),
+                                        });
+                                        setAlerts([
+                                            <AutoCloseAlert variant="success">删除成功</AutoCloseAlert>,
+                                            ...alerts,
+                                        ]);
+                                        setIsShow(false);
+                                    }}
+                                >
+                                    删除
+                                </Button>
+                            </div>
                         </div>
-                        <a className="ms-auto" href={message.topic.link}>
+                        <a className="ms-auto" href={message.topic.link} style={{ alignSelf: 'flex-start' }}>
                             <img
                                 src={message.topic.thumbnail}
                                 alt={message.topic.text}
@@ -146,11 +154,20 @@ const CommentCard = ({ message, className = '' }: { message: CommentDataItem; cl
     );
 };
 
-const FollowCard = ({ message, className = '' }: { message: FollowDataItem; className?: string }) => {
+const FollowCard = ({
+    message,
+    className = '',
+    onRead,
+}: {
+    message: FollowDataItem;
+    className?: string;
+    onRead: () => void;
+}) => {
     const [userFollowed, setUserFollowed] = React.useState(message.follow_status === 1);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
+    const [needRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
     const userLink = `/space.html?id=${message.send_user_id}`;
-    const [NeedRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
+
     const onClickRead = async () => {
         await fetch('/api/messages/read', {
             method: 'POST',
@@ -158,7 +175,8 @@ const FollowCard = ({ message, className = '' }: { message: FollowDataItem; clas
             body: JSON.stringify({ category: 1, id: message.id }),
         });
         setNeedRead(false);
-        setAlerts([<AutoCloseAlert variant="success">已阅读</AutoCloseAlert>, ...alerts]);
+        setAlerts([<AutoCloseAlert variant="success" key={uuidV4()}>已阅读</AutoCloseAlert>, ...alerts]);
+        onRead();
     };
 
     const onClickFollow = async () => {
@@ -168,37 +186,43 @@ const FollowCard = ({ message, className = '' }: { message: FollowDataItem; clas
             body: JSON.stringify({ followed_user_id: message.send_user_id, state: !userFollowed }),
         });
         setUserFollowed(!userFollowed);
-        setAlerts([<AutoCloseAlert variant="success">删除成功</AutoCloseAlert>, ...alerts]);
+        console.log(userFollowed);
+        setAlerts([
+            <AutoCloseAlert variant="success" key={uuidV4()}>{userFollowed ? '取消关注' : '关注'}成功</AutoCloseAlert>,
+            ...alerts,
+        ]);
     };
 
     return (
         <>
             <div className="alert-list">{alerts}</div>
-            <Card style={{ padding: '10px' }} className={className}>
+            <Card className={className} onClick={needRead ? onClickRead : null}>
                 <Card.Body>
-                    <Stack
-                        direction="horizontal"
-                        onClick={
-                            NeedRead
-                                ? () => {
-                                      onClickRead();
-                                  }
-                                : null
-                        }
-                    >
-                        <div className="notifition-dot" style={{ display: NeedRead ? 'block' : 'none' }}></div>
+                    <Stack direction="horizontal">
+                        <div className="notifition-dot" style={{ display: needRead ? 'block' : 'none' }}></div>
                         <a href={userLink} target="_blank">
-                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={108} />
+                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={50} />
                         </a>
-                        <div style={{ margin: '26px 20px' }}>
+                        <div style={{ marginLeft: '10px', marginRight: '10px' }}>
                             <a href={userLink} target="_blank" style={{ marginRight: '31px', fontSize: '18px' }}>
                                 {message.send_username}
                             </a>
-                            <div style={{ fontSize: '14px', marginTop: '10px' }}>{message.signature}</div>
+                            <div style={{ fontSize: '14px' }}>{message.signature}</div>
+                            <div>
+                                <span
+                                    style={{
+                                        color: 'grey',
+                                        fontSize: '12px',
+                                        marginRight: '10px',
+                                    }}
+                                >
+                                    {message.created_at}
+                                </span>
+                            </div>
                         </div>
                         <Button
                             variant={(userFollowed ? 'outline-' : '') + 'secondary'}
-                            onClick={() => onClickFollow()}
+                            onClick={onClickFollow}
                             className="ms-auto"
                         >
                             {userFollowed ? '已关注' : '关注'}

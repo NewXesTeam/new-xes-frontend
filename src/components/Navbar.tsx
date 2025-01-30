@@ -1,19 +1,21 @@
 import * as React from 'react';
-import { Container, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Form, Badge } from 'react-bootstrap';
 import { checkLoggedIn } from '@/utils';
 import Avatar from './Avatar';
 import { UserInfo } from '@/interfaces/user';
 import { MessageData } from '@/interfaces/message';
 
 const NavbarComponent = () => {
+    const [userName, setUserName] = React.useState<string>('');
+    const [userAvatar, setUserAvatar] = React.useState<string>('');
+    const [messageData, setMessageData] = React.useState<MessageData>(null);
+    const [totalMessageCount, setTotalMessageCount] = React.useState(0);
+    let userComponent: React.JSX.Element;
+
     const logoutEvent = async () => {
         await fetch('/passport/logout');
         location.reload();
     };
-    const [userName, setUserName] = React.useState<string>('');
-    const [userAvatar, setUserAvatar] = React.useState<string>('');
-    const [message, setMessage] = React.useState<React.JSX.Element>(<p className="navbar-nav">加载中</p>);
-    let userComponent: React.JSX.Element;
 
     if (checkLoggedIn()) {
         React.useEffect(() => {
@@ -24,45 +26,12 @@ const NavbarComponent = () => {
                 setUserName(responseData.data.name);
                 setUserAvatar(responseData.data.avatar_path);
 
-                const messageresponse = await fetch(`/api/messages/overview`);
-                const messageData: MessageData = await messageresponse.json();
-                // console.log(messageData.data[0].count);
-                const AllMessageCount = messageData.data[0].count + messageData.data[2].count;
-                setMessage(
-                    <NavDropdown
-                        title={
-                            <>
-                                消息{' '}
-                                <span
-                                    className="badge rounded-pill text-bg-danger"
-                                    style={{ display: AllMessageCount == 0 ? 'none' : 'inline' }}
-                                >
-                                    {AllMessageCount}
-                                </span>
-                            </>
-                        }
-                        align={'end'}
-                    >
-                        <NavDropdown.Item href="/message.html?category=1" target="_blank">
-                            评论和回复{' '}
-                            <span
-                                className="badge rounded-pill text-bg-danger"
-                                style={{ display: messageData.data[0].count == 0 ? 'none' : 'inline' }}
-                            >
-                                {messageData.data[0].count}
-                            </span>
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/message.html?category=5" target="_blank">
-                            关注{' '}
-                            <span
-                                className="badge rounded-pill text-bg-danger"
-                                style={{ display: messageData.data[2].count == 0 ? 'none' : 'inline' }}
-                            >
-                                {messageData.data[2].count}
-                            </span>
-                        </NavDropdown.Item>
-                    </NavDropdown>,
-                );
+                if (!location.pathname.includes('message.html')) {
+                    const messageResponse = await fetch(`/api/messages/overview`);
+                    const messageResponseData: MessageData = await messageResponse.json();
+                    setMessageData(messageResponseData);
+                    setTotalMessageCount(messageResponseData.data.reduce((acc, cur) => acc + cur.count, 0));
+                }
             };
 
             if (!ignore) func();
@@ -70,14 +39,44 @@ const NavbarComponent = () => {
                 ignore = true;
             };
         }, []);
-        // console.log(messageData.data[0].count)
+
         userComponent = (
             <>
-                {message}
+                {!location.pathname.includes('message.html') && (
+                    <NavDropdown
+                        title={
+                            <>
+                                消息
+                                <Badge pill bg="danger" style={{ display: totalMessageCount ? 'inline' : 'none' }}>
+                                    {totalMessageCount}
+                                </Badge>
+                            </>
+                        }
+                        align={'end'}
+                    >
+                        <NavDropdown.Item href="/message.html?category=1" target="_blank">
+                            评论和回复
+                            <Badge pill bg="danger" style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}>
+                                {messageData?.data[0].count}
+                            </Badge>
+                        </NavDropdown.Item>
+                        <NavDropdown.Item href="/message.html?category=5" target="_blank">
+                            关注
+                            <Badge pill bg="danger" style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}>
+                                {messageData?.data[2].count}
+                            </Badge>
+                        </NavDropdown.Item>
+                    </NavDropdown>
+                )}
+
                 <NavDropdown title={<Avatar name={userName} avatarUrl={userAvatar} size={40} />} align={'end'}>
+                    <NavDropdown.Item href="/user.html" target="_blank">
+                        作品管理
+                    </NavDropdown.Item>
                     <NavDropdown.Item href="/space.html" target="_blank">
                         个人空间
                     </NavDropdown.Item>
+                    <NavDropdown.Divider />
                     <NavDropdown.Item href="/userInfo.html" target="_blank">
                         个人信息
                     </NavDropdown.Item>
