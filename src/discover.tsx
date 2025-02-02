@@ -114,7 +114,11 @@ const DiscoverPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<DiscoverPage />);
+    root.render(
+        <React.StrictMode>
+            <DiscoverPage />
+        </React.StrictMode>
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }
