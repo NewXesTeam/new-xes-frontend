@@ -117,7 +117,11 @@ const UserInfoPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<UserInfoPage />);
+    root.render(
+        <React.StrictMode>
+            <UserInfoPage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }
