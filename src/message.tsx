@@ -18,7 +18,6 @@ const MessagePage = () => {
         const messageResponse = await fetch(`/api/messages/overview`);
         const messageResponseData: MessageData = await messageResponse.json();
         setMessageData(messageResponseData);
-        setTotalMessageCount(messageResponseData.data.reduce((acc, cur) => acc + cur.count, 0));
     };
 
     let params = new URLSearchParams(location.search);
@@ -28,7 +27,6 @@ const MessagePage = () => {
     const [currentTab, setCurrentTab] = React.useState(category);
     const [currentPage, setCurrentPage] = React.useState(1);
     const [messageData, setMessageData] = React.useState<MessageData>(null);
-    const [totalMessageCount, setTotalMessageCount] = React.useState(0);
 
     window.addEventListener('popstate', (event: PopStateEvent) => {
         setCurrentTab(event.state?.category || '1');
@@ -81,17 +79,19 @@ const MessagePage = () => {
 
             <Container className="mt-5">
                 <Row className="mt-3">
-                    <Col xs={12} lg={2}>
-                        <Card
-                            className="shadow-sm"
-                            style={{ position: 'sticky', top: '10px', height: 'fit-content', padding: '5px' }}
-                        >
-                            <h2>
-                                消息中心
-                                <Badge bg="danger" pill style={{ display: totalMessageCount ? 'inline' : 'none' }}>
-                                    {totalMessageCount}
-                                </Badge>
-                            </h2>
+                    <Col
+                        xs={12}
+                        lg={2}
+                        style={{
+                            position: 'sticky',
+                            top: '10px',
+                            height: 'fit-content',
+                            marginBottom: '10px',
+                            zIndex: 1,
+                        }}
+                    >
+                        <Card className="shadow" style={{ padding: '5px' }}>
+                            <h2>消息中心</h2>
                             <Nav
                                 className="flex-column"
                                 variant="pills"
@@ -151,7 +151,11 @@ const MessagePage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<MessagePage />);
+    root.render(
+        <React.StrictMode>
+            <MessagePage />
+        </React.StrictMode>,
+    );
 } else {
     throw new Error('Cannot find dom element #app');
 }
