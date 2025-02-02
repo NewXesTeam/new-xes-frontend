@@ -67,3 +67,77 @@ export interface WorkList {
     /** 每页数量 */
     per_page: number;
 }
+
+export interface PublishWorkInfo {
+    /** 作品ID */
+    id: number;
+    /** 作品名称 */
+    name: string;
+    category: number;
+    /** 作品类型 */
+    type: string;
+    /** 作品描述 */
+    description: string;
+    /** 作者ID */
+    user_id: number;
+    /** 作品封面url */
+    thumbnail: string;
+    /** 作品代码 */
+    xml: string;
+    /** 作品语言 */
+    lang: string;
+    /** 作品发布状态 */
+    published: number;
+    /** 作品发布日期 */
+    published_at: string;
+    /** 作品最后修改日期 */
+    modified_at: string;
+    /** 作品点赞数 */
+    likes: number;
+    /** 作品观看数 */
+    views: number;
+    /** 作品评论数 */
+    comments: number;
+    /** 作品版本 */
+    version: string;
+    /** 作品来源 */
+    source: string;
+    original_id: number;
+    weight: number;
+    /** 删除日期 */
+    deleted_at: string;
+    /** 创建日期 */
+    created_at: string;
+    /** 更新日期 */
+    updated_at: string;
+    /** 改编的作品作者 */
+    adapter: string;
+    hidden_code: number;
+    /** 是否删除 */
+    removed: number;
+    video: string;
+    audio: string;
+    /** 踩数 */
+    unlikes: number;
+    code_complete: number;
+    source_code_views: number;
+    /** 收藏数 */
+    favorites: number;
+    /** 标签 */
+    tags: string;
+    xml_path: string;
+    /** 作品发布类型 */
+    created_source: string;
+    /** 热度 */
+    popular_score: number;
+    code_complete_json: string;
+    live_id: null;
+    template_project_id: null;
+    /** 作者用户名 */
+    username: string;
+    /** 作者头像url */
+    user_avatar: string;
+    manual_weight: number;
+    project_type: string;
+    topic_id: string;
+}
