@@ -196,7 +196,14 @@ const FollowCard = ({
     return (
         <>
             <div className="alert-list">{alerts}</div>
-            <Card className={className} onClick={needRead ? onClickRead : null}>
+            <Card
+                className={className}
+                style={{
+                    borderLeftColor: needRead ? 'red' : 'var(--bs-border-color-translucent)',
+                    borderLeftWidth: needRead ? '3px' : '1px',
+                }}
+                onClick={needRead ? onClickRead : null}
+            >
                 <Card.Body>
                     <Stack direction="horizontal">
                         <div className="notifition-dot" style={{ display: needRead ? 'block' : 'none' }}></div>
