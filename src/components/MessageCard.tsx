@@ -28,7 +28,12 @@ const CommentCard = ({
             body: JSON.stringify({ category: 1, id: message.id }),
         });
         setNeedRead(false);
-        setAlerts([<AutoCloseAlert variant="success" key={uuidV4()}>已阅读</AutoCloseAlert>, ...alerts]);
+        setAlerts([
+            <AutoCloseAlert variant="success" key={uuidV4()}>
+                已阅读
+            </AutoCloseAlert>,
+            ...alerts,
+        ]);
         onRead();
     };
 
@@ -175,7 +180,12 @@ const FollowCard = ({
             body: JSON.stringify({ category: 1, id: message.id }),
         });
         setNeedRead(false);
-        setAlerts([<AutoCloseAlert variant="success" key={uuidV4()}>已阅读</AutoCloseAlert>, ...alerts]);
+        setAlerts([
+            <AutoCloseAlert variant="success" key={uuidV4()}>
+                已阅读
+            </AutoCloseAlert>,
+            ...alerts,
+        ]);
         onRead();
     };
 
@@ -188,7 +198,9 @@ const FollowCard = ({
         setUserFollowed(!userFollowed);
         console.log(userFollowed);
         setAlerts([
-            <AutoCloseAlert variant="success" key={uuidV4()}>{userFollowed ? '取消关注' : '关注'}成功</AutoCloseAlert>,
+            <AutoCloseAlert variant="success" key={uuidV4()}>
+                {userFollowed ? '取消关注' : '关注'}成功
+            </AutoCloseAlert>,
             ...alerts,
         ]);
     };

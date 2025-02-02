@@ -70,11 +70,11 @@ const NavbarComponent = () => {
                 )}
 
                 <NavDropdown title={<Avatar name={userName} avatarUrl={userAvatar} size={40} />} align={'end'}>
-                    <NavDropdown.Item href="/user.html" target="_blank">
-                        作品管理
-                    </NavDropdown.Item>
                     <NavDropdown.Item href="/space.html" target="_blank">
                         个人空间
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/user.html" target="_blank">
+                        作品管理
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item href="/userInfo.html" target="_blank">
