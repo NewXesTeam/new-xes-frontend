@@ -117,7 +117,7 @@ if (dom) {
     root.render(
         <React.StrictMode>
             <DiscoverPage />
-        </React.StrictMode>
+        </React.StrictMode>,
     );
 } else {
     throw new Error('Cannot find dom element #app');

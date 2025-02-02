@@ -30,6 +30,7 @@
 ## 开发进度
 
 ### 功能部分
+
 - [x] 主页 /index.html
 - [x] 登录 /login.html
 - [x] 发现 /discover.html
@@ -44,8 +45,9 @@
 - [ ] 作品发布页面 /project-publish.html
 
 ### 作品部分
+
 - [ ] 作品重定向页面 /ide.html /embed.html
-- [ ] TurboWarp  /ide/turbowarp.html /embed/turbowarp.html
+- [ ] TurboWarp /ide/turbowarp.html /embed/turbowarp.html
 - [ ] Python 基础 /ide/python.html /embed/python.html
 - [ ] Python 海龟 /ide/webpy.html /embed/webpy.html
 - [ ] Python 高阶 /ide/pygame.html /embed/pygame.html
