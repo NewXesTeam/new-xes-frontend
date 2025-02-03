@@ -3,57 +3,74 @@ import { createRoot } from 'react-dom/client';
 import { Container, Nav, Card, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
+import ProjectPublishModal from '@/components/ProjectPublishModal';
 import { Pagination } from '@/components/Pagination';
 import { UserWorkList } from '@/interfaces/user';
-import { Work } from '@/interfaces/work';
+import { Work, PublishWorkInfo } from '@/interfaces/work';
 import { getWorkLink, getEditWorkLink } from '@/utils';
 import '@/styles/user.scss';
 
-const FixedWorkCard = ({ work }: { work: Work }) => {
-    const publishedText = { 0: '未发布', 1: '已发布', 2: '审核中', removed: '已下架' };
-    const [isShowOperators, setIsShowOperators] = React.useState(false);
-    let link = getWorkLink(work);
-    let editLink = getEditWorkLink(work);
+const FixedWorkCard = (onClickPublish: (work: PublishWorkInfo) => void) => {
+    return ({ work }: { work: Work }) => {
+        const publishedText = { 0: '未发布', 1: '已发布', 2: '审核中', removed: '已下架' };
+        const [isShowOperators, setIsShowOperators] = React.useState(false);
+        let link = getWorkLink(work);
+        let editLink = getEditWorkLink(work);
 
-    return (
-        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>} onToggle={value => setIsShowOperators(value)}>
-            <div style={{ position: 'relative' }} className="mb-3">
-                <Card>
-                    <img
-                        src={
-                            work.thumbnail ||
-                            'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
-                        }
-                        className="card-img-top"
-                        alt={work.name}
-                        width={224}
-                        height={168}
-                    />
+        return (
+            <OverlayTrigger
+                overlay={<Tooltip>{work.created_at}</Tooltip>}
+                onToggle={value => setIsShowOperators(value)}
+            >
+                <div style={{ position: 'relative' }} className="mb-3">
+                    <Card>
+                        <img
+                            src={
+                                work.thumbnail ||
+                                'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
+                            }
+                            className="card-img-top"
+                            alt={work.name}
+                            width={224}
+                            height={168}
+                        />
 
-                    <div className="operators-box" style={{ display: isShowOperators ? 'flex' : 'none' }}>
-                        <Button variant="" size="sm" onClick={() => window.open(editLink, '_blank')}>
-                            编辑
-                        </Button>
-                    </div>
+                        <div className="operators-box" style={{ display: isShowOperators ? 'flex' : 'none' }}>
+                            <Button variant="" size="sm" onClick={() => window.open(editLink, '_blank')}>
+                                编辑
+                            </Button>
+                            <Button
+                                variant=""
+                                size="sm"
+                                onClick={() => {
+                                    let workData = work as unknown as PublishWorkInfo;
+                                    workData.created_source = 'original';
+                                    onClickPublish(workData);
+                                }}
+                            >
+                                发布
+                            </Button>
+                        </div>
 
-                    <Card.Body>
-                        <Card.Title>
-                            <a href={link} className="text-decoration-none stretched-link" target="_blank">
-                                {work.name}
-                            </a>
-                        </Card.Title>
-                        <Card.Text className="d-flex justify-content-between align-items-center">
-                            <span style={{ fontSize: '14px' }}>{work.username}</span>
-                            <span style={{ fontSize: '12px' }}>
-                                👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
-                            </span>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <div className="work-status">{publishedText[work.published]}</div>
-            </div>
-        </OverlayTrigger>
-    );
+                        <Card.Body>
+                            <Card.Title>
+                                <a href={link} className="text-decoration-none stretched-link" target="_blank">
+                                    {work.name}
+                                </a>
+                            </Card.Title>
+                            <Card.Text className="d-flex justify-content-between align-items-center">
+                                <span style={{ fontSize: '14px' }}>{work.username}</span>
+                                <span style={{ fontSize: '12px' }}>
+                                    👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
+                                </span>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                    <div className="work-status">{publishedText[work.published]}</div>
+                </div>
+            </OverlayTrigger>
+        );
+    };
 };
 
 const UserPage = () => {
@@ -62,6 +79,8 @@ const UserPage = () => {
     const [status, setStatus] = React.useState('all');
     const [currentPage, setCurrentPage] = React.useState(1);
     const [pageComponent, setPageComponent] = React.useState(<h2>Loading...</h2>);
+    const [showPublishModal, setShowPublishModal] = React.useState(false);
+    const publishWork = React.useRef<PublishWorkInfo>(null);
 
     React.useEffect(() => {
         let ignore = false;
@@ -77,7 +96,13 @@ const UserPage = () => {
             }
             setPageComponent(
                 <>
-                    <WorkList works={responseData.data.data} WorkCardInterface={FixedWorkCard} />
+                    <WorkList
+                        works={responseData.data.data}
+                        WorkCardInterface={FixedWorkCard((work: PublishWorkInfo) => {
+                            publishWork.current = work;
+                            setShowPublishModal(true);
+                        })}
+                    />
                     {responseData.data.total > 20 && (
                         <Pagination
                             pageCount={Math.ceil(responseData.data.total / 20)}
@@ -99,6 +124,13 @@ const UserPage = () => {
     return (
         <>
             <NavbarComponent />
+            {showPublishModal && (
+                <ProjectPublishModal
+                    work={publishWork.current}
+                    isShow={showPublishModal}
+                    setIsShow={setShowPublishModal}
+                />
+            )}
             <Container className="mt-5">
                 <Card body className="shadow-sm mb-3">
                     <Nav
