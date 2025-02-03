@@ -36,13 +36,35 @@
 - [x] 发现 /discover.html
 - [ ] 搜索 /search.html
 - [x] 我的作品 /user.html
-- [x] 个人主页 /space.html
-- [ ] 消息中心 /messages.html
-- [x] 关于 /about.html
-- [ ] 最终用户协议（等待补充内容） /eula.html
 - [x] 用户信息展示 /userInfo.html
+- [ ] 最终用户协议（等待补充内容） /eula.html
+- [x] 关于 /about.html
+
+- [x] 个人主页 /space.html
+
+    - [x] 主页
+    - [x] 封面
+    - [x] 作品
+    - [x] 收藏
+    - [x] 社交
+
+- [ ] 消息中心 /messages.html
+
+    - [x] 评论与回复
+    - [ ] 点赞与收藏
+    - [x] 关注
+    - [ ] 反馈与审核
+    - [ ] 系统消息
+
 - [ ] 作品展示页面 /project.html
-- [ ] 作品发布页面 /project-publish.html
+
+    - [ ] 作品展示
+    - [ ] 评论
+
+- [ ] 作品发布组件 ProjectPublishModal.tsx
+    - [x] 基本信息填写
+    - [ ] 标签选择
+    - [ ] 封面上传
 
 ### 作品部分
 
@@ -57,4 +79,6 @@
 
 此仓库使用 GPL-3.0 许可证。
 
-请在贡献前阅读 [贡献指南](CONTRIBUTING)。
+请在贡献前阅读 [贡献指南](CONTRIBUTING.md)。
+
+若要报告安全漏洞，请阅读 [安全策略](SECURITY.md)。
