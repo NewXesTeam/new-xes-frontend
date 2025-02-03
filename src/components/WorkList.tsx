@@ -13,12 +13,12 @@ const WorkList = ({
     works: Work[];
     className?: string;
     enableRemoved?: boolean;
-    WorkCardInterface?: ({ work: Work }) => React.JSX.Element;
+    WorkCardInterface?: ({ work }: { work: Work }) => React.JSX.Element;
 }) => {
     const cards = works.map((work: Work) => {
         if (work === null) {
             return null;
-        } else if (work.removed) {
+        } else if (work.removed && enableRemoved) {
             return (
                 <Col key={work.topic_id}>
                     <RemovedWorkCard />
