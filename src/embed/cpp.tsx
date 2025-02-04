@@ -46,7 +46,7 @@ const EmbedCppPage = () => {
     const fitAddonRef = React.useRef(new FitAddon());
     const terminal = React.useRef(
         new Terminal({
-            fontSize: 15,
+            fontSize: 20,
             fontFamily: 'monospace',
             theme: xtermTheme,
             cursorBlink: true,
