@@ -27,7 +27,7 @@ export function processEmojiReplace(text: string, emojis: Emoji[]) {
         for (let i = 0; i < emojis.length; i++) {
             content = content.replace(
                 emojis[i].id,
-                `<img alt="${emojis[i].id.replace('[','{').replace(']','}')}" style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
+                `<img alt="${emojis[i].id.replace('[', '{').replace(']', '}')}" style="width: 24px; height: 24px; margin: 0 2px" src="${emojis[i].url}">`,
             );
         }
     }
