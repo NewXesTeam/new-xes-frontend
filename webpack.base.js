@@ -7,7 +7,19 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const entriesName = ['index', 'about', 'login', 'eula', 'space', 'userInfo', 'discover', 'user', 'message'];
+const entriesName = [
+    'index',
+    'about',
+    'login',
+    'eula',
+    'space',
+    'userInfo',
+    'discover',
+    'user',
+    'message',
+    'embed/cpp',
+    'embed/python'
+];
 
 let entries = {};
 let plugins = [new MiniCssExtractPlugin()];
