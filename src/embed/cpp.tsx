@@ -55,7 +55,6 @@ const EmbedCppPage = () => {
             cursorStyle: 'bar',
         }),
     );
-    terminal.current.write('\r\n');
 
     let ws: WebSocket | null = null;
 
@@ -178,7 +177,6 @@ const EmbedCppPage = () => {
                 variant="primary"
                 onClick={() => {
                     terminal.current.reset();
-                    terminal.current.write('\r\n');
                 }}
             >
                 清除终端
@@ -186,14 +184,13 @@ const EmbedCppPage = () => {
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth - 10 + 'px',
-                    height: window.innerHeight - 40 + 'px',
+                    width: window.innerWidth-2 + 'px',
+                    height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
-                    border: '1px solid #ccc',
-                    overflow: 'hidden',
+                    border: '10px solid #2D2E2C',
                     position: 'absolute',
                     top: '40px',
-                    left: '0px',
+                    left: '1px',
                 }}
             />
         </>
