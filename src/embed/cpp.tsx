@@ -55,7 +55,6 @@ const EmbedCppPage = () => {
             cursorStyle: 'bar',
         }),
     );
-    terminal.current.write('\r\n');
 
     let ws: WebSocket | null = null;
 
@@ -123,6 +122,15 @@ const EmbedCppPage = () => {
                     else if (d.Type === 'runInfo') {
                         term.write(`\r\n\r\n\x1b[33m` + d.Info.replace('\r\n\r\n', '') + `\x1b[1m`);
                         ws.close();
+                    } else if (d.Type === 'compile') {
+                        let outraw: string = d.OutRaw;
+                        outraw = outraw.replace(/\b(\w+)\.cpp\b/g, '\x1b[34m$1.cpp\x1b[0m');
+                        outraw = outraw.replace(/error:/g, '\x1b[31merror:\x1b[0m');
+                        term.write(outraw);
+                    } else if (d.Type === 'compileFail') {
+                        term.write('\x1b[31m编译错误\x1b[0m\r\n\r\n');
+                        term.write('\x1b[31m' + d.Info + '\x1b[0m');
+                        ws.close();
                     }
                     return;
                 case '3':
@@ -130,7 +138,7 @@ const EmbedCppPage = () => {
                 case '2':
                     return;
                 default:
-                    term.write('出错了');
+                    term.write('\x1b[31m~出错了~\x1b[0m');
                     return;
             }
         };
@@ -169,7 +177,6 @@ const EmbedCppPage = () => {
                 variant="primary"
                 onClick={() => {
                     terminal.current.reset();
-                    terminal.current.write('\r\n');
                 }}
             >
                 清除终端
@@ -177,14 +184,13 @@ const EmbedCppPage = () => {
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth - 10 + 'px',
-                    height: window.innerHeight - 40 + 'px',
+                    width: window.innerWidth - 2 + 'px',
+                    height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
-                    border: '1px solid #ccc',
-                    overflow: 'hidden',
+                    border: '10px solid #2D2E2C',
                     position: 'absolute',
                     top: '40px',
-                    left: '0px',
+                    left: '1px',
                 }}
             />
         </>

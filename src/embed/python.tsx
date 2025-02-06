@@ -55,7 +55,6 @@ const EmbedPythonPage = () => {
             cursorStyle: 'bar',
         }),
     );
-    terminal.current.write('\r\n');
 
     let ws: WebSocket | null = null;
 
@@ -130,7 +129,7 @@ const EmbedPythonPage = () => {
                 case '2':
                     return;
                 default:
-                    term.write('出错了');
+                    term.write('\x1b[31m~出错了~\x1b[0m');
                     return;
             }
         };
@@ -169,7 +168,6 @@ const EmbedPythonPage = () => {
                 variant="primary"
                 onClick={() => {
                     terminal.current.reset();
-                    terminal.current.write('\r\n');
                 }}
             >
                 清除终端
@@ -177,14 +175,13 @@ const EmbedPythonPage = () => {
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth - 10 + 'px',
-                    height: window.innerHeight - 40 + 'px',
+                    width: window.innerWidth - 2 + 'px',
+                    height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
-                    border: '1px solid #ccc',
-                    overflow: 'hidden',
+                    border: '10px solid #2D2E2C',
                     position: 'absolute',
                     top: '40px',
-                    left: '0px',
+                    left: '1px',
                 }}
             />
         </>
