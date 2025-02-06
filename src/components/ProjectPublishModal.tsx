@@ -87,6 +87,7 @@ const ProjectPublishModal = ({
                                 label="原创"
                                 name="origin"
                                 value="original"
+                                disabled={work.created_source === 'adapt'}
                             />
                             <Form.Check
                                 checked={origin === 'adapt'}
@@ -96,6 +97,7 @@ const ProjectPublishModal = ({
                                 label="改编"
                                 name="origin"
                                 value="adapt"
+                                disabled={work.created_source !== 'adapt'}
                             />
                             <Form.Check
                                 checked={origin === 'reprint'}
@@ -105,6 +107,7 @@ const ProjectPublishModal = ({
                                 label="转载"
                                 name="origin"
                                 value="reprint"
+                                disabled={work.created_source === 'adapt'}
                             />
                         </Form.Group>
 
