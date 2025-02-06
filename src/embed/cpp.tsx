@@ -122,12 +122,12 @@ const EmbedCppPage = () => {
                     else if (d.Type === 'runInfo') {
                         term.write(`\r\n\r\n\x1b[33m` + d.Info.replace('\r\n\r\n', '') + `\x1b[1m`);
                         ws.close();
-                    }else if (d.Type === 'compile'){
+                    } else if (d.Type === 'compile') {
                         let outraw: string = d.OutRaw;
                         outraw = outraw.replace(/\b(\w+)\.cpp\b/g, '\x1b[34m$1.cpp\x1b[0m');
                         outraw = outraw.replace(/error:/g, '\x1b[31merror:\x1b[0m');
                         term.write(outraw);
-                    }else if (d.Type === 'compileFail') {
+                    } else if (d.Type === 'compileFail') {
                         term.write('\x1b[31m编译错误\x1b[0m\r\n\r\n');
                         term.write('\x1b[31m' + d.Info + '\x1b[0m');
                         ws.close();
@@ -184,7 +184,7 @@ const EmbedCppPage = () => {
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth-2 + 'px',
+                    width: window.innerWidth - 2 + 'px',
                     height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
                     border: '10px solid #2D2E2C',

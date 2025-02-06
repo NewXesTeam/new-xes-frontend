@@ -175,7 +175,7 @@ const EmbedPythonPage = () => {
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth-2 + 'px',
+                    width: window.innerWidth - 2 + 'px',
                     height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
                     border: '10px solid #2D2E2C',
