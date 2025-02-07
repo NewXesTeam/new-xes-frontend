@@ -1,19 +1,32 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from 'react-bootstrap';
+import AceEditor from 'react-ace';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { checkLoggedIn, b64_to_utf8 } from '@/utils';
 import '@/styles/common.scss';
 import '@/styles/xterm.scss';
 import '../../node_modules/xterm/css/xterm.css';
+import '../../node_modules/ace-builds/src-noconflict/mode-python';
+import '../../node_modules/ace-builds/src-noconflict/theme-textmate';
+import '../../node_modules/ace-builds/src-noconflict/ext-language_tools';
+import '../../node_modules/ace-builds/src-noconflict/snippets/python';
 
-const EmbedCppPage = () => {
+const IdePythonPage = () => {
     if (!checkLoggedIn()) {
         location.href = '/login.html';
         return null;
     }
+
+    const param: URLSearchParams = new URLSearchParams(location.search);
+    const id: string | null = param.get('id');
+
     const [runningState, setRunningState] = React.useState<boolean>(false);
+    const [code, setCode] = React.useState<string>('');
+    const changeCode = (value: string) => {
+        setCode(value);
+    };
 
     const xtermTheme = {
         foreground: '#F8F8F8',
@@ -37,12 +50,6 @@ const EmbedCppPage = () => {
         brightWhite: '#FFFFFF',
     };
 
-    const param: URLSearchParams = new URLSearchParams(location.search);
-    const from: string | null = param.get('from');
-    const id: string | null = param.get('id');
-    const show_only_answer: string | null = param.get('show_only_answer');
-    const v: string | null = param.get('v');
-
     const terminalRef = React.useRef<HTMLDivElement>(null);
     const fitAddonRef = React.useRef(new FitAddon());
     const terminal = React.useRef(
@@ -60,10 +67,6 @@ const EmbedCppPage = () => {
     let ws: WebSocket | null = null;
 
     const onClickRun = async () => {
-        const response = await fetch(
-            `/api/compilers/v2/${id}/?from=${from}&show_only_answer=${show_only_answer}&v=${v}&id=${id}`,
-        );
-        const responseData = await response.json();
         const term = terminal.current;
         ws = new WebSocket(`wss://codedynamic.xueersi.com/api/compileapi/ws/run`);
 
@@ -77,9 +80,9 @@ const EmbedCppPage = () => {
             ws.send(
                 '7' +
                     JSON.stringify({
-                        xml: responseData.data.xml,
+                        xml: code,
                         type: 'run',
-                        lang: responseData.data.lang,
+                        lang: 'python',
                         original_id: 1,
                     }),
             );
@@ -123,15 +126,6 @@ const EmbedCppPage = () => {
                     else if (d.Type === 'runInfo') {
                         term.write(`\r\n\r\n\x1b[33m` + d.Info.replace('\r\n\r\n', '') + `\x1b[1m`);
                         ws.close();
-                    } else if (d.Type === 'compile') {
-                        let outraw: string = d.OutRaw;
-                        outraw = outraw.replace(/\b(\w+)\.cpp\b/g, '\x1b[34m$1.cpp\x1b[0m');
-                        outraw = outraw.replace(/error:/g, '\x1b[31merror:\x1b[0m');
-                        term.write(outraw);
-                    } else if (d.Type === 'compileFail') {
-                        term.write('\x1b[31m编译错误\x1b[0m\r\n\r\n');
-                        term.write('\x1b[31m' + d.Info + '\x1b[0m');
-                        ws.close();
                     }
                     return;
                 case '3':
@@ -160,6 +154,11 @@ const EmbedCppPage = () => {
                 term.open(terminalRef.current);
                 fitAddonRef.current.fit(); // 初始化时调整大小以适应容器
             }
+            if (id) {
+                const response = await fetch(`/api/compilers/v2/${id}?id=${id}`);
+                const responseData = await response.json();
+                setCode(responseData.data.xml);
+            }
         };
 
         if (!ignore) func();
@@ -182,16 +181,38 @@ const EmbedCppPage = () => {
             >
                 清除终端
             </Button>
+            <AceEditor
+                value={code}
+                style={{ position: 'absolute', top: '40px' }}
+                mode="python"
+                theme="textmate"
+                name="python"
+                onChange={changeCode}
+                width={window.innerWidth * 0.5 + 'px'}
+                height={window.innerHeight - 50 + 'px'}
+                fontSize={18}
+                highlightActiveLine={false}
+                setOptions={{
+                    useWorker: false,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: true,
+                    showLineNumbers: true,
+                    enableBasicAutocompletion: true,
+                    wrap: false,
+                    tabSize: 4,
+                    showGutter: true,
+                }}
+            />
             <div
                 ref={terminalRef}
                 style={{
-                    width: window.innerWidth - 2 + 'px',
+                    width: window.innerWidth * 0.5 + 'px',
                     height: window.innerHeight - 50 + 'px',
                     borderRadius: '15px',
                     border: '10px solid #2D2E2C',
                     position: 'absolute',
                     top: '40px',
-                    left: '1px',
+                    left: window.innerWidth * 0.5 + 'px',
                 }}
             />
         </>
@@ -201,7 +222,7 @@ const EmbedCppPage = () => {
 const dom: HTMLElement | null = document.getElementById('app');
 if (dom) {
     const root = createRoot(dom);
-    root.render(<EmbedCppPage />);
+    root.render(<IdePythonPage />);
 } else {
     throw new Error('Cannot find dom element #app');
 }

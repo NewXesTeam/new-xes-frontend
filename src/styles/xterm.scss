@@ -1,0 +1,10 @@
+/* 隐藏滚动条 */
+.xterm-viewport {
+    overflow-y: scroll;
+    scrollbar-width: none; /* 针对 Firefox */
+    -ms-overflow-style: none; /* 针对 IE 10+ */
+}
+
+.xterm-viewport::-webkit-scrollbar {
+    display: none; /* 针对 Chrome, Safari 和 Opera */
+}

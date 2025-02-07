@@ -19,6 +19,8 @@ const entriesName = [
     'message',
     'embed/cpp',
     'embed/python',
+    'ide/cpp',
+    'ide/python',
 ];
 
 let entries = {};

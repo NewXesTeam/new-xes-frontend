@@ -5,6 +5,7 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { checkLoggedIn, b64_to_utf8 } from '@/utils';
 import '@/styles/common.scss';
+import '@/styles/xterm.scss';
 import '../../node_modules/xterm/css/xterm.css';
 
 const EmbedPythonPage = () => {
