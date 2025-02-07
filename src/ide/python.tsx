@@ -187,6 +187,7 @@ const IdePythonPage = () => {
                 mode="python"
                 theme="textmate"
                 name="python"
+                onChange={changeCode}
                 width={window.innerWidth * 0.5 + 'px'}
                 height={window.innerHeight - 50 + 'px'}
                 fontSize={18}
