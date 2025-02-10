@@ -2,14 +2,19 @@ import * as React from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Badge } from 'react-bootstrap';
 import { checkLoggedIn } from '@/utils';
 import Avatar from './Avatar';
+import { Associate_words } from '@/interfaces/common';
 import { UserInfo } from '@/interfaces/user';
 import { MessageData } from '@/interfaces/message';
+import "@/styles/search.scss";
 
 const NavbarComponent = () => {
     const [userName, setUserName] = React.useState<string>('');
     const [userAvatar, setUserAvatar] = React.useState<string>('');
     const [messageData, setMessageData] = React.useState<MessageData>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
+    const suggestionsRef = React.useRef<HTMLUListElement>(null);
+    const timerRef = React.useRef<NodeJS.Timeout>(null);
+    const [suggestions, setSuggestions] = React.useState<React.JSX.Element[]>([]);
     let userComponent: React.JSX.Element;
 
     const logoutEvent = async () => {
@@ -105,7 +110,35 @@ const NavbarComponent = () => {
 
                     <Nav className="ms-auto" style={{ alignItems: 'center' }}>
                         <Form role="search" action="https://code.xueersi.com/search-center" className="me-2">
-                            <Form.Control type="search" placeholder="搜索" className=" mr-sm-2" name="keyword" />
+                            <Form.Control onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                clearTimeout(timerRef.current);
+                                timerRef.current = setTimeout(async () => {
+                                    const inputValue = event.target.value.toLowerCase();
+                                    setSuggestions([]);
+                                    let suggestionsList = [];
+                                    if (inputValue.length > 0) {
+                                        const response = await fetch(`/api/search/associate_words?keyword=${inputValue}`);
+                                        const responseData: Associate_words = await response.json();
+                                        for (let i=0;i<responseData.data.length;++i) {
+                                            suggestionsList.push(unescape(responseData.data[i].word));
+                                        }
+                                        setSuggestions(suggestionsList.map((word, index) => (
+                                            <li key={index} onClick={() => {
+                                                event.target.value = word.replace(/<em>/g, '').replace(/<\/em>/g, '');
+                                                suggestionsRef.current.style.display = "none";
+                                            }} ref={element => {
+                                                if (element) {
+                                                    element.innerHTML = word;
+                                                }
+                                            }} />
+                                        )));
+                                        suggestionsRef.current.style.display = "block";
+                                    } else {
+                                        suggestionsRef.current.style.display = "none";
+                                    }
+                                }, 500)
+                            }} type="search" placeholder="搜索" className=" mr-sm-2" name="keyword" />
+                            <ul id="suggestions-list" ref={suggestionsRef}>{suggestions}</ul>
                         </Form>
 
                         {userComponent}

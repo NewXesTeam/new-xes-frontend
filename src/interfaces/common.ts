@@ -18,3 +18,16 @@ export interface Emoji {
     id: string;
     url: string;
 }
+
+export interface Associate_word {
+    word: string;
+}
+
+export interface Associate_words {
+    /** 数据 */
+    data: Associate_word[];
+    /** 状态信息 */
+    msg: string;
+    /** 状态码 */
+    status: number;
+}
