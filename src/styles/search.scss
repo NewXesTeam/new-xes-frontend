@@ -12,14 +12,14 @@
     width: 13rem;
     z-index: 1;
 }
-  
+
 /* 提示列表中每个选项的样式 */
 #suggestions-list li {
     padding: 8px 10px;
     cursor: pointer;
     color: #858c96;
 }
-  
+
 /* 鼠标悬停在选项上的效果 */
 #suggestions-list li:hover {
     background-color: #f5f5f5;
