@@ -6,7 +6,6 @@ import { Associate_words } from '@/interfaces/common';
 import { UserInfo } from '@/interfaces/user';
 import { MessageData } from '@/interfaces/message';
 import '@/styles/search.scss';
-import { set } from 'ace-builds-internal/config';
 
 const NavbarComponent = () => {
     const [userName, setUserName] = React.useState<string>('');
