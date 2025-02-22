@@ -15,7 +15,7 @@ const ProjectPublishModal = ({
 }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [work, setWork] = React.useState<PublishWorkInfo>(workInfo);
-    
+
     let lang = workInfo.lang;
     if (lang === 'webpy' || lang === 'python') {
         lang = 'python';
@@ -52,7 +52,7 @@ const ProjectPublishModal = ({
     const workTagsRef = React.useRef<string>(null);
     // const thumbnailImageRef = React.useRef<HTMLImageElement>(null);
     const [thumbnailImage, setThumbnailImage] = React.useState<string>(
-        work.thumbnail || 'https://static0.xesimg.com/talcode/assets/py/default-python-thumbnail.png'
+        work.thumbnail || 'https://static0.xesimg.com/talcode/assets/py/default-python-thumbnail.png',
     );
     const descriptionTextRef = React.useRef<HTMLTextAreaElement>(null);
     const [origin, setOrigin] = React.useState<string>(work.created_source || 'original');
@@ -65,9 +65,9 @@ const ProjectPublishModal = ({
         // console.log(e.target.value);
         if (workTagsRef.current === null) workTagsRef.current = '';
         if (e.target.checked) {
-            workTagsRef.current += e.target.value+' ';
+            workTagsRef.current += e.target.value + ' ';
         } else {
-            workTagsRef.current = workTagsRef.current.replace(e.target.value+' ', '');
+            workTagsRef.current = workTagsRef.current.replace(e.target.value + ' ', '');
         }
         // console.log(workTagsRef.current);
     };
@@ -76,8 +76,7 @@ const ProjectPublishModal = ({
         let ignore = false;
         const func = async () => {
             let now_lang = lang;
-            if (lang === 'python')
-                now_lang = 'compilers';
+            if (lang === 'python') now_lang = 'compilers';
             const response = await fetch(`/api/${now_lang}/${work.id}?id=${work.id}`);
             const responseData = await response.json();
             setWork(responseData.data);
@@ -87,7 +86,7 @@ const ProjectPublishModal = ({
         return () => {
             ignore = true;
         };
-    }, [])
+    }, []);
 
     return (
         <Modal show={isShow} centered={true}>
@@ -99,11 +98,7 @@ const ProjectPublishModal = ({
                 <Row>
                     <Col sm={6}>
                         <p>作品封面</p>
-                        <img
-                            src={thumbnailImage}
-                            alt="作品封面"
-                            style={{ width: '100%' }}
-                        />
+                        <img src={thumbnailImage} alt="作品封面" style={{ width: '100%' }} />
                     </Col>
                     <Col sm={6}>
                         <Form.Label>* 作品名称</Form.Label>
@@ -158,37 +153,37 @@ const ProjectPublishModal = ({
                         <Form.Group>
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='游戏'
-                                value='游戏'
-                                id='游戏'
+                                type="checkbox"
+                                label="游戏"
+                                value="游戏"
+                                id="游戏"
                                 defaultChecked={work.tags && work.tags.includes('游戏')}
                                 onChange={handleChangeTags}
                             />
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='动画'
-                                value='动画'
-                                id='动画'
+                                type="checkbox"
+                                label="动画"
+                                value="动画"
+                                id="动画"
                                 defaultChecked={work.tags && work.tags.includes('动画')}
                                 onChange={handleChangeTags}
                             />
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='故事'
-                                value='故事'
-                                id='故事'
+                                type="checkbox"
+                                label="故事"
+                                value="故事"
+                                id="故事"
                                 defaultChecked={work.tags && work.tags.includes('故事')}
                                 onChange={handleChangeTags}
                             />
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='模拟'
-                                value='模拟'
-                                id='模拟'
+                                type="checkbox"
+                                label="模拟"
+                                value="模拟"
+                                id="模拟"
                                 defaultChecked={work.tags && work.tags.includes('模拟')}
                                 onChange={handleChangeTags}
                             />
@@ -196,28 +191,28 @@ const ProjectPublishModal = ({
                         <Form.Group>
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='艺术'
-                                value='艺术'
-                                id='艺术'
+                                type="checkbox"
+                                label="艺术"
+                                value="艺术"
+                                id="艺术"
                                 defaultChecked={work.tags && work.tags.includes('艺术')}
                                 onChange={handleChangeTags}
                             />
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='教程'
-                                value='教程'
-                                id='教程'
+                                type="checkbox"
+                                label="教程"
+                                value="教程"
+                                id="教程"
                                 defaultChecked={work.tags && work.tags.includes('教程')}
                                 onChange={handleChangeTags}
                             />
                             <Form.Check
                                 inline
-                                type='checkbox'
-                                label='其他'
-                                value='其他'
-                                id='其他'
+                                type="checkbox"
+                                label="其他"
+                                value="其他"
+                                id="其他"
                                 defaultChecked={work.tags && work.tags.includes('其他')}
                                 onChange={handleChangeTags}
                             />
