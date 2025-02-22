@@ -7,11 +7,12 @@ import { FitAddon } from '@xterm/addon-fit';
 import { checkLoggedIn, b64_to_utf8 } from '@/utils';
 import '@/styles/common.scss';
 import '@/styles/xterm.scss';
-import '../../node_modules/xterm/css/xterm.css';
-import '../../node_modules/ace-builds/src-noconflict/mode-python';
-import '../../node_modules/ace-builds/src-noconflict/theme-textmate';
-import '../../node_modules/ace-builds/src-noconflict/ext-language_tools';
-import '../../node_modules/ace-builds/src-noconflict/snippets/python';
+import '@xterm/xterm/css/xterm.css';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/theme-textmate';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/snippets/python';
+import 'ace-builds/src-noconflict/ext-settings_menu';
 
 const IdePythonPage = () => {
     if (!checkLoggedIn()) {

@@ -39,17 +39,19 @@ const FixedWorkCard = (onClickPublish: (work: PublishWorkInfo) => void) => {
                             <Button variant="" size="sm" onClick={() => window.open(editLink, '_blank')}>
                                 编辑
                             </Button>
-                            <Button
-                                variant=""
-                                size="sm"
-                                onClick={() => {
-                                    let workData = work as unknown as PublishWorkInfo;
-                                    workData.created_source = 'original';
-                                    onClickPublish(workData);
-                                }}
-                            >
-                                发布
-                            </Button>
+                            {work.published === 0 && (
+                                <Button
+                                    variant=""
+                                    size="sm"
+                                    onClick={() => {
+                                        let workData = work as unknown as PublishWorkInfo;
+                                        workData.created_source = 'original';
+                                        onClickPublish(workData);
+                                    }}
+                                >
+                                    发布
+                                </Button>
+                            )}
                         </div>
 
                         <Card.Body>
@@ -126,7 +128,7 @@ const UserPage = () => {
             <NavbarComponent />
             {showPublishModal && (
                 <ProjectPublishModal
-                    work={publishWork.current}
+                    workInfo={publishWork.current}
                     isShow={showPublishModal}
                     setIsShow={setShowPublishModal}
                 />
