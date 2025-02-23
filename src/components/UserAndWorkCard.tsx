@@ -22,7 +22,11 @@ const UserAndWorkCard = ({ info, className = '' }: { info: any; className?: stri
             <Card.Body>
                 <Stack direction="horizontal">
                     <a href={userLink} target="_blank">
-                        <Avatar name={info.user.realname.replace(/<em>|<\/em>/g, '')} avatarUrl={info.user.avatar_path} size={108} />
+                        <Avatar
+                            name={info.user.realname.replace(/<em>|<\/em>/g, '')}
+                            avatarUrl={info.user.avatar_path}
+                            size={108}
+                        />
                     </a>
                     <div style={{ margin: '26px 20px' }}>
                         <div>

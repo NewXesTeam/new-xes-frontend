@@ -60,10 +60,14 @@ const SpaceTabs = {
                 let response: Response;
                 let responseData: any;
                 if (currentPage === 1) {
-                    response = await fetch(`/api/search?keyword=${keyword}&search_type=all&page=${currentPage}&per_page=50`);
+                    response = await fetch(
+                        `/api/search?keyword=${keyword}&search_type=all&page=${currentPage}&per_page=50`,
+                    );
                     responseData = await response.json();
                 } else {
-                    response = await fetch(`/api/search?keyword=${keyword}&search_type=works&order_type=comprehensive&lang=all&page=${currentPage}&per_page=50`);
+                    response = await fetch(
+                        `/api/search?keyword=${keyword}&search_type=works&order_type=comprehensive&lang=all&page=${currentPage}&per_page=50`,
+                    );
                     responseData = await response.json();
                 }
                 if (responseData.data.total === 0) {
@@ -162,11 +166,7 @@ const SpaceTabs = {
             };
         }, [currentPage]);
 
-        return (
-            <Container className="mt-2">
-                {pageComponent}
-            </Container>
-        );
+        return <Container className="mt-2">{pageComponent}</Container>;
     },
     ProjectsTab: ({ keyword }: { keyword: string }) => {
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
@@ -199,7 +199,7 @@ const SpaceTabs = {
                                     if (eventKey !== lang) {
                                         setLang(eventKey ?? 'all');
                                         setCurrentPage(1);
-                                        }
+                                    }
                                 }}
                             >
                                 <Nav.Item>
@@ -238,7 +238,7 @@ const SpaceTabs = {
                                 </Nav.Item>
                             </Nav>
                         </div>
-                        
+
                         <WorkList works={responseData.data.data} WorkCardInterface={FixedWorkCard} />
                         {responseData.data.total > 50 && (
                             <div style={{ width: '100%' }}>
