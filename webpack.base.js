@@ -17,6 +17,7 @@ const entriesName = [
     'discover',
     'user',
     'message',
+    'search',
     'embed/cpp',
     'embed/python',
     'ide/cpp',

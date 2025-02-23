@@ -8,7 +8,7 @@ const WorkCard = ({ work }: { work: Work }) => {
     let author_url = `/space.html?id=${work.user_id}`;
 
     return (
-        <OverlayTrigger overlay={<Tooltip>{work.created_at}</Tooltip>}>
+        <OverlayTrigger overlay={<Tooltip>{work.published_at}</Tooltip>}>
             <Card className="mb-3">
                 <img
                     src={

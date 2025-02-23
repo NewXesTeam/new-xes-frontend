@@ -1,12 +1,18 @@
 @import 'xterm/css/xterm.css';
 
-/* 隐藏滚动条 */
-.xterm-viewport {
-    overflow-y: scroll;
-    scrollbar-width: none; /* 针对 Firefox */
-    -ms-overflow-style: none; /* 针对 IE 10+ */
+.xterm-viewport::-webkit-scrollbar {
+    width: 10px;
 }
 
-.xterm-viewport::-webkit-scrollbar {
-    display: none; /* 针对 Chrome, Safari 和 Opera */
+.xterm-viewport::-webkit-scrollbar-track {
+    background: #555;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
 }
