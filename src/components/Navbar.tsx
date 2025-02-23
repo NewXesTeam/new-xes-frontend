@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, Badge } from 'react-bootstrap';
 import { checkLoggedIn } from '@/utils';
 import Avatar from './Avatar';
+import SearchInput from './SearchInput';
 import { Associate_words } from '@/interfaces/common';
 import { UserInfo } from '@/interfaces/user';
 import { MessageData } from '@/interfaces/message';
@@ -109,63 +110,7 @@ const NavbarComponent = () => {
                     </Nav>
 
                     <Nav className="ms-auto" style={{ alignItems: 'center' }}>
-                        <Form role="search" action="https://code.xueersi.com/search-center" className="me-2">
-                            <Form.Control
-                                onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    clearTimeout(timerRef.current);
-                                    timerRef.current = setTimeout(async () => {
-                                        const inputValue = event.target.value.toLowerCase();
-                                        setSuggestions([]);
-                                        let suggestionsList: string[] = [];
-                                        if (inputValue.length > 0) {
-                                            const response = await fetch(
-                                                `/api/search/associate_words?keyword=${inputValue}`,
-                                            );
-                                            const responseData: Associate_words = await response.json();
-                                            for (let i = 0; i < responseData.data.length; ++i) {
-                                                suggestionsList.push(unescape(responseData.data[i].word));
-                                            }
-                                            setSuggestions(
-                                                suggestionsList.map((word, index) => (
-                                                    <li
-                                                        key={index}
-                                                        onClick={() => {
-                                                            event.target.value = word
-                                                                .replace(/<em>/g, '')
-                                                                .replace(/<\/em>/g, '');
-                                                            setIsShowSuggestions(false);
-                                                        }}
-                                                        ref={element => {
-                                                            if (element) {
-                                                                element.innerHTML = word;
-                                                            }
-                                                        }}
-                                                    />
-                                                )),
-                                            );
-                                            setIsShowSuggestions(true);
-                                        } else {
-                                            setIsShowSuggestions(false);
-                                        }
-                                    }, 500);
-                                }}
-                                onBlur={() => {
-                                    setTimeout(() => {
-                                        if (is_show_suggestions === true) {
-                                            setIsShowSuggestions(false);
-                                            clearTimeout(timerRef.current);
-                                        }
-                                    }, 100);
-                                }}
-                                type="search"
-                                placeholder="搜索"
-                                className=" mr-sm-2"
-                                name="keyword"
-                            />
-                            <ul id="suggestions-list" style={{ display: is_show_suggestions ? 'block' : 'none' }}>
-                                {suggestions}
-                            </ul>
-                        </Form>
+                        <SearchInput />
 
                         {userComponent}
 
