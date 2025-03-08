@@ -15,11 +15,7 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
     let author_url = `/space.html?id=${work.user_id}`;
 
     if (work.name === null) {
-        return (
-            <Card className="mb-3" body>
-                这个是api莫名生成的null作品（
-            </Card>
-        );
+        return null;
     }
 
     return (
