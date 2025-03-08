@@ -19,7 +19,7 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
             <Card className="mb-3" body>
                 这个是api莫名生成的null作品（
             </Card>
-        )
+        );
     }
 
     return (
