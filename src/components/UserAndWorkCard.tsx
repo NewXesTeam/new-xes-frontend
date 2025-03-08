@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { SimpleUserInfo } from '@/interfaces/user';
-import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
+import { Button, Card, Stack } from 'react-bootstrap';
 import WorkList from '@/components/WorkList';
 import Avatar from './Avatar';
 

@@ -87,6 +87,7 @@ const SpaceTabs = {
                         {currentPage === 1 && (
                             <>
                                 <UserAndWorkList infos={responseData.data.users.data} />
+                                <br />
                                 <WorkList works={responseData.data.works.data} WorkCardInterface={FixedWorkCard} />
                             </>
                         )}
