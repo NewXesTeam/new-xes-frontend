@@ -14,6 +14,14 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
     let link = getWorkLink(work);
     let author_url = `/space.html?id=${work.user_id}`;
 
+    if (work.name === null) {
+        return (
+            <Card className="mb-3" body>
+                这个是api莫名生成的null作品（
+            </Card>
+        )
+    }
+
     return (
         <OverlayTrigger overlay={<Tooltip>{work.published_at}</Tooltip>}>
             <Card className="mb-3">
