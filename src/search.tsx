@@ -14,6 +14,10 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
     let link = getWorkLink(work);
     let author_url = `/space.html?id=${work.user_id}`;
 
+    if (work.name === null) {
+        return null;
+    }
+
     return (
         <OverlayTrigger overlay={<Tooltip>{work.published_at}</Tooltip>}>
             <Card className="mb-3">
@@ -79,6 +83,7 @@ const SpaceTabs = {
                         {currentPage === 1 && (
                             <>
                                 <UserAndWorkList infos={responseData.data.users.data} />
+                                <br />
                                 <WorkList works={responseData.data.works.data} WorkCardInterface={FixedWorkCard} />
                             </>
                         )}

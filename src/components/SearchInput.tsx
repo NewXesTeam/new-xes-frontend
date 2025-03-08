@@ -60,7 +60,7 @@ const SearchInput = ({ keyword = null }: { keyword?: string }) => {
                 name="keyword"
                 defaultValue={keyword || ''}
             />
-            <ul id="suggestions-list" style={{ display: is_show_suggestions ? 'block' : 'none' }}>
+            <ul id="suggestions-list" style={{ display: is_show_suggestions ? 'block' : 'none', zIndex: 9999 }}>
                 {suggestions}
             </ul>
         </Form>

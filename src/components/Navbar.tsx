@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Container, Nav, Navbar, NavDropdown, Form, Badge } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap';
 import { checkLoggedIn } from '@/utils';
 import Avatar from './Avatar';
 import SearchInput from './SearchInput';
-import { Associate_words } from '@/interfaces/common';
 import { UserInfo } from '@/interfaces/user';
 import { MessageData } from '@/interfaces/message';
 import '@/styles/search.scss';
@@ -13,9 +12,6 @@ const NavbarComponent = () => {
     const [userAvatar, setUserAvatar] = React.useState<string>('');
     const [messageData, setMessageData] = React.useState<MessageData>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
-    const timerRef = React.useRef<NodeJS.Timeout>(null);
-    const [is_show_suggestions, setIsShowSuggestions] = React.useState<boolean>(false);
-    const [suggestions, setSuggestions] = React.useState<React.JSX.Element[]>([]);
     let userComponent: React.JSX.Element;
 
     const logoutEvent = async () => {
