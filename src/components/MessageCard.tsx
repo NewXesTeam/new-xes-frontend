@@ -177,7 +177,7 @@ const FollowCard = ({
         await fetch('/api/messages/read', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ category: 1, id: message.id }),
+            body: JSON.stringify({ category: 5, id: message.id }),
         });
         setNeedRead(false);
         setAlerts([

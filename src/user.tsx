@@ -5,12 +5,17 @@ import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
 import ProjectPublishModal from '@/components/ProjectPublishModal';
 import { Pagination } from '@/components/Pagination';
+import AutoCloseAlert from '@/components/AutoCloseAlert';
 import { UserWorkList } from '@/interfaces/user';
 import { Work, PublishWorkInfo } from '@/interfaces/work';
+import { v4 as uuidV4 } from 'uuid';
 import { getWorkLink, getEditWorkLink } from '@/utils';
 import '@/styles/user.scss';
 
-const FixedWorkCard = (onClickPublish: (work: PublishWorkInfo) => void) => {
+const FixedWorkCard = (
+    onClickPublish: (work: PublishWorkInfo) => void,
+    onClickCancelPublish: (work: PublishWorkInfo) => void,
+) => {
     return ({ work }: { work: Work }) => {
         const publishedText = { 0: '未发布', 1: '已发布', 2: '审核中', removed: '已下架' };
         const [isShowOperators, setIsShowOperators] = React.useState(false);
@@ -52,6 +57,18 @@ const FixedWorkCard = (onClickPublish: (work: PublishWorkInfo) => void) => {
                                     发布
                                 </Button>
                             )}
+                            {work.published === 1 && (
+                                <Button
+                                    variant=""
+                                    size="sm"
+                                    onClick={() => {
+                                        let workData = work as unknown as PublishWorkInfo;
+                                        onClickCancelPublish(workData);
+                                    }}
+                                >
+                                    取消发布
+                                </Button>
+                            )}
                         </div>
 
                         <Card.Body>
@@ -82,6 +99,7 @@ const UserPage = () => {
     const [currentPage, setCurrentPage] = React.useState(1);
     const [pageComponent, setPageComponent] = React.useState(<h2>Loading...</h2>);
     const [showPublishModal, setShowPublishModal] = React.useState(false);
+    const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const publishWork = React.useRef<PublishWorkInfo>(null);
 
     React.useEffect(() => {
@@ -100,10 +118,30 @@ const UserPage = () => {
                 <>
                     <WorkList
                         works={responseData.data.data}
-                        WorkCardInterface={FixedWorkCard((work: PublishWorkInfo) => {
-                            publishWork.current = work;
-                            setShowPublishModal(true);
-                        })}
+                        WorkCardInterface={FixedWorkCard(
+                            (work: PublishWorkInfo) => {
+                                publishWork.current = work;
+                                setShowPublishModal(true);
+                            },
+                            async (work: PublishWorkInfo) => {
+                                await fetch(`/api/${lang}/${work.id}/cancel_publish`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        params: {
+                                            id: work.id,
+                                        },
+                                    }),
+                                });
+                                setAlerts([
+                                    <AutoCloseAlert key={uuidV4()} variant="suceess">
+                                        已取消发布
+                                    </AutoCloseAlert>,
+                                    ...alerts,
+                                ]);
+                                setLang(work.lang);
+                            },
+                        )}
                     />
                     {responseData.data.total > 20 && (
                         <Pagination
@@ -125,6 +163,7 @@ const UserPage = () => {
 
     return (
         <>
+            <div className="alert-list">{alerts}</div>
             <NavbarComponent />
             {showPublishModal && (
                 <ProjectPublishModal
