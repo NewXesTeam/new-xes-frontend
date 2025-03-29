@@ -12,7 +12,10 @@ import { v4 as uuidV4 } from 'uuid';
 import { getWorkLink, getEditWorkLink } from '@/utils';
 import '@/styles/user.scss';
 
-const FixedWorkCard = (onClickPublish: (work: PublishWorkInfo) => void, onClickCancelPublish: (work: PublishWorkInfo) => void) => {
+const FixedWorkCard = (
+    onClickPublish: (work: PublishWorkInfo) => void,
+    onClickCancelPublish: (work: PublishWorkInfo) => void,
+) => {
     return ({ work }: { work: Work }) => {
         const publishedText = { 0: '未发布', 1: '已发布', 2: '审核中', removed: '已下架' };
         const [isShowOperators, setIsShowOperators] = React.useState(false);
@@ -115,22 +118,30 @@ const UserPage = () => {
                 <>
                     <WorkList
                         works={responseData.data.data}
-                        WorkCardInterface={FixedWorkCard((work: PublishWorkInfo) => {
-                            publishWork.current = work;
-                            setShowPublishModal(true);
-                        }, async (work: PublishWorkInfo) => {
-                            await fetch(`/api/${lang}/${work.id}/cancel_publish`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    params: {
-                                        id: work.id
-                                    }
-                                }),
-                            });
-                            setAlerts([<AutoCloseAlert key={uuidV4()} variant="suceess">已取消发布</AutoCloseAlert>, ...alerts]);
-                            setLang(work.lang);
-                        })}
+                        WorkCardInterface={FixedWorkCard(
+                            (work: PublishWorkInfo) => {
+                                publishWork.current = work;
+                                setShowPublishModal(true);
+                            },
+                            async (work: PublishWorkInfo) => {
+                                await fetch(`/api/${lang}/${work.id}/cancel_publish`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        params: {
+                                            id: work.id,
+                                        },
+                                    }),
+                                });
+                                setAlerts([
+                                    <AutoCloseAlert key={uuidV4()} variant="suceess">
+                                        已取消发布
+                                    </AutoCloseAlert>,
+                                    ...alerts,
+                                ]);
+                                setLang(work.lang);
+                            },
+                        )}
                     />
                     {responseData.data.total > 20 && (
                         <Pagination
