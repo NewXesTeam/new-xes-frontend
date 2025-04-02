@@ -32,6 +32,9 @@ const UserInfoPage = () => {
                     <div>
                         <img src={infoResponseData.data.avatar_path} alt="头像" />
                         <h2>{infoResponseData.data.realname}</h2>
+                        <h3 color="red">
+                            Dangerous: 消息中心的“点赞与收藏”部分的api有问题，会返回包括但不限于下面他人不可见的内容。
+                        </h3>
                     </div>
                     <Table>
                         <thead>
