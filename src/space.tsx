@@ -333,6 +333,7 @@ const SpacePage = () => {
     const [userFollows, setUserFollows] = React.useState(0);
     const [userFans, setUserFans] = React.useState(0);
     const [userFollowed, setUserFollowed] = React.useState(false);
+
     const [isMySpace, setIsMySpace] = React.useState(true);
     const [signatureInputValue, setSignatureInputValue] = React.useState('');
     const [isChangingSignature, setIsChangingSignature] = React.useState(false);
@@ -411,64 +412,76 @@ const SpacePage = () => {
 
             <div className="alert-list">{alerts}</div>
 
-            <Stack className="mt-5 mx-auto width-fit-content text-center">
-                <Avatar name={username} avatarUrl={userAvatar} size={128} />
-                <span style={{ fontSize: '24px' }}>{username}</span>
-                {isChangingSignature ? (
-                    <Form.Control
-                        type="text"
-                        value={signatureInputValue}
-                        onChange={event => setSignatureInputValue(event.target.value)}
-                        onKeyDown={event => {
-                            if (event.key === 'Enter') {
-                                handleChangeSignature();
-                            } else if (event.key === 'Escape') {
-                                setIsChangingSignature(false);
-                                setSignatureInputValue('');
-                            }
-                        }}
-                        onBlur={() => {
-                            handleChangeSignature();
-                        }}
-                        ref={signatureInputRef}
-                    />
-                ) : (
-                    <div>
-                        <span style={{ fontSize: '16px' }}>{userSignature}</span>
-                        {isMySpace && (
-                            <>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <Button
-                                    size="sm"
-                                    variant="outline-secondary"
-                                    onClick={() => {
-                                        setSignatureInputValue(userSignature);
-                                        setIsChangingSignature(true);
-                                        console.log(signatureInputRef.current);
-                                        signatureInputRef.current?.focus();
-                                        signatureInputRef.current?.select();
-                                    }}
-                                >
-                                    修改签名
-                                </Button>
-                            </>
-                        )}
-                    </div>
-                )}
-                <span>
-                    关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
-                </span>
-                {!isMySpace && (
-                    <Button
-                        variant={(userFollowed ? 'outline-' : '') + 'secondary'}
-                        onClick={() => onClickFollow()}
-                        style={{ width: '124px' }}
-                        className="mx-auto"
+            <Container>
+                <Stack className="mt-5 mx-auto text-center" direction="horizontal">
+                    <Stack
+                        className="width-fit-content text-center"
+                        direction="horizontal"
+                        style={{ marginRight: 'auto' }}
                     >
-                        {userFollowed ? '已关注' : '关注'}
-                    </Button>
-                )}
-            </Stack>
+                        <Avatar name={username} avatarUrl={userAvatar} size={128} />
+                        <div style={{ textAlign: 'left', marginLeft: '1rem' }}>
+                            <div>
+                                <span style={{ fontSize: '24px' }}>{username}</span>
+                                <span style={{ fontSize: '16px', color: 'var(--bs-secondary)' }}>({userId})</span>
+                            </div>
+                            {isChangingSignature ? (
+                                <Form.Control
+                                    type="text"
+                                    value={signatureInputValue}
+                                    onChange={event => setSignatureInputValue(event.target.value)}
+                                    onKeyDown={event => {
+                                        if (event.key === 'Enter') {
+                                            handleChangeSignature();
+                                        } else if (event.key === 'Escape') {
+                                            setIsChangingSignature(false);
+                                            setSignatureInputValue('');
+                                        }
+                                    }}
+                                    onBlur={() => {
+                                        handleChangeSignature();
+                                    }}
+                                    ref={signatureInputRef}
+                                />
+                            ) : (
+                                <div>
+                                    <span style={{ fontSize: '16px' }}>{userSignature}</span>
+                                    {isMySpace && (
+                                        <>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <Button
+                                                size="sm"
+                                                variant="outline-secondary"
+                                                onClick={() => {
+                                                    setSignatureInputValue(userSignature);
+                                                    setIsChangingSignature(true);
+                                                    console.log(signatureInputRef.current);
+                                                    signatureInputRef.current?.focus();
+                                                    signatureInputRef.current?.select();
+                                                }}
+                                            >
+                                                修改签名
+                                            </Button>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                            <span>
+                                关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
+                            </span>
+                        </div>
+                    </Stack>
+                    {!isMySpace && (
+                        <Button
+                            variant={(userFollowed ? 'outline-' : '') + 'secondary'}
+                            onClick={() => onClickFollow()}
+                            style={{ width: '124px' }}
+                        >
+                            {userFollowed ? '已关注' : '关注'}
+                        </Button>
+                    )}
+                </Stack>
+            </Container>
 
             <Tabs
                 className="mt-5 justify-content-center"
