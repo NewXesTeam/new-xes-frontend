@@ -37,3 +37,21 @@ export function processEmojiReplace(text: string, emojis: Emoji[]) {
 export function b64_to_utf8(str: string) {
     return decodeURIComponent(escape(window.atob(str)));
 }
+
+export async function python_template() {
+    const response = await fetch('/hitokoto/?c=k');
+    const responseData = await response.json();
+    return `print("${responseData.hitokoto} —— 「${responseData.from}」")`;
+}
+
+export async function cpp_template() {
+    const response = await fetch('/hitokoto/?c=k');
+    const responseData = await response.json();
+    return `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "${responseData.hitokoto} —— 「${responseData.from}」" << endl;
+    return 0;
+}`;
+}
