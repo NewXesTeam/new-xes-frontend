@@ -21,7 +21,7 @@
         "@xterm/xterm": "^5.5.0",
         "ace-builds": "^1.39.1",
         "bootstrap": "^5.3.4",
-        "dompurify": "^3.2.4",
+        "dompurify": "^3.2.5",
         "react": "^19.1.0",
         "react-ace": "^14.0.1",
         "react-bootstrap": "^2.10.9",
