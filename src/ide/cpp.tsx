@@ -4,14 +4,14 @@ import { Button } from 'react-bootstrap';
 import AceEditor from 'react-ace';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
-import { checkLoggedIn, b64_to_utf8 } from '@/utils';
+import { checkLoggedIn, b64_to_utf8, cpp_template } from '@/utils';
 import '@/styles/common.scss';
 import '@/styles/xterm.scss';
 import '@xterm/xterm/css/xterm.css';
-import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/theme-textmate';
 import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/snippets/python';
+import 'ace-builds/src-noconflict/snippets/c_cpp';
 import 'ace-builds/src-noconflict/ext-settings_menu';
 
 const IdeCppPage = () => {
@@ -21,7 +21,7 @@ const IdeCppPage = () => {
     }
 
     const param: URLSearchParams = new URLSearchParams(location.search);
-    const id: string | null = param.get('id');
+    const id: string = param.get('id') || 'new';
 
     const [runningState, setRunningState] = React.useState<boolean>(false);
     const [code, setCode] = React.useState<string>('');
@@ -165,9 +165,14 @@ const IdeCppPage = () => {
                 fitAddonRef.current.fit(); // 初始化时调整大小以适应容器
             }
             if (id) {
-                const response = await fetch(`/api/compilers/v2/${id}?id=${id}`);
-                const responseData = await response.json();
-                setCode(responseData.data.xml);
+                if (id !== 'new') {
+                    const response = await fetch(`/api/compilers/v2/${id}?id=${id}`);
+                    const responseData = await response.json();
+                    setCode(responseData.data.xml);
+                } else {
+                    let template = await cpp_template();
+                    setCode(template);
+                }
             }
         };
 
