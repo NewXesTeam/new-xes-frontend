@@ -53,7 +53,7 @@ const WSTerminal = ({ id }: { id: number | string }) => {
     const onClickRun = async () => {
         if (runningState && websocket.current) {
             websocket.current.close();
-            terminal.current.write('\r\n\r\n\x1b[31m代码运行结束\x1b[0m');
+            terminal.current.write('\r\n\r\n\x1b[31m运行终止\x1b[0m');
             return;
         }
 
@@ -84,21 +84,15 @@ const WSTerminal = ({ id }: { id: number | string }) => {
             term.reset();
             term.onData(() => null);
             let text: string = '';
-            // term.clear();
             term.onData(data => {
                 let flag: boolean = ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING;
-                // console.log(e);
                 if (data === '\r' && !flag) {
-                    // console.log(text);
                     text = '';
                     ws.send('1\n');
                 } else if (data === '\x7F' && !flag) {
-                    // term.write('\b \b');
                     if (text.length > 0) {
-                        // let char_width = wcswidth(text[text.length - 1]);
                         text = text.slice(0, -1);
                         ws.send('1' + data);
-                        // term.write("\b \b".repeat(char_width));
                     }
                 } else if (!flag) {
                     text += data;
@@ -142,19 +136,15 @@ const WSTerminal = ({ id }: { id: number | string }) => {
     };
 
     return (
-        <>
-            <Button style={{ position: 'absolute', left: '0px' }} variant="primary" onClick={() => onClickRun()}>
-                {runningState ? '运行中' : '运行'}
-            </Button>
-            <Button
-                style={{ position: 'absolute', right: '0px' }}
-                variant="primary"
-                onClick={() => {
-                    terminal.current.reset();
-                }}
-            >
-                清除终端
-            </Button>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button variant="primary" onClick={() => onClickRun()}>
+                    {runningState ? '运行中' : '运行'}
+                </Button>
+                <Button variant="primary" onClick={() => terminal.current.reset()}>
+                    清除终端
+                </Button>
+            </div>
             <div
                 ref={terminalRef => {
                     if (terminalRef) {
@@ -179,13 +169,11 @@ const WSTerminal = ({ id }: { id: number | string }) => {
                     }
                 }}
                 style={{
+                    flexGrow: 1,
                     width: '100%',
-                    height: 'calc(100% - 40px)',
-                    position: 'absolute',
-                    top: '40px',
                 }}
             />
-        </>
+        </div>
     );
 };
 
