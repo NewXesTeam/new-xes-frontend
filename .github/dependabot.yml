@@ -9,8 +9,6 @@ updates:
           day: 'friday'
           time: '06:00'
           timezone: 'Asia/Shanghai'
-      reviewers:
-          - 'lrsgzs'
       labels:
           - '依赖项'
       commit-message:
