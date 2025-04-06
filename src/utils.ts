@@ -42,10 +42,10 @@ export async function getTemplate(lang: string) {
     const response = await fetch('https://v1.hitokoto.cn/');
     const responseData = await response.json();
     const templates = {
-        "python": `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
-        "webpy": `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
-        "offlinepy": `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
-        "cpp": `#include <iostream>
+        python: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        webpy: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        offlinepy: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        cpp: `#include <iostream>
 using namespace std;
 
 int main() {
