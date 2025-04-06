@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import AceEditor from 'react-ace';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
-import { checkLoggedIn, b64_to_utf8, cpp_template } from '@/utils';
+import { checkLoggedIn, b64_to_utf8, getTemplate } from '@/utils';
 import '@/styles/common.scss';
 import '@/styles/xterm.scss';
 import '@xterm/xterm/css/xterm.css';
@@ -21,7 +21,7 @@ const IdeCppPage = () => {
     }
 
     const param: URLSearchParams = new URLSearchParams(location.search);
-    const id: string = param.get('id') || 'new';
+    const id: string = param.get('id');
 
     const [runningState, setRunningState] = React.useState<boolean>(false);
     const [code, setCode] = React.useState<string>('');
@@ -165,12 +165,12 @@ const IdeCppPage = () => {
                 fitAddonRef.current.fit(); // 初始化时调整大小以适应容器
             }
             if (id) {
-                if (id !== 'new') {
+                if (id !== '1') {
                     const response = await fetch(`/api/compilers/v2/${id}?id=${id}`);
                     const responseData = await response.json();
                     setCode(responseData.data.xml);
                 } else {
-                    let template = await cpp_template();
+                    let template = await getTemplate('cpp');
                     setCode(template);
                 }
             }

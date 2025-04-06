@@ -38,20 +38,20 @@ export function b64_to_utf8(str: string) {
     return decodeURIComponent(escape(window.atob(str)));
 }
 
-export async function python_template() {
-    const response = await fetch('/hitokoto/?c=k');
+export async function getTemplate(lang: string) {
+    const response = await fetch('https://v1.hitokoto.cn/');
     const responseData = await response.json();
-    return `print("${responseData.hitokoto} —— 「${responseData.from}」")`;
-}
-
-export async function cpp_template() {
-    const response = await fetch('/hitokoto/?c=k');
-    const responseData = await response.json();
-    return `#include <iostream>
+    const templates = {
+        python: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        webpy: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        offlinepy: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
+        cpp: `#include <iostream>
 using namespace std;
 
 int main() {
     cout << "${responseData.hitokoto} —— 「${responseData.from}」" << endl;
     return 0;
-}`;
+}`,
+    };
+    return templates[lang];
 }
