@@ -6,15 +6,25 @@
 > 此项目仅供交流学习，请勿他用！
 
 > [!WARNING]
-> 这是使用 React 重写的 NewXesFrontend
+> 此项目刚刚进行了重组，使用了 React Router 组织项目。
 >
-> 欲查看原来的*屎山* NewXesFrontend，请访问 [NewXesTeam/Archived-NewXesFrontend](https://github.com/NewXesTeam/Archived-NewXesFrontend)
+> 因此一段时间内不一定稳定
+
+## 准备开发
+
+1. 下载项目 `git clone https://github.com/NewXesTeam/new-xes-frontend`
+2. 切换到项目文件夹
+3. 安装依赖项 `npm install`
+4. ⚠️开发前初始化构建 `npm run build`
 
 ## npm 脚本
 
-- `npm run build:dev` 构建项目（开发模式）
-- `npm run build:prod` 构建项目（生产模式）
-- `npm run prettier` 使用 Prettier 格式化代码
+- `npm run build` 构建项目（生产模式）
+- `npm run dev` 启动开发模式
+- `npm run start` 启动已构建的代码
+
+- `npm run typecheck` 类型检查
+- `npm run format` 使用 Prettier 格式化代码
 
 ## 运行开发服务器
 

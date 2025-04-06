@@ -1,20 +1,9 @@
+.DS_Store
 /node_modules
 /dist
 /.vscode
 /.idea
 
-# Nginx
-/nginx.exe
-/temp
-/nginx
-/logs
-/docs
-/contrib
-/conf/fastcgi_params
-/conf/fastcgi.conf
-/conf/koi-utf
-/conf/koi-win
-/conf/mime.types
-/conf/scgi_params
-/conf/uwsgi_params
-/conf/win-utf
+# React Router
+/.react-router/
+/build/
