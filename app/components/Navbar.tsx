@@ -11,8 +11,6 @@ import logoImg from '@/static/logo.png';
 import '@/styles/search.scss';
 
 const NavbarComponent = () => {
-    const [userName, setUserName] = React.useState<string>('');
-    const [userAvatar, setUserAvatar] = React.useState<string>('');
     const [messageData, setMessageData] = React.useState<MessageData | null>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
     const [userComponent, setUserComponent] = React.useState<React.JSX.Element>(
@@ -29,12 +27,11 @@ const NavbarComponent = () => {
     };
 
     React.useEffect(() => {
-        if (checkLoggedIn()) {
-            (async () => {
+        let ignore = false;
+        const func = async () => {
+            if (checkLoggedIn()) {
                 const response = await fetch('/api/user/info');
                 const responseData: UserInfo = await response.json();
-                setUserName(responseData.data.name);
-                setUserAvatar(responseData.data.avatar_path);
 
                 if (!location.pathname.includes('message.html')) {
                     const messageResponse = await fetch(`/api/messages/overview`);
@@ -42,62 +39,80 @@ const NavbarComponent = () => {
                     setMessageData(messageResponseData);
                     setTotalMessageCount(messageResponseData.data.reduce((acc, cur) => acc + cur.count, 0));
                 }
-            })();
 
-            setUserComponent(
-                <>
-                    {!location.pathname.includes('message.html') && (
+                setUserComponent(
+                    <>
+                        {!location.pathname.includes('message.html') && (
+                            <NavDropdown
+                                title={
+                                    <>
+                                        消息
+                                        <Badge
+                                            pill
+                                            bg="danger"
+                                            style={{ display: totalMessageCount ? 'inline' : 'none' }}
+                                        >
+                                            {totalMessageCount}
+                                        </Badge>
+                                    </>
+                                }
+                                align={'end'}
+                            >
+                                <NavLink className="dropdown-item" to="/message/1" target="_blank">
+                                    评论和回复
+                                    <Badge
+                                        pill
+                                        bg="danger"
+                                        style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
+                                    >
+                                        {messageData?.data[0].count}
+                                    </Badge>
+                                </NavLink>
+                                <NavLink className="dropdown-item" to="/message/5" target="_blank">
+                                    关注
+                                    <Badge
+                                        pill
+                                        bg="danger"
+                                        style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
+                                    >
+                                        {messageData?.data[2].count}
+                                    </Badge>
+                                </NavLink>
+                            </NavDropdown>
+                        )}
+
                         <NavDropdown
                             title={
-                                <>
-                                    消息
-                                    <Badge pill bg="danger" style={{ display: totalMessageCount ? 'inline' : 'none' }}>
-                                        {totalMessageCount}
-                                    </Badge>
-                                </>
+                                <Avatar
+                                    name={responseData.data.name}
+                                    avatarUrl={responseData.data.avatar_path}
+                                    size={40}
+                                />
                             }
                             align={'end'}
                         >
-                            <NavLink className="dropdown-item" to="/message/1" target="_blank">
-                                评论和回复
-                                <Badge
-                                    pill
-                                    bg="danger"
-                                    style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
-                                >
-                                    {messageData?.data[0].count}
-                                </Badge>
+                            <NavLink className="dropdown-item" to="/space/-1/home" target="_blank">
+                                个人空间
                             </NavLink>
-                            <NavLink className="dropdown-item" to="/message/5" target="_blank">
-                                关注
-                                <Badge
-                                    pill
-                                    bg="danger"
-                                    style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
-                                >
-                                    {messageData?.data[2].count}
-                                </Badge>
+                            <NavLink className="dropdown-item" to="/user" target="_blank">
+                                作品管理
                             </NavLink>
+                            <NavDropdown.Divider />
+                            <NavLink className="dropdown-item" to="/userInfo" target="_blank">
+                                个人信息
+                            </NavLink>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
                         </NavDropdown>
-                    )}
+                    </>,
+                );
+            }
+        };
 
-                    <NavDropdown title={<Avatar name={userName} avatarUrl={userAvatar} size={40} />} align={'end'}>
-                        <NavLink className="dropdown-item" to="/space/-1/home" target="_blank">
-                            个人空间
-                        </NavLink>
-                        <NavLink className="dropdown-item" to="/user" target="_blank">
-                            作品管理
-                        </NavLink>
-                        <NavDropdown.Divider />
-                        <NavLink className="dropdown-item" to="/userInfo" target="_blank">
-                            个人信息
-                        </NavLink>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
-                    </NavDropdown>
-                </>,
-            );
-        }
+        if (!ignore) func();
+        return () => {
+            ignore = true;
+        };
     }, []);
 
     return (
