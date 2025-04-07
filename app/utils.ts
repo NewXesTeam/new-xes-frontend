@@ -5,6 +5,10 @@ export function checkLoggedIn() {
     return document.cookie.includes('is_login=1;');
 }
 
+export function getUserId() {
+    return document.cookie.split('stu_id=')[1].split(';')[0];
+}
+
 export function getWorkLink(work: Work) {
     let lang = work.project_type;
     if (lang === 'compiler') lang = 'code';
