@@ -17,7 +17,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
 export default function MessagePage({ loaderData }: Route.ComponentProps) {
     if (!loaderData.isLoggedIn) {
-        redirect('/login');
+        location.href = '/login';
         return null;
     }
 
@@ -97,8 +97,12 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
                                 variant="pills"
                                 defaultActiveKey={currentTab}
                                 onSelect={(eventKey: string | null) => {
-                                    if (eventKey !== currentTab) {
-                                        redirect(`/message/${eventKey}`);
+                                    if (eventKey !== currentTab && eventKey !== null) {
+                                        // redirect(`/message/${eventKey}`);
+                                        history.pushState({ category: eventKey }, '', `/message/${eventKey}`);
+                                        document.documentElement.scrollTop = 0;
+                                        setCurrentTab(eventKey);
+                                        setCurrentPage(1);
                                     }
                                 }}
                             >

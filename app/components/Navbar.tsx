@@ -3,7 +3,7 @@ import { Container, Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router';
 import Avatar from './Avatar';
 import SearchInput from './SearchInput';
-import { checkLoggedIn } from '@/utils';
+import { checkLoggedIn, getUserId } from '@/utils';
 
 import type { UserInfo } from '@/interfaces/user';
 import type { MessageData } from '@/interfaces/message';
@@ -30,6 +30,7 @@ const NavbarComponent = () => {
         let ignore = false;
         const func = async () => {
             if (checkLoggedIn()) {
+                const userId = getUserId();
                 const response = await fetch('/api/user/info');
                 const responseData: UserInfo = await response.json();
 
@@ -91,7 +92,7 @@ const NavbarComponent = () => {
                             }
                             align={'end'}
                         >
-                            <NavLink className="dropdown-item" to="/space/-1/home" target="_blank">
+                            <NavLink className="dropdown-item" to={`/space/${userId}/home`} target="_blank">
                                 个人空间
                             </NavLink>
                             <NavLink className="dropdown-item" to="/user" target="_blank">
