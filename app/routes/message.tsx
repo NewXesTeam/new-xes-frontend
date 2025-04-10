@@ -97,7 +97,7 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
                                 variant="pills"
                                 defaultActiveKey={currentTab}
                                 onSelect={(eventKey: string | null) => {
-                                    if (eventKey !== currentTab && eventKey!== null) {
+                                    if (eventKey !== currentTab && eventKey !== null) {
                                         // redirect(`/message/${eventKey}`);
                                         history.pushState({ category: eventKey }, '', `/message/${eventKey}`);
                                         document.documentElement.scrollTop = 0;
