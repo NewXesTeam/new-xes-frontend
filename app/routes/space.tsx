@@ -304,7 +304,8 @@ export async function loader({ request, params }: Route.LoaderArgs) {
 
 export default function SpacePage({ loaderData }: Route.ComponentProps) {
     const userId = loaderData.userId;
-    const tab = loaderData.tabName;
+    // const tab = loaderData.tabName;
+    const [tab, setTab] = React.useState(loaderData.tabName);
 
     if (userId === '-1') {
         if (!loaderData.isLoggedIn) {
@@ -326,7 +327,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
             return () => {
                 ignore = true;
             };
-        }, []);
+        }, [tab]);
 
         return <div />;
     }
@@ -493,7 +494,9 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                 activeKey={tab}
                 onSelect={(eventKey: string | null) => {
                     if (eventKey) {
-                        redirect(`/space/${userId}/${eventKey}`);
+                        // redirect(`/space/${userId}/${eventKey}`);
+                        history.pushState({ tab: eventKey }, '', `/space/${userId}/${eventKey}`);
+                        setTab(eventKey);
                     }
                 }}
             >
