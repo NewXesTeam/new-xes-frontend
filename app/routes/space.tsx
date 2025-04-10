@@ -309,7 +309,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
 
     if (userId === '-1') {
         if (!loaderData.isLoggedIn) {
-            redirect('/login');
+            location.href = '/login';
             return null;
         }
 
