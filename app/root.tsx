@@ -14,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body>
+            <body style={{ zoom: '1' }}>
                 <noscript>肥肠抱歉，js无了，tm能用。</noscript>
                 <div id="app">{children}</div>
                 <ScrollRestoration />
