@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { redirect } from 'react-router';
-import { Tabs, Tab, Container, Stack, Card, Button, Nav, Form } from 'react-bootstrap';
+import { Tabs, Tab, Container, Stack, Card, Button, Nav, Form, Spinner } from 'react-bootstrap';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -295,6 +295,10 @@ const SpaceTabs = {
 };
 
 export async function loader({ request, params }: Route.LoaderArgs) {
+    if (params.userId === 'my' && request.headers.get('Cookie')?.includes('is_login=1;')) {
+        redirect('/login');
+    }
+
     return {
         isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
         userId: params.userId,
@@ -302,44 +306,52 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     };
 }
 
-export default function SpacePage({ loaderData }: Route.ComponentProps) {
-    const userId = loaderData.userId;
-    // const tab = loaderData.tabName;
-    const [tab, setTab] = React.useState(loaderData.tabName);
+export async function clientLoader({ serverLoader, params }: Route.ClientLoaderArgs) {
+    const serverData = await serverLoader();
 
-    if (userId === '-1') {
-        if (!loaderData.isLoggedIn) {
-            location.href = '/login';
-            return null;
-        }
+    let userId = params.userId;
+    let navigation = false;
 
-        React.useEffect(() => {
-            let ignore = false;
-
-            const func = async () => {
-                const response = await fetch('/api/user/info');
-                const responseData: UserInfo = await response.json();
-                let userId = responseData.data.id;
-                redirect(`/space/${userId}/${tab}`);
-            };
-
-            if (!ignore) func();
-            return () => {
-                ignore = true;
-            };
-        }, [tab]);
-
-        return <div />;
+    if (params.userId === 'my') {
+        const response = await fetch('/api/user/info');
+        const responseData: UserInfo = await response.json();
+        userId = responseData.data.id;
+        navigation = true;
     }
 
-    const [username, setUsername] = React.useState('Loading...');
-    const [userAvatar, setUserAvatar] = React.useState('https://t.100tal.com/avatar/');
-    const [userSignature, setUserSignature] = React.useState('Loading...');
-    const [userFollows, setUserFollows] = React.useState(0);
-    const [userFans, setUserFans] = React.useState(0);
-    const [userFollowed, setUserFollowed] = React.useState(false);
+    const spaceProfileResponse = await fetch(`/api/space/profile?user_id=${userId}`);
+    const spaceProfileData: SpaceProfile = await spaceProfileResponse.json();
 
-    const [isMySpace, setIsMySpace] = React.useState(true);
+    return { ...serverData, userId, navigation, spaceProfileData };
+}
+
+clientLoader.hydrate = true as const;
+
+export function HydrateFallback() {
+    return (
+        <>
+            <NavbarComponent />
+            <Container className="mt-2">
+                <Spinner />
+                <span style={{ fontSize: '24px' }}>Loading...</span>
+            </Container>
+        </>
+    );
+}
+
+export default function SpacePage({ loaderData }: Route.ComponentProps) {
+    const userId = loaderData.userId;
+    const spaceProfileData = loaderData.spaceProfileData;
+
+    if (loaderData.navigation) {
+        location.href = `/space/${userId}/${loaderData.tabName}`;
+        return <HydrateFallback />;
+    }
+
+    const [tab, setTab] = React.useState(loaderData.tabName);
+    const [userSignature, setUserSignature] = React.useState(spaceProfileData.data.signature);
+    const [userFollowed, setUserFollowed] = React.useState(spaceProfileData.data.is_follow);
+
     const [signatureInputValue, setSignatureInputValue] = React.useState('');
     const [isChangingSignature, setIsChangingSignature] = React.useState(false);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
@@ -389,28 +401,6 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
         }
     };
 
-    React.useEffect(() => {
-        let ignore = false;
-
-        const func = async () => {
-            const spaceProfileResponse = await fetch(`/api/space/profile?user_id=${userId}`);
-            const spaceProfileData: SpaceProfile = await spaceProfileResponse.json();
-
-            setUsername(spaceProfileData.data.realname);
-            setUserAvatar(spaceProfileData.data.avatar_path);
-            setUserSignature(spaceProfileData.data.signature);
-            setUserFollows(spaceProfileData.data.follows);
-            setUserFans(spaceProfileData.data.fans);
-            setUserFollowed(spaceProfileData.data.is_follow);
-            setIsMySpace(spaceProfileData.data.is_my);
-        };
-
-        if (!ignore) func();
-        return () => {
-            ignore = true;
-        };
-    }, []);
-
     return (
         <>
             <NavbarComponent />
@@ -424,10 +414,14 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                         direction="horizontal"
                         style={{ marginRight: 'auto' }}
                     >
-                        <Avatar name={username} avatarUrl={userAvatar} size={128} />
+                        <Avatar
+                            name={spaceProfileData.data.realname}
+                            avatarUrl={spaceProfileData.data.avatar_path}
+                            size={128}
+                        />
                         <div style={{ textAlign: 'left', marginLeft: '1rem' }}>
                             <div>
-                                <span style={{ fontSize: '24px' }}>{username}</span>
+                                <span style={{ fontSize: '24px' }}>{spaceProfileData.data.realname}</span>
                                 <span style={{ fontSize: '16px', color: 'var(--bs-secondary)' }}>({userId})</span>
                             </div>
                             {isChangingSignature ? (
@@ -451,7 +445,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                             ) : (
                                 <div>
                                     <span style={{ fontSize: '16px' }}>{userSignature}</span>
-                                    {isMySpace && (
+                                    {spaceProfileData.data.is_my && (
                                         <>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
                                             <Button
@@ -472,11 +466,12 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                                 </div>
                             )}
                             <span>
-                                关注：{userFollows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：{userFans}
+                                关注：{spaceProfileData.data.follows}&nbsp;&nbsp;&nbsp;&nbsp;粉丝：
+                                {spaceProfileData.data.fans}
                             </span>
                         </div>
                     </Stack>
-                    {!isMySpace && (
+                    {!spaceProfileData.data.is_my && (
                         <Button
                             variant={(userFollowed ? 'outline-' : '') + 'secondary'}
                             onClick={() => onClickFollow()}
@@ -494,7 +489,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                 activeKey={tab}
                 onSelect={(eventKey: string | null) => {
                     if (eventKey) {
-                        // redirect(`/space/${userId}/${eventKey}`);
+                        // location.href = `/space/${userId}/${eventKey}`;
                         history.pushState({ tab: eventKey }, '', `/space/${userId}/${eventKey}`);
                         setTab(eventKey);
                     }
