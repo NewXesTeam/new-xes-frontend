@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Badge, Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { getWorkLink } from '@/utils';
 import type { Work } from '@/interfaces/work';
 
@@ -28,12 +28,23 @@ const WorkCard = ({ work }: { work: Work }) => {
                         </a>
                     </Card.Title>
                     <Card.Text className="d-flex justify-content-between align-items-center">
-                        <a href={author_url} target="_blank" style={{ maxWidth: '114px', zIndex: 2 }}>
+                        <a href={author_url} target="_blank" style={{ zIndex: 2 }}>
                             <span style={{ fontSize: '14px' }}>{work.username}</span>
                         </a>
-                        <span style={{ fontSize: '12px' }}>
-                            👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
-                        </span>
+                        <div>
+                            <Badge pill bg="info" aria-label={'浏览量'}>
+                                👀{work.views}
+                            </Badge>
+                            <Badge pill bg="primary" aria-label={'点赞数'}>
+                                👍{work.likes}
+                            </Badge>
+                            <Badge pill bg="danger" aria-label={'点踩数'}>
+                                👎{work.unlikes}
+                            </Badge>
+                            <Badge pill bg="success" aria-label={'评论数'}>
+                                💬{work.comments}
+                            </Badge>
+                        </div>
                     </Card.Text>
                 </Card.Body>
             </Card>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Nav, Card, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import { Container, Nav, Card, OverlayTrigger, Tooltip, Button, Badge } from 'react-bootstrap';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
 import ProjectPublishModal from '@/components/ProjectPublishModal';
@@ -79,9 +79,20 @@ const FixedWorkCard = (
                             </Card.Title>
                             <Card.Text className="d-flex justify-content-between align-items-center">
                                 <span style={{ fontSize: '14px' }}>{work.username}</span>
-                                <span style={{ fontSize: '12px' }}>
-                                    👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
-                                </span>
+                                <div>
+                                    <Badge pill bg="info">
+                                        👀{work.views}
+                                    </Badge>
+                                    <Badge pill bg="primary">
+                                        👍{work.likes}
+                                    </Badge>
+                                    <Badge pill bg="danger">
+                                        👎{work.unlikes}
+                                    </Badge>
+                                    <Badge pill bg="success">
+                                        💬{work.comments}
+                                    </Badge>
+                                </div>
                             </Card.Text>
                         </Card.Body>
                     </Card>

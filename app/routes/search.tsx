@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tabs, Tab, Container, Card, OverlayTrigger, Tooltip, Nav } from 'react-bootstrap';
+import { Tabs, Tab, Container, Card, OverlayTrigger, Tooltip, Nav, Badge } from 'react-bootstrap';
 import { redirect } from 'react-router';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -43,9 +43,20 @@ const FixedWorkCard = ({ work }: { work: Work }) => {
                         <a href={author_url} target="_blank" style={{ maxWidth: '114px', zIndex: 2 }}>
                             <span style={{ fontSize: '14px' }}>{work.username}</span>
                         </a>
-                        <span style={{ fontSize: '12px' }}>
-                            👀{work.views} 👍{work.likes} 👎{work.unlikes} 💬{work.comments}
-                        </span>
+                        <div>
+                            <Badge pill bg="info">
+                                👀{work.views}
+                            </Badge>
+                            <Badge pill bg="primary">
+                                👍{work.likes}
+                            </Badge>
+                            <Badge pill bg="danger">
+                                👎{work.unlikes}
+                            </Badge>
+                            <Badge pill bg="success">
+                                💬{work.comments}
+                            </Badge>
+                        </div>
                     </Card.Text>
                 </Card.Body>
             </Card>
