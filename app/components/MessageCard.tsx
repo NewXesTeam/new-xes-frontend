@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, Stack } from 'react-bootstrap';
+import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
 import Avatar from './Avatar';
 import { processEmojiReplace } from '@/utils';
@@ -146,15 +146,17 @@ const CommentCard = ({
                                 </Button>
                             </div>
                         </div>
-                        <a className="ms-auto" href={message.topic.link} style={{ alignSelf: 'flex-start' }}>
-                            <img
-                                src={message.topic.thumbnail}
-                                alt={message.topic.text}
-                                width={107}
-                                height={80}
-                                style={{ borderRadius: '6px' }}
-                            />
-                        </a>
+                        <OverlayTrigger overlay={<Tooltip>{message.topic.text}</Tooltip>}>
+                            <a className="ms-auto" href={message.topic.link} style={{ alignSelf: 'flex-start' }}>
+                                <img
+                                    src={message.topic.thumbnail}
+                                    alt={message.topic.text}
+                                    width={107}
+                                    height={80}
+                                    style={{ borderRadius: '6px', border: '1px solid #afafaf' }}
+                                />
+                            </a>
+                        </OverlayTrigger>
                     </Stack>
                 </Card.Body>
             </Card>
