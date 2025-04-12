@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Tabs, Tab, Container, Card, OverlayTrigger, Tooltip, Nav, Badge } from 'react-bootstrap';
-import { redirect } from 'react-router';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
 import { Pagination } from '@/components/Pagination';
@@ -293,11 +292,12 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function SearchPage({ loaderData }: Route.ComponentProps) {
     const keyword = loaderData.keyword;
-    const [tab, setTab] = React.useState(loaderData.tab || 'all');
+    // const [tab, setTab] = React.useState(loaderData.tab || 'all');
+    const tab = loaderData.tab || 'all';
 
     if (keyword === null) {
         if (!loaderData.isLoggedIn) {
-            redirect('/login');
+            location.href = "/login"
             return null;
         }
         return <h2>获取关键字失败</h2>;
@@ -332,7 +332,8 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
                 onSelect={(eventKey: string | null) => {
                     if (eventKey) {
                         // location.href = `/space.html?id=${userId}&tab=${eventKey}`;
-                        redirect(`/search?keyword=${decodeURIComponent(keyword)}&tab=${eventKey}`);
+                        // redirect(`/search?keyword=${decodeURIComponent(keyword)}&tab=${eventKey}`);
+                        location.href = `/search?keyword=${decodeURIComponent(keyword)}&tab=${eventKey}`;
                     }
                 }}
             >
