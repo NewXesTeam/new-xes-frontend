@@ -3,7 +3,7 @@ import { Container, Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap';
 import { NavLink } from 'react-router';
 import Avatar from './Avatar';
 import SearchInput from './SearchInput';
-import { checkLoggedIn, getUserId } from '@/utils';
+import { checkLoggedIn } from '@/utils';
 
 import type { UserInfo } from '@/interfaces/user';
 import type { MessageData } from '@/interfaces/message';
@@ -30,7 +30,6 @@ const NavbarComponent = () => {
         let ignore = false;
         const func = async () => {
             if (checkLoggedIn()) {
-                const userId = getUserId();
                 const response = await fetch('/api/user/info');
                 const responseData: UserInfo = await response.json();
 
@@ -43,44 +42,38 @@ const NavbarComponent = () => {
 
                 setUserComponent(
                     <>
-                        {!location.pathname.includes('message.html') && (
-                            <NavDropdown
-                                title={
-                                    <>
-                                        消息
-                                        <Badge
-                                            pill
-                                            bg="danger"
-                                            style={{ display: totalMessageCount ? 'inline' : 'none' }}
-                                        >
-                                            {totalMessageCount}
-                                        </Badge>
-                                    </>
-                                }
-                                align={'end'}
-                            >
-                                <NavLink className="dropdown-item" to="/message/1" target="_blank">
-                                    评论和回复
-                                    <Badge
-                                        pill
-                                        bg="danger"
-                                        style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
-                                    >
-                                        {messageData?.data[0].count}
+                        <NavDropdown
+                            title={
+                                <>
+                                    消息
+                                    <Badge pill bg="danger" style={{ display: totalMessageCount ? 'inline' : 'none' }}>
+                                        {totalMessageCount}
                                     </Badge>
-                                </NavLink>
-                                <NavLink className="dropdown-item" to="/message/5" target="_blank">
-                                    关注
-                                    <Badge
-                                        pill
-                                        bg="danger"
-                                        style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
-                                    >
-                                        {messageData?.data[2].count}
-                                    </Badge>
-                                </NavLink>
-                            </NavDropdown>
-                        )}
+                                </>
+                            }
+                            align={'end'}
+                        >
+                            <NavLink className="dropdown-item" to="/message/1">
+                                评论和回复
+                                <Badge
+                                    pill
+                                    bg="danger"
+                                    style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
+                                >
+                                    {messageData?.data[0].count}
+                                </Badge>
+                            </NavLink>
+                            <NavLink className="dropdown-item" to="/message/5">
+                                关注
+                                <Badge
+                                    pill
+                                    bg="danger"
+                                    style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
+                                >
+                                    {messageData?.data[2].count}
+                                </Badge>
+                            </NavLink>
+                        </NavDropdown>
 
                         <NavDropdown
                             title={
@@ -92,14 +85,14 @@ const NavbarComponent = () => {
                             }
                             align={'end'}
                         >
-                            <NavLink className="dropdown-item" to={`/space/${userId}/home`} target="_blank">
+                            <NavLink className="dropdown-item" to={`/space/${responseData.data.id}/home`}>
                                 个人空间
                             </NavLink>
-                            <NavLink className="dropdown-item" to="/user" target="_blank">
+                            <NavLink className="dropdown-item" to="/user">
                                 作品管理
                             </NavLink>
                             <NavDropdown.Divider />
-                            <NavLink className="dropdown-item" to="/userInfo" target="_blank">
+                            <NavLink className="dropdown-item" to="/userInfo">
                                 个人信息
                             </NavLink>
                             <NavDropdown.Divider />
