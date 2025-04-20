@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+// @ts-ignore  // 这个不怨我
+import Tags from '@yaireo/tagify/react';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 
 import type { PublishWorkInfo } from '@/interfaces/work';
+import '@yaireo/tagify/dist/tagify.css';
+import "./ProjectPublishModal.scss";
 
 const ProjectPublishModal = ({
     workInfo,
@@ -64,17 +68,6 @@ const ProjectPublishModal = ({
     const handleChangeOrigin = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOrigin(e.target.value);
     };
-    const handleChangeTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // workTagsRef.current = e.target.value;
-        // console.log(e.target.value);
-        if (workTagsRef.current === null) workTagsRef.current = '';
-        if (e.target.checked) {
-            workTagsRef.current += e.target.value + ' ';
-        } else {
-            workTagsRef.current = workTagsRef.current.replace(e.target.value + ' ', '');
-        }
-        // console.log(workTagsRef.current);
-    };
 
     React.useEffect(() => {
         let ignore = false;
@@ -93,7 +86,7 @@ const ProjectPublishModal = ({
     }, []);
 
     return (
-        <Modal show={isShow} centered={true}>
+        <Modal show={isShow} centered={true} dialogClassName="publish-modal" contentClassName="publish-modal-content">
             <Modal.Header>
                 <Modal.Title>发布作品</Modal.Title>
             </Modal.Header>
@@ -148,79 +141,25 @@ const ProjectPublishModal = ({
                         </Form.Group>
 
                         <Form.Label>*作品标签（空格分开两个标签）</Form.Label>
-                        {/* <Form.Control
-                            ref={workTagsRef}
-                            type="text"
-                            placeholder="请输入作品标签"
-                            defaultValue={work.tags}
-                        /> */}
-                        <Form.Group>
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="游戏"
-                                value="游戏"
-                                id="游戏"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('游戏')}
-                                onChange={handleChangeTags}
-                            />
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="动画"
-                                value="动画"
-                                id="动画"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('动画')}
-                                onChange={handleChangeTags}
-                            />
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="故事"
-                                value="故事"
-                                id="故事"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('故事')}
-                                onChange={handleChangeTags}
-                            />
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="模拟"
-                                value="模拟"
-                                id="模拟"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('模拟')}
-                                onChange={handleChangeTags}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="艺术"
-                                value="艺术"
-                                id="艺术"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('艺术')}
-                                onChange={handleChangeTags}
-                            />
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="教程"
-                                value="教程"
-                                id="教程"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('教程')}
-                                onChange={handleChangeTags}
-                            />
-                            <Form.Check
-                                inline
-                                type="checkbox"
-                                label="其他"
-                                value="其他"
-                                id="其他"
-                                defaultChecked={Boolean(work.tags) && work.tags.includes('其他')}
-                                onChange={handleChangeTags}
-                            />
-                        </Form.Group>
+                        <Tags
+                            whitelist={["游戏", "动画", "故事", "模拟", "艺术", "教程", "其他"]}
+                            placeholder='添加标签'
+                            settings={{
+                                dropdown: {
+                                    enabled: 0,
+                                }
+                            }}
+                            onChange={(event: any) => {
+                                const tags: {value: string}[] = event.detail.tagify.getCleanValue();
+                                let tag_str = "";
+                                tags.forEach((tag) => {
+                                    tag_str += tag.value.replaceAll(" ", "&nbsp;") + " ";
+                                })
+                                console.log(tag_str);
+                                workTagsRef.current = tag_str;
+                            }}
+                            className=""
+                        />
 
                         <Form.Label>作品介绍</Form.Label>
                         <Form.Control
