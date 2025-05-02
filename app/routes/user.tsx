@@ -21,6 +21,13 @@ const FixedWorkCard = (
         const [isShowOperators, setIsShowOperators] = React.useState(false);
         let link = getWorkLink(work);
         let editLink = getEditWorkLink(work);
+        let workStatus = '';
+
+        if (work.removed) {
+            workStatus = publishedText["removed"];
+        } else {
+            workStatus = publishedText[work.published];
+        }
 
         return (
             <OverlayTrigger
@@ -96,7 +103,7 @@ const FixedWorkCard = (
                             </Card.Text>
                         </Card.Body>
                     </Card>
-                    <div className="work-status">{publishedText[work.published]}</div>
+                    <div className="work-status">{workStatus}</div>
                 </div>
             </OverlayTrigger>
         );
@@ -129,6 +136,7 @@ export default function UserPage() {
                 <>
                     <WorkList
                         works={responseData.data.data}
+                        enableRemoved={false}
                         WorkCardInterface={FixedWorkCard(
                             (work: PublishWorkInfo) => {
                                 publishWork.current = work;
