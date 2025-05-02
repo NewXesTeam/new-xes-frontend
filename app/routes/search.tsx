@@ -285,8 +285,8 @@ const SearchTabs = {
 export async function loader({ request }: Route.LoaderArgs) {
     return {
         isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
-        keyword: (await request.formData()).get('keyword') as string | null,
-        tab: (await request.formData()).get('tab') as string | null,
+        keyword: new URL(request.url).searchParams.get('keyword'),
+        tab: new URL(request.url).searchParams.get('tab'),
     };
 }
 
@@ -321,7 +321,7 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
         <>
             <NavbarComponent />
 
-            <Container className="mt-2">
+            <Container className="mt-5">
                 <SearchInput keyword={keyword} />
             </Container>
 
