@@ -24,7 +24,7 @@ const FixedWorkCard = (
         let workStatus = '';
 
         if (work.removed) {
-            workStatus = publishedText["removed"];
+            workStatus = publishedText['removed'];
         } else {
             workStatus = publishedText[work.published];
         }

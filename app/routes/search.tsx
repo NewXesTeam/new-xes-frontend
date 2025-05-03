@@ -297,7 +297,7 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
 
     if (keyword === null) {
         if (!loaderData.isLoggedIn) {
-            location.href = "/login"
+            location.href = '/login';
             return null;
         }
         return <h2>获取关键字失败</h2>;

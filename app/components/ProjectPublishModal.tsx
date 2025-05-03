@@ -6,7 +6,7 @@ import AutoCloseAlert from '@/components/AutoCloseAlert';
 
 import type { PublishWorkInfo } from '@/interfaces/work';
 import '@yaireo/tagify/dist/tagify.css';
-import "./ProjectPublishModal.scss";
+import './ProjectPublishModal.scss';
 
 const ProjectPublishModal = ({
     workInfo,
@@ -142,19 +142,19 @@ const ProjectPublishModal = ({
 
                         <Form.Label>*作品标签（空格分开两个标签）</Form.Label>
                         <Tags
-                            whitelist={["游戏", "动画", "故事", "模拟", "艺术", "教程", "其他"]}
-                            placeholder='添加标签'
+                            whitelist={['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他']}
+                            placeholder="添加标签"
                             settings={{
                                 dropdown: {
                                     enabled: 0,
-                                }
+                                },
                             }}
                             onChange={(event: any) => {
-                                const tags: {value: string}[] = event.detail.tagify.getCleanValue();
-                                let tag_str = "";
-                                tags.forEach((tag) => {
-                                    tag_str += tag.value.replaceAll(" ", "&nbsp;") + " ";
-                                })
+                                const tags: { value: string }[] = event.detail.tagify.getCleanValue();
+                                let tag_str = '';
+                                tags.forEach(tag => {
+                                    tag_str += tag.value.replaceAll(' ', '&nbsp;') + ' ';
+                                });
                                 console.log(tag_str);
                                 workTagsRef.current = tag_str;
                             }}
