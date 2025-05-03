@@ -34,8 +34,8 @@ export function processEmojiReplace(text: string, emojis: Emoji[]) {
     return content;
 }
 
-export function b64_to_utf8(str: string) {
-    return decodeURIComponent(escape(window.atob(str)));
+export function b64_to_utf8(text: string): string {
+    return new TextDecoder().decode(Uint8Array.from(atob(text), (c) => c.charCodeAt(0)))
 }
 
 export async function getTemplate(lang: string) {
