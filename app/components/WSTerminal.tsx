@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import xterm from '@xterm/xterm';
-import { FitAddon } from '@xterm/addon-fit/src/FitAddon';
-import { CanvasAddon } from '@xterm/addon-canvas';
-import { WebglAddon } from '@xterm/addon-webgl';
-import { WebLinksAddon } from '@xterm/addon-web-links';
-import { Unicode11Addon } from '@xterm/addon-unicode11';
 import type { BasicResponse } from '@/interfaces/common';
 import type { PublishWorkInfo } from '@/interfaces/work';
 import { b64_to_utf8 } from '@/utils';
 import '@/styles/xterm.scss';
-
-const { Terminal } = xterm;
 
 const xtermTheme = {
     foreground: '#F8F8F8',
@@ -37,25 +29,56 @@ const xtermTheme = {
 
 const WSTerminal = ({ id }: { id: number | string }) => {
     const [runningState, setRunningState] = React.useState<boolean>(false);
-
-    const terminal = React.useRef(
-        new Terminal({
-            fontSize: 20,
-            fontFamily: "'Cascadia Code', Consolas, 'Courier New', monospace",
-            theme: xtermTheme,
-            cursorBlink: true,
-            allowProposedApi: true,
-            allowTransparency: true,
-            cursorStyle: 'bar',
-        }),
-    );
-    const addons = React.useRef([]);
+    const [terminal, setTerminal] = React.useState<any>(null);
+    const [addons, setAddons] = React.useState<any[]>([]);
     const websocket = React.useRef<WebSocket>(null);
+
+    React.useEffect(() => {
+        const func = async () => {
+            if (!terminal) {
+                const { Terminal } = await import('@xterm/xterm');
+                const { FitAddon } = await import('@xterm/addon-fit');
+                const { CanvasAddon } = await import('@xterm/addon-canvas');
+                const { WebglAddon } = await import('@xterm/addon-webgl');
+                const { WebLinksAddon } = await import('@xterm/addon-web-links');
+                const { Unicode11Addon } = await import('@xterm/addon-unicode11');
+
+                const term = new Terminal({
+                    fontSize: 20,
+                    fontFamily: "'Cascadia Code', Consolas, 'Courier New', monospace",
+                    theme: xtermTheme,
+                    cursorBlink: true,
+                    allowProposedApi: true,
+                    allowTransparency: true,
+                    cursorStyle: 'bar',
+                });
+
+                setTerminal(term);
+                setAddons([
+                    new FitAddon(),
+                    new CanvasAddon(),
+                    new WebglAddon(),
+                    new WebLinksAddon(),
+                    new Unicode11Addon(),
+                ]);
+            }
+        };
+
+        func();
+
+        return () => {
+            if (terminal && addons.length > 0) {
+                window.removeEventListener('resize', () => {
+                    addons[0].fit();
+                });
+            }
+        };
+    }, [terminal, addons]);
 
     const onClickRun = async () => {
         if (runningState && websocket.current) {
             websocket.current.close();
-            terminal.current.write('\r\n\r\n\x1b[31m运行终止\x1b[0m');
+            terminal.write('\r\n\r\n\x1b[31m运行终止\x1b[0m');
             return;
         }
 
@@ -63,7 +86,7 @@ const WSTerminal = ({ id }: { id: number | string }) => {
         const responseData: BasicResponse<PublishWorkInfo> = await response.json();
         websocket.current = new WebSocket(`wss://codedynamic.xueersi.com/api/compileapi/ws/run`);
 
-        const term = terminal.current;
+        const term = terminal;
         const ws = websocket.current;
 
         const heartbeat = setInterval(() => {
@@ -86,7 +109,7 @@ const WSTerminal = ({ id }: { id: number | string }) => {
             term.reset();
             term.onData(() => null);
             let text: string = '';
-            term.onData(data => {
+            term.onData((data: string) => {
                 let flag: boolean = ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING;
                 if (data === '\r' && !flag) {
                     text = '';
@@ -137,39 +160,34 @@ const WSTerminal = ({ id }: { id: number | string }) => {
         };
     };
 
+    React.useEffect(() => {
+        if (terminal && addons.length > 0) {
+            const terminalRef = document.getElementById('terminal-container');
+            if (terminalRef && !terminal.element) {
+                for (const addon of addons) {
+                    terminal.loadAddon(addon);
+                }
+                terminal.open(terminalRef);
+                addons[0].fit();
+                window.addEventListener('resize', () => {
+                    addons[0].fit();
+                });
+            }
+        }
+    }, [terminal, addons]);
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button variant="primary" onClick={() => onClickRun()}>
                     {runningState ? '运行中' : '运行'}
                 </Button>
-                <Button variant="primary" onClick={() => terminal.current.reset()}>
+                <Button variant="primary" onClick={() => terminal && terminal.reset()}>
                     清除终端
                 </Button>
             </div>
             <div
-                ref={terminalRef => {
-                    if (terminalRef) {
-                        if (!terminal.current.element) {
-                            addons.current = [
-                                new FitAddon(),
-                                new CanvasAddon(),
-                                new WebglAddon(),
-                                new WebLinksAddon(),
-                                new Unicode11Addon(),
-                            ];
-                            const term = terminal.current;
-                            for (const addon of addons.current) {
-                                term.loadAddon(addon);
-                            }
-                            term.open(terminalRef);
-                            addons.current[0].fit();
-                            window.addEventListener('resize', () => {
-                                addons.current[0].fit();
-                            });
-                        }
-                    }
-                }}
+                id="terminal-container"
                 style={{
                     flexGrow: 1,
                     width: '100%',

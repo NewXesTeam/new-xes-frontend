@@ -1,29 +1,26 @@
 import * as React from 'react';
-import { createRoot } from 'react-dom/client';
-import { checkLoggedIn } from '@/utils';
 import WSTerminal from '@/components/WSTerminal';
 import '@/styles/app.scss';
 
-const EmbedPythonPage = () => {
-    if (!checkLoggedIn()) {
+import type { Route } from './+types/python';
+
+export async function loader({ request }: Route.LoaderArgs) {
+    return {
+        isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
+        id: new URL(request.url).searchParams.get('id'),
+    };
+}
+
+export default function EmbedPythonPage({ loaderData }: Route.ComponentProps) {
+    if (!loaderData.isLoggedIn) {
         location.href = '/login.html';
         return null;
     }
+    if (loaderData.id === null) {
+        return <div>请提供有效的 id 参数</div>;
+    }
 
-    const param: URLSearchParams = new URLSearchParams(location.search);
-    const id: string | null = param.get('id');
+    const id = loaderData.id;
 
     return <WSTerminal id={id} />;
-};
-
-const dom: HTMLElement | null = document.getElementById('app');
-if (dom) {
-    const root = createRoot(dom);
-    root.render(
-        <React.StrictMode>
-            <EmbedPythonPage />
-        </React.StrictMode>,
-    );
-} else {
-    throw new Error('Cannot find dom element #app');
 }

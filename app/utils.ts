@@ -35,7 +35,7 @@ export function processEmojiReplace(text: string, emojis: Emoji[]) {
 }
 
 export function b64_to_utf8(str: string) {
-    return decodeURIComponent(encodeURIComponent(window.atob(str)));
+    return decodeURIComponent(escape(window.atob(str)));
 }
 
 export async function getTemplate(lang: string) {
