@@ -1,4 +1,4 @@
-import { type RouteConfig, index, route } from '@react-router/dev/routes';
+import { type RouteConfig, index, route, prefix } from '@react-router/dev/routes';
 
 export default [
     index('routes/home.tsx'),
@@ -20,9 +20,6 @@ export default [
     //     route('cpp', 'routes/ide/cpp.tsx'),
     //     route('python', 'routes/ide/python.tsx'),
     // ]),
-    //
-    // ...prefix('embed', [
-    //     route('cpp', 'routes/embed/cpp.tsx'),
-    //     route('python', 'routes/embed/python.tsx'),
-    // ]),
+
+    ...prefix('embed', [route('cpp', 'routes/embed/cpp.tsx'), route('python', 'routes/embed/python.tsx')]),
 ] satisfies RouteConfig;
