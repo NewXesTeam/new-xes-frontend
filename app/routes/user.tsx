@@ -51,7 +51,7 @@ const FixedWorkCard = (
                             <Button variant="" size="sm" onClick={() => window.open(editLink, '_blank')}>
                                 编辑
                             </Button>
-                            {work.published === 0 && (
+                            {work.published === 0 && !work.removed &&(
                                 <Button
                                     variant=""
                                     size="sm"
