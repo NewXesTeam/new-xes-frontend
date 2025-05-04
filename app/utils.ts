@@ -39,10 +39,7 @@ export function processLinkReplace(text: string, links: Link[]) {
     let content = text;
     if (links.length !== 0) {
         for (let i = 0; i < links.length; i++) {
-            content = content.replace(
-                links[i].link,
-                `<a href="${links[i].link}" target="_blank">${links[i].text}</a>`,
-            );
+            content = content.replace(links[i].link, `<a href="${links[i].link}" target="_blank">${links[i].text}</a>`);
         }
     }
     return content;

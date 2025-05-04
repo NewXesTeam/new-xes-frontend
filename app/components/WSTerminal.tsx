@@ -47,7 +47,8 @@ const WSTerminal = ({ id }: { id: number | string }) => {
                     rows: 25,
                     cols: 80,
                     fontSize: 18,
-                    fontFamily: '"Jetbrains Mono", "Fira Code", "Cascadia Code", "Noto Emoji", "Segoe UI Emoji", "Lucida Console", Menlo, courier-new, courier, monospace',
+                    fontFamily:
+                        '"Jetbrains Mono", "Fira Code", "Cascadia Code", "Noto Emoji", "Segoe UI Emoji", "Lucida Console", Menlo, courier-new, courier, monospace',
                     theme: xtermTheme,
                     cursorBlink: true,
                     allowProposedApi: true,

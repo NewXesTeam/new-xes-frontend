@@ -109,10 +109,13 @@ const CommentCard = ({
                                 }}
                                 ref={node => {
                                     if (node) {
-                                        node.innerHTML = processLinkReplace(processEmojiReplace(
-                                            DOMPurify.sanitize(message.content.main.content),
-                                            message.content.main.emojis,
-                                        ), message.content.main.links);
+                                        node.innerHTML = processLinkReplace(
+                                            processEmojiReplace(
+                                                DOMPurify.sanitize(message.content.main.content),
+                                                message.content.main.emojis,
+                                            ),
+                                            message.content.main.links,
+                                        );
                                     }
                                 }}
                             />
