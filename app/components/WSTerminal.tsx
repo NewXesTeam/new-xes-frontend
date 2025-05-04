@@ -44,8 +44,11 @@ const WSTerminal = ({ id }: { id: number | string }) => {
                 const { Unicode11Addon } = await import('@xterm/addon-unicode11');
 
                 const term = new Terminal({
-                    fontSize: 20,
-                    fontFamily: "'Cascadia Code', Consolas, 'Courier New', monospace",
+                    rows: 25,
+                    cols: 80,
+                    fontSize: 18,
+                    fontFamily:
+                        '"Jetbrains Mono", "Fira Code", "Cascadia Code", "Noto Emoji", "Segoe UI Emoji", "Lucida Console", Menlo, courier-new, courier, monospace',
                     theme: xtermTheme,
                     cursorBlink: true,
                     allowProposedApi: true,

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
 import Avatar from './Avatar';
-import { processEmojiReplace } from '@/utils';
+import { processEmojiReplace, processLinkReplace } from '@/utils';
 import { v4 as uuidV4 } from 'uuid';
 import DOMPurify from 'dompurify';
 
@@ -109,9 +109,12 @@ const CommentCard = ({
                                 }}
                                 ref={node => {
                                     if (node) {
-                                        node.innerHTML = processEmojiReplace(
-                                            DOMPurify.sanitize(message.content.main.content),
-                                            message.content.main.emojis,
+                                        node.innerHTML = processLinkReplace(
+                                            processEmojiReplace(
+                                                DOMPurify.sanitize(message.content.main.content),
+                                                message.content.main.emojis,
+                                            ),
+                                            message.content.main.links,
                                         );
                                     }
                                 }}

@@ -1,4 +1,4 @@
-import type { Emoji } from './common';
+import type { Emoji, Link } from './common';
 import type { Medal } from './medal';
 
 export interface MessageData {
@@ -46,7 +46,7 @@ interface Content {
     replies: number;
     top: number;
     removed: number;
-    links: null | string;
+    links: Link[];
     created_at: string;
     comment_from: string;
     username: string;
