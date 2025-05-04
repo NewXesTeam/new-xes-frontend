@@ -19,6 +19,11 @@ export interface Emoji {
     url: string;
 }
 
+export interface Link {
+    link: string;
+    text: string;
+}
+
 export interface Associate_word {
     word: string;
 }
