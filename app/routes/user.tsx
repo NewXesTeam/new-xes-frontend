@@ -21,7 +21,7 @@ const FixedWorkCard = (
         const [isShowOperators, setIsShowOperators] = React.useState(false);
         let link = getWorkLink(work);
         let editLink = getEditWorkLink(work);
-        let workStatus = '';
+        let workStatus;
 
         if (work.removed) {
             workStatus = publishedText['removed'];
@@ -84,23 +84,24 @@ const FixedWorkCard = (
                                     {work.name}
                                 </a>
                             </Card.Title>
-                            <Card.Text className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex justify-content-between align-items-center">
                                 <span style={{ fontSize: '14px' }}>{work.username}</span>
                                 <div>
-                                    <Badge pill bg="info">
+                                    <Badge pill bg="info" aria-label="浏览量">
                                         👀{work.views}
                                     </Badge>
-                                    <Badge pill bg="primary">
+                                    <Badge pill bg="primary" aria-label="点赞数">
                                         👍{work.likes}
                                     </Badge>
-                                    <Badge pill bg="danger">
+                                    <br />
+                                    <Badge pill bg="danger" aria-label="点踩数">
                                         👎{work.unlikes}
                                     </Badge>
-                                    <Badge pill bg="success">
+                                    <Badge pill bg="success" aria-label="评论数">
                                         💬{work.comments}
                                     </Badge>
                                 </div>
-                            </Card.Text>
+                            </div>
                         </Card.Body>
                     </Card>
                     <div className="work-status">{workStatus}</div>
