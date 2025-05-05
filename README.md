@@ -15,7 +15,7 @@
 1. 下载项目 `git clone https://github.com/NewXesTeam/new-xes-frontend`
 2. 切换到项目文件夹
 3. 安装依赖项 `npm install`
-4. ⚠️开发前初始化构建 `npm run build`
+4. 开发时最好开着开发服务器，让 React Router 初始化一下 Router 的 types
 
 ## npm 脚本
 
