@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
 import AutoCloseAlert from './AutoCloseAlert';
+import CommentBox from './CommentBox';
 import Avatar from './Avatar';
 import { processEmojiReplace, processLinkReplace } from '@/utils';
 import { v4 as uuidV4 } from 'uuid';
@@ -19,6 +20,7 @@ const CommentCard = ({
 }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [isShow, setIsShow] = React.useState<boolean>(true);
+    const [isShowComment, setIsShowComment] = React.useState<boolean>(false);
     const [needRead, setNeedRead] = React.useState<boolean>(message.read_at == '');
     const sendUserLink = `/space/${message.send_user_id}/home`;
 
@@ -147,6 +149,15 @@ const CommentCard = ({
                                 >
                                     删除
                                 </Button>
+                                <Button
+                                    size="sm"
+                                    className="nxf-btn-primary"
+                                    onClick={() => {
+                                        setIsShowComment(true);
+                                    }}
+                                >
+                                    {message.has_reply ? '已回复' : '回复'}
+                                </Button>
                             </div>
                         </div>
                         <OverlayTrigger overlay={<Tooltip>{message.topic.text}</Tooltip>}>
@@ -162,6 +173,12 @@ const CommentCard = ({
                         </OverlayTrigger>
                     </Stack>
                 </Card.Body>
+                <CommentBox
+                    isShow={isShowComment}
+                    setIsShow={setIsShowComment}
+                    topic_id={message.topic_id}
+                    comment_id={message.comment_id}
+                />
             </Card>
         </>
     );
