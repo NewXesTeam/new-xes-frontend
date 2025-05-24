@@ -36,7 +36,7 @@ const CommentBox = ({
         if (response.ok) {
             setAlerts([
                 <AutoCloseAlert variant="success" key={generateUUID().slice(0, 8)}>
-                    更改签名成功
+                    回复成功
                 </AutoCloseAlert>,
                 ...alerts,
             ]);
