@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@react-router/node": "^7.5.3",
-        "@react-router/serve": "^7.6.0",
+        "@react-router/serve": "^7.6.1",
         "@xterm/addon-canvas": "^0.7.0",
         "@xterm/addon-fit": "^0.10.0",
         "@xterm/addon-unicode11": "^0.8.0",
