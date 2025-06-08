@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
+import { Tooltip, Card, CardContent, Stack, Button, Typography } from '@mui/material';
 import Avatar from './Avatar';
 
 import type { SimpleUserInfo } from '@/interfaces/user';
@@ -19,30 +19,33 @@ const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; cl
 
     return (
         <Card style={{ padding: '10px' }} className={className}>
-            <Card.Body>
-                <Stack direction="horizontal">
-                    <a href={userLink} target="_blank">
-                        <Avatar name={user.realname} avatarUrl={user.avatar_path} size={108} />
-                    </a>
-                    <div style={{ margin: '26px 20px' }}>
+            <CardContent>
+                <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <a href={userLink} target="_blank" style={{ textDecoration: 'none' }}>
+                            <Avatar name={user.realname} avatarUrl={user.avatar_path} size={108} />
+                        </a>
                         <div>
-                            <a href={userLink} target="_blank" style={{ marginRight: '31px', fontSize: '18px' }}>
+                            <Typography variant="h6" component="a" href={userLink} target="_blank" style={{ textDecoration: 'none' }}>
                                 {user.realname}
-                            </a>
-                            <span style={{ marginRight: '40px' }}>关注：{user.follows}</span>
-                            <span>粉丝：{user.fans}</span>
+                            </Typography>
+                            <Typography variant="body2">
+                                关注：{user.follows} 粉丝：{user.fans}
+                            </Typography>
+                            <Typography variant="body2" style={{ marginTop: '10px' }}>
+                                {user.signature}
+                            </Typography>
                         </div>
-                        <div style={{ fontSize: '14px', marginTop: '10px' }}>{user.signature}</div>
-                    </div>
+                    </Stack>
                     <Button
-                        variant={(userFollowed ? 'outline-' : '') + 'secondary'}
+                        variant={userFollowed ? 'outlined' : 'contained'}
+                        color={userFollowed ? 'secondary' : 'primary'}
                         onClick={() => onClickFollow()}
-                        className="ms-auto"
                     >
                         {userFollowed ? '已关注' : '关注'}
                     </Button>
                 </Stack>
-            </Card.Body>
+            </CardContent>
         </Card>
     );
 };
@@ -51,14 +54,7 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
     const userLink = `/space/${user.id}/home`;
 
     return (
-        <OverlayTrigger
-            overlay={
-                <Tooltip>
-                    <span style={{ marginRight: '10px' }}>关注：{user.follows}</span>
-                    <span>粉丝：{user.fans}</span>
-                </Tooltip>
-            }
-        >
+        <Tooltip title={`粉丝：${user.fans}   关注：${user.follows}`}>
             <Card style={{ padding: '10px' }}>
                 <img
                     src={user.avatar_path}
@@ -67,11 +63,11 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
                     width={80}
                     style={{ borderRadius: '50%' }}
                 />
-                <a className="stretched-link" href={userLink} target="_blank">
+                <a href={userLink} target="_blank">
                     {user.realname}
                 </a>
             </Card>
-        </OverlayTrigger>
+        </Tooltip>
     );
 };
 
