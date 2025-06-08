@@ -21,7 +21,14 @@ const MyPagination = ({
     };
 
     return (
-        <Pagination className={className} color='primary' variant='outlined' count={pageCount} page={currentPage} onChange={handleChange}></Pagination>
+        <Pagination
+            className={className}
+            color="primary"
+            variant="outlined"
+            count={pageCount}
+            page={currentPage}
+            onChange={handleChange}
+        ></Pagination>
     );
 };
 

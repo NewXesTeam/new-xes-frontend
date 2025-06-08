@@ -10,7 +10,7 @@ const AutoCloseAlert = ({
     closeTimeout = 1000,
     children,
 }: {
-    severity: AlertProps["severity"];
+    severity: AlertProps['severity'];
     dismissible?: boolean;
     closeTimeout?: number;
     children: React.ReactNode;
@@ -39,18 +39,17 @@ const AutoCloseAlert = ({
 
     return (
         <Collapse in={show}>
-            <Alert severity={severity} action={
-                dismissible && (
-                    <IconButton
-                        aria-label='close'
-                        color='inherit'
-                        size='small'
-                        onClick={() => setShow(false)}
-                    >
-                        <CloseIcon fontSize='inherit' />
-                    </IconButton>
-                )
-            } onClose={() => setShow(false)}>
+            <Alert
+                severity={severity}
+                action={
+                    dismissible && (
+                        <IconButton aria-label="close" color="inherit" size="small" onClick={() => setShow(false)}>
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    )
+                }
+                onClose={() => setShow(false)}
+            >
                 {children}
             </Alert>
         </Collapse>

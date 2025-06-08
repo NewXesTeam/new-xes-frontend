@@ -108,20 +108,14 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
                             >
                                 <Nav.Item>
                                     <Nav.Link eventKey="1">
-                                        <Badge
-                                            color="error"
-                                            badgeContent={messageData?.data[0].count}
-                                        >
+                                        <Badge color="error" badgeContent={messageData?.data[0].count}>
                                             评论和回复
                                         </Badge>
                                     </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="5">
-                                        <Badge
-                                            color="error"
-                                            badgeContent={messageData?.data[2].count}
-                                        >
+                                        <Badge color="error" badgeContent={messageData?.data[2].count}>
                                             关注
                                         </Badge>
                                     </Nav.Link>
