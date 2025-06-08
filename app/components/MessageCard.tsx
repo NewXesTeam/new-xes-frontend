@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, Card, OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
+import { Card, Button, CardContent } from '@mui/material';
 import AutoCloseAlert from './AutoCloseAlert';
 import CommentBox from './CommentBox';
 import Avatar from './Avatar';
@@ -32,7 +33,7 @@ const CommentCard = ({
         });
         setNeedRead(false);
         setAlerts([
-            <AutoCloseAlert variant="success" key={uuidV4()}>
+            <AutoCloseAlert severity="success" key={uuidV4()}>
                 已阅读
             </AutoCloseAlert>,
             ...alerts,
@@ -52,7 +53,7 @@ const CommentCard = ({
                 }}
                 onClick={needRead ? onClickRead : () => {}}
             >
-                <Card.Body>
+                <CardContent>
                     <Stack direction="horizontal">
                         <a href={sendUserLink} target="_blank" style={{ alignSelf: 'flex-start' }}>
                             <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={50} />
@@ -132,8 +133,7 @@ const CommentCard = ({
                                     {message.created_at}
                                 </span>
                                 <Button
-                                    size="sm"
-                                    className="nxf-btn-primary"
+                                    size="small"
                                     onClick={async () => {
                                         await fetch('/api/messages/delete', {
                                             method: 'POST',
@@ -141,7 +141,7 @@ const CommentCard = ({
                                             body: JSON.stringify({ category: message.category, id: message.id }),
                                         });
                                         setAlerts([
-                                            <AutoCloseAlert variant="success">删除成功</AutoCloseAlert>,
+                                            <AutoCloseAlert severity="success">删除成功</AutoCloseAlert>,
                                             ...alerts,
                                         ]);
                                         setIsShow(false);
@@ -150,8 +150,7 @@ const CommentCard = ({
                                     删除
                                 </Button>
                                 <Button
-                                    size="sm"
-                                    className="nxf-btn-primary"
+                                    size="small"
                                     onClick={() => {
                                         setIsShowComment(true);
                                     }}
@@ -172,7 +171,7 @@ const CommentCard = ({
                             </a>
                         </OverlayTrigger>
                     </Stack>
-                </Card.Body>
+                </CardContent>
                 <CommentBox
                     isShow={isShowComment}
                     setIsShow={setIsShowComment}
@@ -206,7 +205,7 @@ const FollowCard = ({
         });
         setNeedRead(false);
         setAlerts([
-            <AutoCloseAlert variant="success" key={uuidV4()}>
+            <AutoCloseAlert severity="success" key={uuidV4()}>
                 已阅读
             </AutoCloseAlert>,
             ...alerts,
@@ -223,7 +222,7 @@ const FollowCard = ({
         setUserFollowed(!userFollowed);
         console.log(userFollowed);
         setAlerts([
-            <AutoCloseAlert variant="success" key={uuidV4()}>
+            <AutoCloseAlert severity="success" key={uuidV4()}>
                 {userFollowed ? '取消关注' : '关注'}成功
             </AutoCloseAlert>,
             ...alerts,
@@ -241,7 +240,7 @@ const FollowCard = ({
                 }}
                 onClick={needRead ? onClickRead : () => {}}
             >
-                <Card.Body>
+                <CardContent>
                     <Stack direction="horizontal">
                         <div className="notifition-dot" style={{ display: needRead ? 'block' : 'none' }}></div>
                         <a href={userLink} target="_blank">
@@ -265,14 +264,15 @@ const FollowCard = ({
                             </div>
                         </div>
                         <Button
-                            variant={(userFollowed ? 'outline-' : '') + 'secondary'}
+                            variant={userFollowed ? 'outlined' : 'contained'}
+                            color={userFollowed ? 'secondary' : 'primary'}
                             onClick={onClickFollow}
                             className="ms-auto"
                         >
                             {userFollowed ? '已关注' : '关注'}
                         </Button>
                     </Stack>
-                </Card.Body>
+                </CardContent>
             </Card>
         </>
     );

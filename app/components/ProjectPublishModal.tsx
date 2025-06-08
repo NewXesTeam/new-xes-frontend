@@ -32,7 +32,7 @@ const ProjectPublishModal = ({
     const onClickPublish = async () => {
         // @ts-ignore
         if (workNameRef.current.value === '' || workTagsRef.current === '') {
-            setAlerts([<AutoCloseAlert variant="warning">有选项未填写！</AutoCloseAlert>, ...alerts]);
+            setAlerts([<AutoCloseAlert severity="warning">有选项未填写！</AutoCloseAlert>, ...alerts]);
             return;
         }
         await fetch(`/api/${lang}/${work.id}/publish`, {
@@ -52,7 +52,7 @@ const ProjectPublishModal = ({
             }),
         });
         setIsShow(false);
-        setAlerts([<AutoCloseAlert variant="suceess">已发布</AutoCloseAlert>, ...alerts]);
+        setAlerts([<AutoCloseAlert severity="success">已发布</AutoCloseAlert>, ...alerts]);
     };
 
     // 提交内容

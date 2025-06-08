@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { OverlayTrigger } from 'react-bootstrap';
 import { Badge, Card, CardMedia, CardContent, Typography, Tooltip } from '@mui/material';
 import { getWorkLink } from '@/utils';
 import type { Work } from '@/interfaces/work';
@@ -10,7 +9,7 @@ const WorkCard = ({ work }: { work: Work }) => {
 
     return (
         <Tooltip placement="top" title={work.created_at}>
-            <Card className="mb-3">
+            <Card className="mb-3 position-relative">
                 <CardMedia
                     component="img"
                     alt={work.name}
@@ -24,8 +23,19 @@ const WorkCard = ({ work }: { work: Work }) => {
 
                 <CardContent>
                     <Tooltip placement="top" title={work.name}>
-                        <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'blue', fontSize: '16px' }} gutterBottom variant="h5" component="div">
-                            <a href={link} className="text-decoration-none" target="_blank">
+                        <Typography
+                            sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                color: 'blue',
+                                fontSize: '16px',
+                            }}
+                            gutterBottom
+                            variant="h5"
+                            component="div"
+                        >
+                            <a href={link} className="text-decoration-none stretched-link" target="_blank">
                                 {work.name}
                             </a>
                         </Typography>
@@ -38,7 +48,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
                                 👀
-                            </Badge>    
+                            </Badge>
                             <Badge badgeContent={work.likes} color="primary" aria-label="点赞数" showZero>
                                 👍
                             </Badge>
@@ -58,21 +68,31 @@ const WorkCard = ({ work }: { work: Work }) => {
 };
 
 const RemovedWorkCard = () => {
-    return (
-        <Card className="mb-3">
-            作品已被下架
-        </Card>
-    );
+    return <Card className="mb-3">作品已被下架</Card>;
 };
 
 const SmallWorkCard = ({ work }: { work: Work }) => {
     return (
-        <Tooltip placement="top" title={`
+        <Tooltip
+            placement="top"
+            title={`
             👀${work.views} 👍${work.likes} 👎${work.unlikes}
             ${work.created_at}
-        `}>
+        `}
+        >
             <Card>
-                <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'blue', fontSize: '16px' }} gutterBottom variant="h5" component="div">
+                <Typography
+                    sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        color: 'blue',
+                        fontSize: '16px',
+                    }}
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                >
                     <a href={getWorkLink(work)} className="stretched-link">
                         {work.name}
                     </a>

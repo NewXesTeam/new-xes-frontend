@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { redirect } from 'react-router';
-import { Container, Nav, Row, Col, Badge, Card } from 'react-bootstrap';
+import { Container, Nav, Row, Col } from 'react-bootstrap';
+import { Badge, Card } from '@mui/material';
 import NavbarComponent from '@/components/Navbar';
 import { CommentList, FollowList } from '@/components/MessageList';
 import { Pagination } from '@/components/Pagination';
@@ -108,25 +108,15 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
                             >
                                 <Nav.Item>
                                     <Nav.Link eventKey="1">
-                                        评论和回复
-                                        <Badge
-                                            bg="danger"
-                                            pill
-                                            style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
-                                        >
-                                            {messageData?.data[0].count}
+                                        <Badge color="error" badgeContent={messageData?.data[0].count}>
+                                            评论和回复
                                         </Badge>
                                     </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="5">
-                                        关注
-                                        <Badge
-                                            bg="danger"
-                                            pill
-                                            style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
-                                        >
-                                            {messageData?.data[2].count}
+                                        <Badge color="error" badgeContent={messageData?.data[2].count}>
+                                            关注
                                         </Badge>
                                     </Nav.Link>
                                 </Nav.Item>

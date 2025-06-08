@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, Collapse, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-import type { Variant } from 'react-bootstrap/esm/types';
+import type { AlertProps } from '@mui/material/Alert';
 
 const AutoCloseAlert = ({
-    variant,
+    severity,
     dismissible = true,
     closeTimeout = 1000,
     children,
 }: {
-    variant: Variant;
+    severity: AlertProps['severity'];
     dismissible?: boolean;
     closeTimeout?: number;
     children: React.ReactNode;
@@ -37,9 +38,21 @@ const AutoCloseAlert = ({
     }
 
     return (
-        <Alert show={show} variant={variant} dismissible={dismissible} onClose={() => setShow(false)}>
-            {children}
-        </Alert>
+        <Collapse in={show}>
+            <Alert
+                severity={severity}
+                action={
+                    dismissible && (
+                        <IconButton aria-label="close" color="inherit" size="small" onClick={() => setShow(false)}>
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    )
+                }
+                onClose={() => setShow(false)}
+            >
+                {children}
+            </Alert>
+        </Collapse>
     );
 };
 

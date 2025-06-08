@@ -4,7 +4,15 @@ import Avatar from './Avatar';
 
 import type { SimpleUserInfo } from '@/interfaces/user';
 
-const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; className?: string }) => {
+const HorizontalUserCard = ({
+    user,
+    className = '',
+    children = null,
+}: {
+    user: SimpleUserInfo;
+    className?: string;
+    children: React.ReactNode;
+}) => {
     const [userFollowed, setUserFollowed] = React.useState(user.is_follow);
     const userLink = `/space/${user.id}/home`;
 
@@ -26,8 +34,14 @@ const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; cl
                             <Avatar name={user.realname} avatarUrl={user.avatar_path} size={108} />
                         </a>
                         <div>
-                            <Typography variant="h6" component="a" href={userLink} target="_blank" style={{ textDecoration: 'none' }}>
-                                {user.realname}
+                            <Typography
+                                variant="h6"
+                                component="a"
+                                href={userLink}
+                                target="_blank"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                {user.realname.replace(/<em>/g, '').replace(/<\/em>/g, '')}
                             </Typography>
                             <Typography variant="body2">
                                 关注：{user.follows} 粉丝：{user.fans}
@@ -46,6 +60,7 @@ const HorizontalUserCard = ({ user, className = '' }: { user: SimpleUserInfo; cl
                     </Button>
                 </Stack>
             </CardContent>
+            {children}
         </Card>
     );
 };

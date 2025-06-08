@@ -35,7 +35,7 @@ const CommentBox = ({
         });
         if (response.ok) {
             setAlerts([
-                <AutoCloseAlert variant="success" key={generateUUID().slice(0, 8)}>
+                <AutoCloseAlert severity="success" key={generateUUID().slice(0, 8)}>
                     回复成功
                 </AutoCloseAlert>,
                 ...alerts,
@@ -43,7 +43,7 @@ const CommentBox = ({
         } else {
             const responseData: ErrorResponse = await response.json();
             setAlerts([
-                <AutoCloseAlert variant="danger" key={generateUUID().slice(0, 8)}>
+                <AutoCloseAlert severity="error" key={generateUUID().slice(0, 8)}>
                     {responseData.message}
                 </AutoCloseAlert>,
                 ...alerts,
