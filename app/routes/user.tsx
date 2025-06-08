@@ -154,7 +154,7 @@ export default function UserPage() {
                                     }),
                                 });
                                 setAlerts([
-                                    <AutoCloseAlert key={uuidV4()} variant="suceess">
+                                    <AutoCloseAlert key={uuidV4()} severity="success">
                                         已取消发布
                                     </AutoCloseAlert>,
                                     ...alerts,

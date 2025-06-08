@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { OverlayTrigger } from 'react-bootstrap';
 import { Badge, Card, CardMedia, CardContent, Typography, Tooltip } from '@mui/material';
 import { getWorkLink } from '@/utils';
 import type { Work } from '@/interfaces/work';
@@ -10,7 +9,7 @@ const WorkCard = ({ work }: { work: Work }) => {
 
     return (
         <Tooltip placement="top" title={work.created_at}>
-            <Card className="mb-3">
+            <Card className="mb-3 position-relative">
                 <CardMedia
                     component="img"
                     alt={work.name}
@@ -25,7 +24,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                 <CardContent>
                     <Tooltip placement="top" title={work.name}>
                         <Typography sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'blue', fontSize: '16px' }} gutterBottom variant="h5" component="div">
-                            <a href={link} className="text-decoration-none" target="_blank">
+                            <a href={link} className="text-decoration-none stretched-link" target="_blank">
                                 {work.name}
                             </a>
                         </Typography>

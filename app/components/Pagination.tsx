@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Pagination, Form, InputGroup } from 'react-bootstrap';
-import './Pagination.scss';
+import { Pagination } from '@mui/material';
 
 const MyPagination = ({
     pageCount,
@@ -14,62 +13,15 @@ const MyPagination = ({
     className?: string;
 }) => {
     const [currentPage, setCurrentPage] = React.useState(value);
-    const setPage = (page: number) => {
+    const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
         if (page < 1) page = 1;
         if (page > pageCount) page = pageCount;
         setCurrentPage(page);
+        handlePageChange(page);
     };
 
     return (
-        <Pagination className={className}>
-            <Pagination.Item
-                href="#"
-                onClick={() => {
-                    setPage(currentPage - 1);
-                    handlePageChange(currentPage - 1);
-                    document.documentElement.scrollTop = 0;
-                }}
-                disabled={currentPage <= 1}
-            >
-                上一页
-            </Pagination.Item>
-            <div className="page-item page-input mb-3">
-                <InputGroup>
-                    <InputGroup.Text>页码</InputGroup.Text>
-                    <Form.Control
-                        type="number"
-                        min={1}
-                        max={pageCount}
-                        value={currentPage}
-                        placeholder={`1~${pageCount}`}
-                        style={{ width: '100px' }}
-                        onChange={event => setPage(parseInt(event.currentTarget.value))}
-                        onKeyDown={event => {
-                            if (event.key === 'Enter') {
-                                setPage(parseInt(event.currentTarget.value));
-                                handlePageChange(parseInt(event.currentTarget.value));
-                                document.documentElement.scrollTop = 0;
-                            }
-                        }}
-                        onBlur={event => {
-                            setPage(parseInt(event.currentTarget.value));
-                            handlePageChange(parseInt(event.currentTarget.value));
-                        }}
-                    />
-                </InputGroup>
-            </div>
-            <Pagination.Item
-                href="#"
-                onClick={() => {
-                    setPage(currentPage + 1);
-                    handlePageChange(currentPage + 1);
-                    document.documentElement.scrollTop = 0;
-                }}
-                disabled={currentPage >= pageCount}
-            >
-                下一页
-            </Pagination.Item>
-        </Pagination>
+        <Pagination className={className} color='primary' variant='outlined' count={pageCount} page={currentPage} onChange={handleChange}></Pagination>
     );
 };
 

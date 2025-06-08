@@ -366,7 +366,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
         });
         setUserFollowed(!userFollowed);
         setAlerts([
-            <AutoCloseAlert key={generateUUID().slice(0, 8)} variant="success">
+            <AutoCloseAlert key={generateUUID().slice(0, 8)} severity="success">
                 {userFollowed ? '取消关注成功' : '关注成功'}
             </AutoCloseAlert>,
             ...alerts,
@@ -385,7 +385,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
         if (response.ok) {
             setUserSignature(signatureInputValue);
             setAlerts([
-                <AutoCloseAlert variant="success" key={generateUUID().slice(0, 8)}>
+                <AutoCloseAlert severity="success" key={generateUUID().slice(0, 8)}>
                     更改签名成功
                 </AutoCloseAlert>,
                 ...alerts,
@@ -393,7 +393,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
         } else {
             const responseData: ErrorResponse = await response.json();
             setAlerts([
-                <AutoCloseAlert variant="danger" key={generateUUID().slice(0, 8)}>
+                <AutoCloseAlert severity="error" key={generateUUID().slice(0, 8)}>
                     {responseData.message}
                 </AutoCloseAlert>,
                 ...alerts,
