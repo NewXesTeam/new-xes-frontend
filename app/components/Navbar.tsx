@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Container, Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { AppBar, Badge, Menu, MenuItem, IconButton, Divider, Button } from '@mui/material';
 import { NavLink } from 'react-router';
 import Avatar from './Avatar';
 import SearchInput from './SearchInput';
@@ -10,16 +11,144 @@ import type { MessageData } from '@/interfaces/message';
 import logoImg from '@/static/logo.png';
 import '@/styles/search.scss';
 
+const UserMenu = ({
+    userInfo,
+    messageData,
+    totalMessageCount,
+    onLogout,
+}: {
+    userInfo: UserInfo["data"];
+    messageData: MessageData | null;
+    totalMessageCount: number;
+    onLogout: () => void;
+}) => {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const openUserMenu = Boolean(anchorEl);
+
+    const [messageEl, setMessageEl] = React.useState<null | HTMLElement>(null);
+    const openMessageMenu = Boolean(messageEl);
+
+    return (
+        <>
+            <Button 
+                aria-controls={openMessageMenu ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMessageMenu ? 'true' : undefined}
+                onClick={event => setMessageEl(event.currentTarget)}
+            >
+                <Badge color="error" badgeContent={totalMessageCount}>
+                    消息
+                </Badge>
+            </Button>
+            <Menu
+                anchorEl={messageEl}
+                open={openMessageMenu}
+                onClose={() => setMessageEl(null)}
+                slotProps={{
+                    list: {
+                        'aria-labelledby': 'basic-button',
+                    },
+                }}
+            >
+                <MenuItem component={NavLink} to="/message/1">
+                    <Badge color="error" badgeContent={messageData?.data[0].count}>
+                        评论和回复
+                    </Badge>
+                </MenuItem>
+                <MenuItem component={NavLink} to="/message/5">
+                    <Badge color="error" badgeContent={messageData?.data[2].count}>
+                        关注
+                    </Badge>
+                </MenuItem>
+            </Menu>
+
+            <IconButton
+                aria-controls={openUserMenu ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openUserMenu ? 'true' : undefined}
+                onClick={event => setAnchorEl(event.currentTarget)}
+            >
+                <Avatar name={userInfo.name} avatarUrl={userInfo.avatar_path} size={40} />
+            </IconButton>
+            <Menu
+                anchorEl={anchorEl}
+                open={openUserMenu}
+                onClose={() => setAnchorEl(null)}
+                slotProps={{
+                    list: {
+                        'aria-labelledby': 'basic-button',
+                    },
+                }}
+            >
+                <MenuItem component={NavLink} to={`/space/${userInfo.id}/home`}>
+                    个人空间
+                </MenuItem>
+                <MenuItem component={NavLink} to="/user">
+                    作品管理
+                </MenuItem>
+                <Divider />
+                <MenuItem component={NavLink} to="/userInfo">
+                    个人信息
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={onLogout}>
+                    登出
+                </MenuItem>
+            </Menu>
+        </>
+    );
+};
+
+const CreateMenu = () => {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const openCreateMenu = Boolean(anchorEl);
+
+    return (
+        <>
+            <Button
+                aria-controls={openCreateMenu ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openCreateMenu ? 'true' : undefined}
+                onClick={event => setAnchorEl(event.currentTarget)}
+            >
+                创作
+            </Button>
+            <Menu
+                anchorEl={anchorEl}
+                open={openCreateMenu}
+                onClose={() => setAnchorEl(null)}
+                slotProps={{
+                    list: {
+                        'aria-labelledby': 'basic-button',
+                    },
+                }}
+            >
+                <MenuItem component={NavLink} to="#">
+                    TurboWarp
+                </MenuItem>
+                <Divider />
+                <MenuItem component={NavLink} to="#">
+                    Python 基础
+                </MenuItem>
+                <MenuItem component={NavLink} to="#">
+                    Python 海龟
+                </MenuItem>
+                <MenuItem component={NavLink} to="#">
+                    Python 本地
+                </MenuItem>
+                <Divider />
+                <MenuItem component={NavLink} to="#">
+                    C++
+                </MenuItem>
+            </Menu>
+        </>
+    )
+}
+
 const NavbarComponent = () => {
+    const [userInfo, setUserInfo] = React.useState<UserInfo["data"] | null>(null);
     const [messageData, setMessageData] = React.useState<MessageData | null>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
-    const [userComponent, setUserComponent] = React.useState<React.JSX.Element>(
-        <>
-            <NavLink className="nav-link" to="/login">
-                登录
-            </NavLink>
-        </>,
-    );
 
     const logoutEvent = async () => {
         await fetch('/passport/logout');
@@ -27,11 +156,11 @@ const NavbarComponent = () => {
     };
 
     React.useEffect(() => {
-        let ignore = false;
-        const func = async () => {
+        const fetchData = async () => {
             if (checkLoggedIn()) {
                 const response = await fetch('/api/user/info');
-                const responseData: UserInfo = await response.json();
+                const userData: UserInfo = await response.json();
+                setUserInfo(userData.data);
 
                 if (!location.pathname.includes('message.html')) {
                     const messageResponse = await fetch(`/api/messages/overview`);
@@ -39,74 +168,10 @@ const NavbarComponent = () => {
                     setMessageData(messageResponseData);
                     setTotalMessageCount(messageResponseData.data.reduce((acc, cur) => acc + cur.count, 0));
                 }
-
-                setUserComponent(
-                    <>
-                        <NavDropdown
-                            title={
-                                <>
-                                    消息
-                                    <Badge pill bg="danger" style={{ display: totalMessageCount ? 'inline' : 'none' }}>
-                                        {totalMessageCount}
-                                    </Badge>
-                                </>
-                            }
-                            align={'end'}
-                        >
-                            <NavLink className="dropdown-item" to="/message/1">
-                                评论和回复
-                                <Badge
-                                    pill
-                                    bg="danger"
-                                    style={{ display: messageData?.data[0].count ? 'inline' : 'none' }}
-                                >
-                                    {messageData?.data[0].count}
-                                </Badge>
-                            </NavLink>
-                            <NavLink className="dropdown-item" to="/message/5">
-                                关注
-                                <Badge
-                                    pill
-                                    bg="danger"
-                                    style={{ display: messageData?.data[2].count ? 'inline' : 'none' }}
-                                >
-                                    {messageData?.data[2].count}
-                                </Badge>
-                            </NavLink>
-                        </NavDropdown>
-
-                        <NavDropdown
-                            title={
-                                <Avatar
-                                    name={responseData.data.name}
-                                    avatarUrl={responseData.data.avatar_path}
-                                    size={40}
-                                />
-                            }
-                            align={'end'}
-                        >
-                            <NavLink className="dropdown-item" to={`/space/${responseData.data.id}/home`}>
-                                个人空间
-                            </NavLink>
-                            <NavLink className="dropdown-item" to="/user">
-                                作品管理
-                            </NavLink>
-                            <NavDropdown.Divider />
-                            <NavLink className="dropdown-item" to="/userInfo">
-                                个人信息
-                            </NavLink>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item onClick={logoutEvent}>登出</NavDropdown.Item>
-                        </NavDropdown>
-                    </>,
-                );
             }
         };
 
-        if (!ignore) func();
-        return () => {
-            ignore = true;
-        };
+        fetchData();
     }, []);
 
     return (
@@ -132,9 +197,20 @@ const NavbarComponent = () => {
                     <Nav className="ms-auto" style={{ alignItems: 'center' }}>
                         <SearchInput />
 
-                        {userComponent}
+                        {userInfo ? (
+                            <UserMenu
+                                userInfo={userInfo}
+                                messageData={messageData}
+                                totalMessageCount={totalMessageCount}
+                                onLogout={logoutEvent}
+                            />
+                        ) : (
+                            <NavLink className="nav-link" to="/login">
+                                登录
+                            </NavLink>
+                        )}
 
-                        <NavDropdown title="创作" align={'end'}>
+                        {/* <NavDropdown title="创作" align={'end'}>
                             <NavDropdown.Item href="#">TurboWarp</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#">Python 基础</NavDropdown.Item>
@@ -142,7 +218,8 @@ const NavbarComponent = () => {
                             <NavDropdown.Item href="#">Python 本地</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#">C++</NavDropdown.Item>
-                        </NavDropdown>
+                        </NavDropdown> */}
+                        <CreateMenu />
                     </Nav>
                 </Navbar.Collapse>
             </Container>
