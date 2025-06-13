@@ -13,7 +13,7 @@ const HorizontalUserCard = ({
     className?: string;
     children: React.ReactNode;
 }) => {
-    const [userFollowed, setUserFollowed] = React.useState(user.is_follow);
+    const [userFollowed, setUserFollowed] = React.useState(user.is_follow || user.is_followed);
     const userLink = `/space/${user.id}/home`;
 
     const onClickFollow = async () => {
@@ -41,7 +41,7 @@ const HorizontalUserCard = ({
                                 target="_blank"
                                 style={{ textDecoration: 'none' }}
                             >
-                                {user.realname.replace(/<em>/g, '').replace(/<\/em>/g, '')}
+                                {user.realname.replace(/<em>|<\/em>/g, '')}
                             </Typography>
                             <Typography variant="body2">
                                 关注：{user.follows} 粉丝：{user.fans}

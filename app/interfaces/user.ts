@@ -47,6 +47,8 @@ export interface SimpleUserInfo {
 
     /** 是否关注 */
     is_follow: boolean;
+    /** 是否被关注 */
+    is_followed: boolean;
 
     /** 真名 */
     realname: string;
