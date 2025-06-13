@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { TextField, Button } from '@mui/material';
 import AutoCloseAlert from './AutoCloseAlert';
 import { v4 as generateUUID } from 'uuid';
 
@@ -20,6 +20,15 @@ const CommentBox = ({
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
 
     const onCLickComment = async () => {
+        if (comment.trim() === '') {
+            setAlerts([
+                <AutoCloseAlert severity="error" key={generateUUID().slice(0, 8)}>
+                    评论内容不能为空
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
+            return;
+        }
         const response = await fetch('/api/comments/submit', {
             method: 'POST',
             headers: {
@@ -54,11 +63,11 @@ const CommentBox = ({
     };
 
     return (
-        <div style={{ display: isShow ? 'block' : 'none' }}>
+        <div style={{ display: isShow ? 'block' : 'none', padding: '10px' }}>
             <div className="alert-list">{alerts}</div>
-            <Form.Control as="textarea" rows={3} value={comment} onChange={e => setComment(e.target.value)} />
-            <Button variant="primary" onClick={onCLickComment}>
-                Submit
+            <TextField label="评论" variant="outlined" fullWidth multiline rows={4} value={comment} onChange={e => setComment(e.target.value)} />
+            <Button variant="contained" color="primary" onClick={onCLickComment}>
+                提交
             </Button>
         </div>
     );

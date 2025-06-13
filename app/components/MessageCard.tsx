@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { OverlayTrigger, Stack, Tooltip } from 'react-bootstrap';
-import { Card, Button, CardContent } from '@mui/material';
+import { Card, Button, CardContent, Stack, Tooltip, Badge } from '@mui/material';
 import AutoCloseAlert from './AutoCloseAlert';
 import CommentBox from './CommentBox';
 import Avatar from './Avatar';
@@ -44,20 +43,23 @@ const CommentCard = ({
     return (
         <>
             <div className="alert-list">{alerts}</div>
-            <Card
-                className={className}
-                style={{
-                    display: isShow ? 'block' : 'none',
-                    borderLeftColor: needRead ? 'red' : 'var(--bs-border-color-translucent)',
-                    borderLeftWidth: needRead ? '3px' : '1px',
-                }}
-                onClick={needRead ? onClickRead : () => {}}
-            >
+            <Card className={className} onClick={needRead ? onClickRead : () => {}}>
                 <CardContent>
-                    <Stack direction="horizontal">
-                        <a href={sendUserLink} target="_blank" style={{ alignSelf: 'flex-start' }}>
-                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={50} />
-                        </a>
+                    <Stack direction="row">
+                        <Badge
+                            color="error"
+                            invisible={!needRead}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                            variant="dot"
+                        >
+                            <a href={sendUserLink} target="_blank" style={{ alignSelf: 'flex-start' }}>
+                                <Avatar
+                                    name={message.send_username}
+                                    avatarUrl={message.send_user_avatar_path}
+                                    size={50}
+                                />
+                            </a>
+                        </Badge>
                         <div style={{ marginLeft: '10px', marginRight: '10px' }}>
                             <div style={{ display: 'block', paddingBottom: '5px' }}>
                                 <a href={sendUserLink} target="_blank" style={{ fontSize: '18px' }}>
@@ -159,7 +161,7 @@ const CommentCard = ({
                                 </Button>
                             </div>
                         </div>
-                        <OverlayTrigger overlay={<Tooltip>{message.topic.text}</Tooltip>}>
+                        <Tooltip title={message.topic.text}>
                             <a className="ms-auto" href={message.topic.link} style={{ alignSelf: 'flex-start' }}>
                                 <img
                                     src={message.topic.thumbnail}
@@ -169,7 +171,7 @@ const CommentCard = ({
                                     style={{ borderRadius: '6px', border: '1px solid #afafaf' }}
                                 />
                             </a>
-                        </OverlayTrigger>
+                        </Tooltip>
                     </Stack>
                 </CardContent>
                 <CommentBox
@@ -232,42 +234,46 @@ const FollowCard = ({
     return (
         <>
             <div className="alert-list">{alerts}</div>
-            <Card
-                className={className}
-                style={{
-                    borderLeftColor: needRead ? 'red' : 'var(--bs-border-color-translucent)',
-                    borderLeftWidth: needRead ? '3px' : '1px',
-                }}
-                onClick={needRead ? onClickRead : () => {}}
-            >
+            <Card className={className} onClick={needRead ? onClickRead : () => {}}>
                 <CardContent>
-                    <Stack direction="horizontal">
-                        <div className="notifition-dot" style={{ display: needRead ? 'block' : 'none' }}></div>
-                        <a href={userLink} target="_blank">
-                            <Avatar name={message.send_username} avatarUrl={message.send_user_avatar_path} size={50} />
-                        </a>
-                        <div style={{ marginLeft: '10px', marginRight: '10px' }}>
-                            <a href={userLink} target="_blank" style={{ marginRight: '31px', fontSize: '18px' }}>
-                                {message.send_username}
-                            </a>
-                            <div style={{ fontSize: '14px' }}>{message.signature}</div>
-                            <div>
-                                <span
-                                    style={{
-                                        color: 'grey',
-                                        fontSize: '12px',
-                                        marginRight: '10px',
-                                    }}
-                                >
-                                    {message.created_at}
-                                </span>
+                    <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                            <Badge
+                                color="error"
+                                invisible={!needRead}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                                variant="dot"
+                            >
+                                <a href={userLink} target="_blank">
+                                    <Avatar
+                                        name={message.send_username}
+                                        avatarUrl={message.send_user_avatar_path}
+                                        size={50}
+                                    />
+                                </a>
+                            </Badge>
+                            <div style={{ marginLeft: '10px', marginRight: '10px' }}>
+                                <a href={userLink} target="_blank" style={{ marginRight: '31px', fontSize: '18px' }}>
+                                    {message.send_username}
+                                </a>
+                                <div style={{ fontSize: '14px' }}>{message.signature}</div>
+                                <div>
+                                    <span
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: '12px',
+                                            marginRight: '10px',
+                                        }}
+                                    >
+                                        {message.created_at}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </Stack>
                         <Button
                             variant={userFollowed ? 'outlined' : 'contained'}
                             color={userFollowed ? 'secondary' : 'primary'}
                             onClick={onClickFollow}
-                            className="ms-auto"
                         >
                             {userFollowed ? '已关注' : '关注'}
                         </Button>
