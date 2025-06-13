@@ -7,12 +7,16 @@ const WorkCard = ({ work }: { work: Work }) => {
     let link = getWorkLink(work);
     let author_url = `/space/${work.user_id}/home`;
 
+    if (!work.name) {
+        return null;
+    }
+
     return (
         <Tooltip placement="top" title={work.created_at}>
             <Card className="mb-3 position-relative">
                 <CardMedia
                     component="img"
-                    alt={work.name}
+                    alt={work.name.replace(/<em>|<\/em>/g, '')}
                     width={224}
                     height={168}
                     src={
@@ -22,7 +26,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                 />
 
                 <CardContent>
-                    <Tooltip placement="top" title={work.name}>
+                    <Tooltip placement="top" title={work.name.replace(/<em>|<\/em>/g, '')}>
                         <Typography
                             sx={{
                                 overflow: 'hidden',
@@ -36,7 +40,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                             component="div"
                         >
                             <a href={link} className="text-decoration-none stretched-link" target="_blank">
-                                {work.name}
+                                {work.name.replace(/<em>|<\/em>/g, '')}
                             </a>
                         </Typography>
                     </Tooltip>
@@ -68,7 +72,13 @@ const WorkCard = ({ work }: { work: Work }) => {
 };
 
 const RemovedWorkCard = () => {
-    return <Card className="mb-3">作品已被下架</Card>;
+    return <Card className="mb-3">
+        <CardContent>
+            <Typography variant="h5" component="div">
+                作品已被下架
+            </Typography>
+        </CardContent>
+    </Card>;
 };
 
 const SmallWorkCard = ({ work }: { work: Work }) => {
@@ -80,27 +90,33 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
             ${work.created_at}
         `}
         >
-            <Card>
-                <Typography
-                    sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                        color: 'blue',
-                        fontSize: '16px',
-                    }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                >
-                    <a href={getWorkLink(work)} className="stretched-link">
-                        {work.name}
-                    </a>
-                </Typography>
-                <CardContent className="py-0">
-                    <img src={work.thumbnail} height={138} className="m-auto" alt={work.name} />
-                </CardContent>
-            </Card>
+            <Tooltip
+                placement="bottom"
+                title={work.name}
+            >
+                <Card>
+                    <Typography
+                        sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            color: 'blue',
+                            fontSize: '16px',
+                            maxWidth: '100px'
+                        }}
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                    >
+                        <a href={getWorkLink(work)} className="stretched-link">
+                            {work.name}
+                        </a>
+                    </Typography>
+                    <CardContent className="py-0">
+                        <img src={work.thumbnail} height={138} className="m-auto" alt={work.name} />
+                    </CardContent>
+                </Card>
+            </Tooltip>
         </Tooltip>
     );
 };
