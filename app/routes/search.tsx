@@ -242,8 +242,8 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
 
     const handleTabChange = (event: React.SyntheticEvent, newTab: string) => {
         if (newTab) {
-            // location.href = `/search?keyword=${decodeURIComponent(keyword)}&tab=${newTab}`;
             setTab(newTab);
+            window.scrollTo(0, 0);
             history.pushState(null, '', `/search?keyword=${decodeURIComponent(keyword)}&tab=${newTab}`);
         }
     };
