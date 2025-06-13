@@ -65,7 +65,15 @@ const CommentBox = ({
     return (
         <div style={{ display: isShow ? 'block' : 'none', padding: '10px' }}>
             <div className="alert-list">{alerts}</div>
-            <TextField label="评论" variant="outlined" fullWidth multiline rows={4} value={comment} onChange={e => setComment(e.target.value)} />
+            <TextField
+                label="评论"
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+            />
             <Button variant="contained" color="primary" onClick={onCLickComment}>
                 提交
             </Button>

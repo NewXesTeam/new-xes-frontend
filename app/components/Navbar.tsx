@@ -17,7 +17,7 @@ const UserMenu = ({
     totalMessageCount,
     onLogout,
 }: {
-    userInfo: UserInfo["data"];
+    userInfo: UserInfo['data'];
     messageData: MessageData | null;
     totalMessageCount: number;
     onLogout: () => void;
@@ -30,7 +30,7 @@ const UserMenu = ({
 
     return (
         <>
-            <Button 
+            <Button
                 aria-controls={openMessageMenu ? 'basic-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={openMessageMenu ? 'true' : undefined}
@@ -91,9 +91,7 @@ const UserMenu = ({
                     个人信息
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={onLogout}>
-                    登出
-                </MenuItem>
+                <MenuItem onClick={onLogout}>登出</MenuItem>
             </Menu>
         </>
     );
@@ -142,11 +140,11 @@ const CreateMenu = () => {
                 </MenuItem>
             </Menu>
         </>
-    )
-}
+    );
+};
 
 const NavbarComponent = () => {
-    const [userInfo, setUserInfo] = React.useState<UserInfo["data"] | null>(null);
+    const [userInfo, setUserInfo] = React.useState<UserInfo['data'] | null>(null);
     const [messageData, setMessageData] = React.useState<MessageData | null>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
 

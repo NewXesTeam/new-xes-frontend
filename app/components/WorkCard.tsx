@@ -72,13 +72,15 @@ const WorkCard = ({ work }: { work: Work }) => {
 };
 
 const RemovedWorkCard = () => {
-    return <Card className="mb-3">
-        <CardContent>
-            <Typography variant="h5" component="div">
-                作品已被下架
-            </Typography>
-        </CardContent>
-    </Card>;
+    return (
+        <Card className="mb-3">
+            <CardContent>
+                <Typography variant="h5" component="div">
+                    作品已被下架
+                </Typography>
+            </CardContent>
+        </Card>
+    );
 };
 
 const SmallWorkCard = ({ work }: { work: Work }) => {
@@ -90,10 +92,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
             ${work.created_at}
         `}
         >
-            <Tooltip
-                placement="bottom"
-                title={work.name}
-            >
+            <Tooltip placement="bottom" title={work.name}>
                 <Card>
                     <Typography
                         sx={{
@@ -102,7 +101,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
                             whiteSpace: 'nowrap',
                             color: 'blue',
                             fontSize: '16px',
-                            maxWidth: '100px'
+                            maxWidth: '100px',
                         }}
                         gutterBottom
                         variant="h5"

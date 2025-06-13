@@ -12,7 +12,7 @@ const SearchTabs = {
     AllTab: ({ keyword }: { keyword: string }) => {
         const [currentPage, setCurrentPage] = React.useState(1);
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(
-            <Typography variant="h6">加载中...</Typography>
+            <Typography variant="h6">加载中...</Typography>,
         );
 
         React.useEffect(() => {
@@ -75,7 +75,7 @@ const SearchTabs = {
                                 />
                             </Box>
                         )}
-                    </>
+                    </>,
                 );
             };
 
@@ -89,7 +89,7 @@ const SearchTabs = {
     },
     AuthorTab: ({ keyword }: { keyword: string }) => {
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(
-            <Typography variant="h6">加载中...</Typography>
+            <Typography variant="h6">加载中...</Typography>,
         );
         const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -121,7 +121,7 @@ const SearchTabs = {
                                 />
                             </Box>
                         )}
-                    </>
+                    </>,
                 );
             };
 
@@ -135,7 +135,7 @@ const SearchTabs = {
     },
     ProjectsTab: ({ keyword }: { keyword: string }) => {
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(
-            <Typography variant="h6">加载中...</Typography>
+            <Typography variant="h6">加载中...</Typography>,
         );
         const [orderType, setOrderType] = React.useState('comprehensive');
         const [lang, setLang] = React.useState('all');
@@ -205,7 +205,7 @@ const SearchTabs = {
                                 />
                             </Box>
                         )}
-                    </>
+                    </>,
                 );
             };
 
