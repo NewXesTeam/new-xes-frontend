@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Carousel, Container } from 'react-bootstrap';
+import { Carousel } from 'react-bootstrap';
+import { Container } from '@mui/material';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
 

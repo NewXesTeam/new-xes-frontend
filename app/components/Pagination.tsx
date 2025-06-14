@@ -18,6 +18,7 @@ const MyPagination = ({
         if (page > pageCount) page = pageCount;
         setCurrentPage(page);
         handlePageChange(page);
+        window.scrollTo(0, 0);
     };
 
     return (
