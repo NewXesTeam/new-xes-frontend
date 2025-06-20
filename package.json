@@ -28,7 +28,7 @@
         "@xterm/xterm": "^5.5.0",
         "@yaireo/tagify": "^4.35.0",
         "ace-builds": "^1.42.0",
-        "bootstrap": "^5.3.6",
+        "bootstrap": "^5.3.7",
         "dompurify": "^3.2.6",
         "isbot": "^5",
         "react": "^19.1.0",
