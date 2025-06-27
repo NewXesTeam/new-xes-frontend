@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
-        "@emotion/styled": "^11.14.0",
+        "@emotion/styled": "^11.14.1",
         "@react-router/node": "^7.6.2",
         "@react-router/serve": "^7.6.2",
         "@mui/material": "^7.1.1",
