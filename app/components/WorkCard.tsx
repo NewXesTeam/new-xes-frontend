@@ -49,7 +49,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                         <a href={author_url} target="_blank" style={{ zIndex: 2 }}>
                             <span style={{ fontSize: '14px' }}>{work.username}</span>
                         </a>
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '10px', zoom: 0.75 }}>
                             <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
                                 👀
                             </Badge>

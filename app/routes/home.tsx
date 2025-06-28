@@ -30,8 +30,8 @@ export default function IndexPage() {
         <>
             <NavbarComponent />
 
-            <Container>
-                <Carousel className="m-auto mt-5 mb-5" interval={3500}>
+            <Container className="mt-5">
+                <Carousel className="m-auto mb-5" interval={3500}>
                     <Carousel.Item>
                         <a href="https://code.xueersi.com/home/project/detail?lang=scratch&pid=24831951&version=3.0&langType=scratch">
                             <img
