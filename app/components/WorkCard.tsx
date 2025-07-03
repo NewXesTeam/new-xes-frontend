@@ -93,7 +93,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
         `}
         >
             <Tooltip placement="bottom" title={work.name}>
-                <Card>
+                <Card className='mb-3 position-relative'>
                     <Typography
                         sx={{
                             overflow: 'hidden',
@@ -101,7 +101,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
                             whiteSpace: 'nowrap',
                             color: 'blue',
                             fontSize: '16px',
-                            maxWidth: '100px',
+                            maxWidth: '200px',
                         }}
                         gutterBottom
                         variant="h5"
