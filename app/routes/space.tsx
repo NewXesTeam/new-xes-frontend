@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { redirect } from 'react-router';
 import { Tabs, Tab, Nav, Form, Spinner } from 'react-bootstrap';
-import { Button, Container, Card, CardContent, Typography, CardHeader, Stack, TextField } from '@mui/material'
+import { Button, Container, Card, CardContent, Typography, CardHeader, Stack, TextField } from '@mui/material';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -72,7 +72,8 @@ const SpaceTabs = {
                             <WorkList works={responseData.data.works.data} />
 
                             <Typography variant="h5">
-                                TA 的收藏 <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span>
+                                TA 的收藏{' '}
+                                <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span>
                             </Typography>
                             <WorkList works={responseData.data.favorites.data} />
 
@@ -410,7 +411,14 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
 
             <Container>
                 <Stack className="mt-5 mx-auto text-center" spacing={2} direction="column">
-                    <Stack direction="row" alignItems="center" spacing={2} sx={{ maxWidth: 1 }} className="text-center" justifyContent="space-between">
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{ maxWidth: 1 }}
+                        className="text-center"
+                        justifyContent="space-between"
+                    >
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
                                 size={128}
@@ -419,7 +427,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                             />
                             <div style={{ textAlign: 'left' }}>
                                 <Typography variant="h5" component="div">
-                                    {spaceProfileData.data.realname} 
+                                    {spaceProfileData.data.realname}
                                     <Typography variant="body1" component="span" color="text.secondary">
                                         ({userId})
                                     </Typography>

@@ -10,7 +10,11 @@ const UserVerticalList = ({ users }: { users: SimpleUserInfo[] }) => {
         <HorizontalUserCard key={user.id} className={index >= 1 ? 'mt-2' : ''} user={user} children={null} />
     ));
 
-    return <Stack direction="column" spacing={2}>{cards}</Stack>;
+    return (
+        <Stack direction="column" spacing={2}>
+            {cards}
+        </Stack>
+    );
 };
 
 const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {

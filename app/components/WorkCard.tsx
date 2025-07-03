@@ -93,7 +93,7 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
         `}
         >
             <Tooltip placement="bottom" title={work.name}>
-                <Card className='mb-3 position-relative'>
+                <Card className="mb-3 position-relative">
                     <Typography
                         sx={{
                             overflow: 'hidden',
