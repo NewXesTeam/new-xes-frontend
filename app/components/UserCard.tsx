@@ -11,7 +11,7 @@ const HorizontalUserCard = ({
 }: {
     user: SimpleUserInfo;
     className?: string;
-    children: React.ReactNode;
+    children: React.ReactNode | null;
 }) => {
     const [userFollowed, setUserFollowed] = React.useState(user.is_follow || user.is_followed);
     const userLink = `/space/${user.id}/home`;
