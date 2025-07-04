@@ -17,7 +17,7 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@react-router/node": "^7.6.2",
-        "@react-router/serve": "^7.6.2",
+        "@react-router/serve": "^7.6.3",
         "@mui/material": "^7.1.1",
         "@mui/icons-material": "^7.2.0",
         "@xterm/addon-canvas": "^0.7.0",
