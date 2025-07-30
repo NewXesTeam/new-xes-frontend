@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { Carousel } from 'react-bootstrap';
-import { Container } from '@mui/material';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
+import { Typography } from '@mui/material';
 
 import type { Work } from '@/interfaces/work';
-import '@/styles/index.scss';
 
 export default function IndexPage() {
-    const [cards, setCards] = React.useState<React.JSX.Element | null>(null);
+    const [works, setWorks] = React.useState<Array<Work>>([]);
 
     React.useEffect(() => {
         let ignore = false;
@@ -17,7 +15,7 @@ export default function IndexPage() {
             const response = await fetch('/api/index/works/follows');
             let data = await response.json();
             let workData: Array<Work> = data.data.filter(Boolean);
-            setCards(<WorkList works={workData} className="m-4" />);
+            setWorks(workData);
         };
 
         if (!ignore) fetchWorkData();
@@ -29,39 +27,12 @@ export default function IndexPage() {
     return (
         <>
             <NavbarComponent />
-
-            <Container>
-                <Carousel className="m-auto mt-5 mb-5" interval={3500}>
-                    <Carousel.Item>
-                        <a href="https://code.xueersi.com/home/project/detail?lang=scratch&pid=24831951&version=3.0&langType=scratch">
-                            <img
-                                src="https://livefile.xesimg.com/programme/python_assets/2408b27e9c45a11098ddfd851844c4f1.png"
-                                className="d-block h-25"
-                                alt="ill"
-                            />
-                        </a>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <a href="https://code.xueersi.com/search">
-                            <img
-                                src="https://static0.xesimg.com/talcode/assets/home/banner/search_default.png"
-                                className="d-block h-25"
-                                alt="search"
-                            />
-                        </a>
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <a href="https://code.xueersi.com/event">
-                            <img
-                                src="https://static0.xesimg.com/talcode/assets/home/banner/event_default.png"
-                                className="d-block h-25"
-                                alt="events"
-                            />
-                        </a>
-                    </Carousel.Item>
-                </Carousel>
-                {cards}
-            </Container>
+            <div className="mt-5 mb-5">
+                <Typography variant="h4" component="h1" className="text-center">
+                    我的关注
+                </Typography>
+                <WorkList works={works} className="m-4" />
+            </div>
         </>
     );
 }

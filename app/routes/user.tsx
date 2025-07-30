@@ -1,9 +1,32 @@
 import * as React from 'react';
-import { Container, Nav, Card, OverlayTrigger, Tooltip, Button, Badge } from 'react-bootstrap';
+import {
+    Container,
+    Card,
+    CardMedia,
+    CardContent,
+    Typography,
+    Box,
+    Button,
+    Badge,
+    Tooltip,
+    Pagination,
+    Tabs,
+    Tab,
+    Chip,
+    Divider,
+} from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import CommentIcon from '@mui/icons-material/Comment';
+import EditIcon from '@mui/icons-material/Edit';
+import PublishIcon from '@mui/icons-material/Publish';
+import UnpublishIcon from '@mui/icons-material/Unpublished';
+
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
 import ProjectPublishModal from '@/components/ProjectPublishModal';
-import { Pagination } from '@/components/Pagination';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import { getWorkLink, getEditWorkLink } from '@/utils';
 import { v4 as uuidV4 } from 'uuid';
@@ -26,87 +49,150 @@ const FixedWorkCard = (
         if (work.removed) {
             workStatus = publishedText['removed'];
         } else {
-            workStatus = publishedText[work.published];
+            workStatus = publishedText[work.published as keyof typeof publishedText];
         }
 
+        const statusColors = {
+            未发布: 'default',
+            已发布: 'success',
+            审核中: 'info',
+            已下架: 'error',
+        };
+
         return (
-            <OverlayTrigger
-                overlay={<Tooltip>{work.created_at}</Tooltip>}
-                onToggle={value => setIsShowOperators(value)}
+            <Tooltip placement='top' title={work.name}>
+            <Card
+                className='mb-3 position-relative'
+                onMouseEnter={() => setIsShowOperators(true)}
+                onMouseLeave={() => setIsShowOperators(false)}
             >
-                <div style={{ position: 'relative' }} className="mb-3">
-                    <Card>
-                        <img
-                            src={
-                                work.thumbnail ||
-                                'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
-                            }
-                            className="card-img-top"
-                            alt={work.name}
-                            width={224}
-                            height={168}
-                        />
+                <CardMedia
+                    component="img"
+                    height="168"
+                    image={
+                        work.thumbnail ||
+                        'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
+                    }
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => window.open(link, '_blank')}
+                    alt={work.name}
+                />
 
-                        <div className="operators-box" style={{ display: isShowOperators ? 'flex' : 'none' }}>
-                            <Button variant="" size="sm" onClick={() => window.open(editLink, '_blank')}>
-                                编辑
-                            </Button>
-                            {work.published === 0 && !work.removed && (
-                                <Button
-                                    variant=""
-                                    size="sm"
-                                    onClick={() => {
-                                        let workData = work as unknown as PublishWorkInfo;
-                                        workData.created_source = 'original';
-                                        onClickPublish(workData);
-                                    }}
-                                >
-                                    发布
-                                </Button>
-                            )}
-                            {work.published === 1 && (
-                                <Button
-                                    variant=""
-                                    size="sm"
-                                    onClick={() => {
-                                        let workData = work as unknown as PublishWorkInfo;
-                                        onClickCancelPublish(workData);
-                                    }}
-                                >
-                                    取消发布
-                                </Button>
-                            )}
-                        </div>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        display: isShowOperators ? 'flex' : 'none',
+                        gap: 1,
+                        zIndex: 2,
+                    }}
+                >
+                    <Button
+                        size="small"
+                        startIcon={<EditIcon />}
+                        onClick={() => window.open(editLink, '_blank')}
+                        variant="contained"
+                        color="primary"
+                        sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                    >
+                        编辑
+                    </Button>
 
-                        <Card.Body>
-                            <Card.Title>
-                                <a href={link} className="text-decoration-none stretched-link" target="_blank">
-                                    {work.name}
-                                </a>
-                            </Card.Title>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <span style={{ fontSize: '14px' }}>{work.username}</span>
-                                <div>
-                                    <Badge pill bg="info" aria-label="浏览量">
-                                        👀{work.views}
-                                    </Badge>
-                                    <Badge pill bg="primary" aria-label="点赞数">
-                                        👍{work.likes}
-                                    </Badge>
-                                    <br />
-                                    <Badge pill bg="danger" aria-label="点踩数">
-                                        👎{work.unlikes}
-                                    </Badge>
-                                    <Badge pill bg="success" aria-label="评论数">
-                                        💬{work.comments}
-                                    </Badge>
-                                </div>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                    <div className="work-status">{workStatus}</div>
-                </div>
-            </OverlayTrigger>
+                    {work.published === 0 && !work.removed && (
+                        <Button
+                            size="small"
+                            startIcon={<PublishIcon />}
+                            onClick={() => {
+                                let workData = work as unknown as PublishWorkInfo;
+                                workData.created_source = 'original';
+                                onClickPublish(workData);
+                            }}
+                            variant="contained"
+                            color="success"
+                            sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                        >
+                            发布
+                        </Button>
+                    )}
+
+                    {work.published === 1 && (
+                        <Button
+                            size="small"
+                            startIcon={<UnpublishIcon />}
+                            onClick={() => {
+                                let workData = work as unknown as PublishWorkInfo;
+                                onClickCancelPublish(workData);
+                            }}
+                            variant="contained"
+                            color="error"
+                            sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                        >
+                            取消发布
+                        </Button>
+                    )}
+                </Box>
+
+                <CardContent sx={{ paddingBottom: '4px' }}>
+                    <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="div"
+                        noWrap
+                    >
+                        <a href={link} target="_blank" rel="noopener noreferrer" className='text-decoration-none'>
+                            {work.name}
+                        </a>
+                    </Typography>
+
+                    <Box className="d-flex justify-content-between align-items-center">
+                        <Typography variant="body2" color="text.secondary">
+                            {work.username}
+                        </Typography>
+
+                        <Box sx={{ display: 'flex', gap: '10px' }}>
+                            <Badge
+                                badgeContent={work.views}
+                                color="info"
+                                showZero
+                            >
+                                <VisibilityIcon fontSize="small" />
+                            </Badge>
+                            <Badge
+                                badgeContent={work.likes}
+                                color="primary"
+                                showZero
+                            >
+                                <FavoriteIcon fontSize="small" />
+                            </Badge>
+                            <Badge
+                                badgeContent={work.unlikes}
+                                color="error"
+                                showZero
+                            >
+                                <ThumbDownIcon fontSize="small" />
+                            </Badge>
+                            <Badge
+                                badgeContent={work.comments}
+                                color="success"
+                                showZero
+                            >
+                                <CommentIcon fontSize="small" />
+                            </Badge>
+                        </Box>
+                    </Box>
+                </CardContent>
+
+                <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Chip
+                        label={workStatus}
+                        size="small"
+                        color={statusColors[workStatus as keyof typeof statusColors] as any}
+                        variant="outlined"
+                    />
+                </Box>
+            </Card>
+            </Tooltip>
         );
     };
 };
@@ -116,7 +202,9 @@ export default function UserPage() {
     const [lang, setLang] = React.useState('projects');
     const [status, setStatus] = React.useState('all');
     const [currentPage, setCurrentPage] = React.useState(1);
-    const [pageComponent, setPageComponent] = React.useState(<h2>Loading...</h2>);
+    const [pageComponent, setPageComponent] = React.useState<React.ReactNode>(
+        <Typography variant="h5">Loading...</Typography>,
+    );
     const [showPublishModal, setShowPublishModal] = React.useState(false);
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const publishWork = React.useRef<PublishWorkInfo>(null);
@@ -124,136 +212,178 @@ export default function UserPage() {
     React.useEffect(() => {
         let ignore = false;
         const func = async () => {
-            const response = await fetch(
-                `/api/${lang}/my?type=${type}&published=${status}&page=${currentPage}&per_page=20`,
-            );
-            const responseData: UserWorkList = await response.json();
+            try {
+                const response = await fetch(
+                    `/api/${lang}/my?type=${type}&published=${status}&page=${currentPage}&per_page=20`,
+                );
 
-            if (responseData.data.total === 0) {
-                setPageComponent(<h2>暂时没有作品，快去创作吧</h2>);
-                return;
-            }
-            setPageComponent(
-                <>
-                    <WorkList
-                        works={responseData.data.data}
-                        enableRemoved={false}
-                        WorkCardInterface={FixedWorkCard(
-                            (work: PublishWorkInfo) => {
-                                publishWork.current = work;
-                                setShowPublishModal(true);
-                            },
-                            async (work: PublishWorkInfo) => {
-                                await fetch(`/api/${lang}/${work.id}/cancel_publish`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        params: {
-                                            id: work.id,
-                                        },
-                                    }),
-                                });
-                                setAlerts([
-                                    <AutoCloseAlert key={uuidV4()} severity="success">
-                                        已取消发布
-                                    </AutoCloseAlert>,
-                                    ...alerts,
-                                ]);
-                                setLang(work.lang);
-                            },
-                        )}
-                    />
-                    {responseData.data.total > 20 && (
-                        <Pagination
-                            pageCount={Math.ceil(responseData.data.total / 20)}
-                            value={currentPage}
-                            handlePageChange={value => setCurrentPage(value)}
-                            className="mt-2"
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+
+                const responseData: UserWorkList = await response.json();
+
+                if (responseData.data.total === 0) {
+                    setPageComponent(
+                        <Typography variant="h5" align="center" sx={{ py: 4 }}>
+                            暂时没有作品，快去创作吧
+                        </Typography>,
+                    );
+                    return;
+                }
+
+                setPageComponent(
+                    <>
+                        <WorkList
+                            works={responseData.data.data}
+                            enableRemoved={false}
+                            WorkCardInterface={FixedWorkCard(
+                                (work: PublishWorkInfo) => {
+                                    publishWork.current = work;
+                                    setShowPublishModal(true);
+                                },
+                                async (work: PublishWorkInfo) => {
+                                    try {
+                                        await fetch(`/api/${lang}/${work.id}/cancel_publish`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                params: {
+                                                    id: work.id,
+                                                },
+                                            }),
+                                        });
+                                        setAlerts([
+                                            <AutoCloseAlert key={uuidV4()} severity="success">
+                                                已取消发布
+                                            </AutoCloseAlert>,
+                                            ...alerts,
+                                        ]);
+                                        setLang(work.lang);
+                                    } catch (error) {
+                                        setAlerts([
+                                            <AutoCloseAlert key={uuidV4()} severity="error">
+                                                取消发布失败，请重试
+                                            </AutoCloseAlert>,
+                                            ...alerts,
+                                        ]);
+                                    }
+                                },
+                            )}
                         />
-                    )}
-                </>,
-            );
+                        {responseData.data.total > 20 && (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+                                <Pagination
+                                    count={Math.ceil(responseData.data.total / 20)}
+                                    page={currentPage}
+                                    onChange={(_, value) => setCurrentPage(value)}
+                                    color="primary"
+                                />
+                            </Box>
+                        )}
+                    </>,
+                );
+            } catch (error) {
+                setPageComponent(
+                    <Typography variant="h5" align="center" sx={{ py: 4, color: 'error.main' }}>
+                        加载失败，请刷新页面重试
+                    </Typography>,
+                );
+            }
         };
 
         if (!ignore) func();
         return () => {
             ignore = true;
         };
-    }, [type, lang, status, currentPage]);
+    }, [type, lang, status, currentPage, alerts]);
+
+    const handleTypeChange = (event: React.SyntheticEvent, newValue: string) => {
+        setType(newValue);
+        setCurrentPage(1);
+    };
+
+    const handleLangChange = (event: React.SyntheticEvent, newValue: string) => {
+        setLang(newValue);
+        setCurrentPage(1);
+    };
+
+    const handleStatusChange = (event: React.SyntheticEvent, newValue: string) => {
+        setStatus(newValue);
+        setCurrentPage(1);
+    };
 
     return (
         <>
-            <div className="alert-list">{alerts}</div>
+            <Box
+                className="alert-list"
+                sx={{
+                    position: 'fixed',
+                    top: 80,
+                    left: 0,
+                    right: 0,
+                    zIndex: 1000,
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                {alerts}
+            </Box>
+
             <NavbarComponent />
-            {showPublishModal && (
+
+            {showPublishModal && publishWork.current && (
                 <ProjectPublishModal
-                    workInfo={publishWork.current as PublishWorkInfo}
+                    workInfo={publishWork.current}
                     isShow={showPublishModal}
                     setIsShow={setShowPublishModal}
                 />
             )}
-            <Container className="mt-5">
-                <Card body className="shadow-sm mb-3">
-                    <Nav
-                        className="mb-2"
-                        variant="pills"
-                        defaultActiveKey="normal"
-                        onSelect={eventKey => setType(eventKey || 'normal')}
-                    >
-                        <Nav.Item>
-                            <Nav.Link eventKey="normal">个人创作</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <OverlayTrigger overlay={<Tooltip>（隋唐练习）</Tooltip>}>
-                                <Nav.Link eventKey="homework">随堂练习</Nav.Link>
-                            </OverlayTrigger>
-                        </Nav.Item>
-                    </Nav>
 
-                    <div className="mb-2 d-flex align-items-center">
-                        <span>类型</span>
-                        <Nav
-                            className="custom-nav"
-                            defaultActiveKey="projects"
-                            onSelect={eventKey => setLang(eventKey || 'projects')}
-                        >
-                            <Nav.Item>
-                                <Nav.Link eventKey="projects">TurboWarp</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="python">Python</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="compilers">C++</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                    </div>
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Card sx={{ mb: 3, boxShadow: 1 }}>
+                    <CardContent sx={{ p: 3 }}>
+                        <Tabs value={type} onChange={handleTypeChange} sx={{ mb: 3 }}>
+                            <Tab label="个人创作" value="normal" />
+                            <Tab
+                                label={
+                                    <Tooltip title="（隋唐练习）">
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                            随堂练习
+                                        </Box>
+                                    </Tooltip>
+                                }
+                                value="homework"
+                            />
+                        </Tabs>
 
-                    <div className="d-flex align-items-center">
-                        <span>状态</span>
-                        <Nav
-                            className="custom-nav"
-                            defaultActiveKey="all"
-                            onSelect={eventKey => setStatus(eventKey || 'all')}
-                        >
-                            <Nav.Item>
-                                <Nav.Link eventKey="all">全部</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="0">未发布</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="2">审核中</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="1">已发布</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="removed">已下架</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                    </div>
+                        <Divider sx={{ mb: 3 }} />
+
+                        <Box sx={{ mb: 3 }}>
+                            <Tabs value={lang} onChange={handleLangChange} variant="scrollable" scrollButtons="auto">
+                                <Tab label="TurboWarp" value="projects" />
+                                <Tab label="Python" value="python" />
+                                <Tab label="C++" value="compilers" />
+                            </Tabs>
+                        </Box>
+
+                        <Box>
+                            <Tabs
+                                value={status}
+                                onChange={handleStatusChange}
+                                variant="scrollable"
+                                scrollButtons="auto"
+                            >
+                                <Tab label="全部" value="all" />
+                                <Tab label="未发布" value="0" />
+                                <Tab label="审核中" value="2" />
+                                <Tab label="已发布" value="1" />
+                                <Tab label="已下架" value="removed" />
+                            </Tabs>
+                        </Box>
+                    </CardContent>
                 </Card>
+
                 {pageComponent}
             </Container>
         </>

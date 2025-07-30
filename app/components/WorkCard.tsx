@@ -28,13 +28,8 @@ const WorkCard = ({ work }: { work: Work }) => {
                 <CardContent>
                     <Tooltip placement="top" title={work.name.replace(/<em>|<\/em>/g, '')}>
                         <Typography
-                            sx={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                color: 'blue',
-                                fontSize: '16px',
-                            }}
+                            className="text-truncate text-blue fs-5"
+                            color="blue"
                             gutterBottom
                             variant="h5"
                             component="div"
@@ -46,8 +41,12 @@ const WorkCard = ({ work }: { work: Work }) => {
                     </Tooltip>
 
                     <div className="d-flex justify-content-between align-items-center">
-                        <a href={author_url} target="_blank" style={{ zIndex: 2 }}>
-                            <span style={{ fontSize: '14px' }}>{work.username}</span>
+                        <a
+                            href={author_url}
+                            target="_blank"
+                            className="text-truncate text-blue fs-7 z-index-2"
+                        >
+                            <span>{work.username}</span>
                         </a>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
@@ -56,7 +55,6 @@ const WorkCard = ({ work }: { work: Work }) => {
                             <Badge badgeContent={work.likes} color="primary" aria-label="点赞数" showZero>
                                 👍
                             </Badge>
-                            <br />
                             <Badge badgeContent={work.unlikes} color="error" aria-label="点踩数" showZero>
                                 👎
                             </Badge>
