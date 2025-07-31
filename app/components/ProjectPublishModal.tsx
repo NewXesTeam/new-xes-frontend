@@ -1,8 +1,24 @@
 import * as React from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    Grid,
+    TextField,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    FormControl,
+} from '@mui/material';
+import UploadIcon from '@mui/icons-material/UploadFile';
 // @ts-ignore  // 这个不怨我
 import Tags from '@yaireo/tagify/react';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
+import CryptoJS from 'crypto-js';
 
 import type { PublishWorkInfo } from '@/interfaces/work';
 import '@yaireo/tagify/dist/tagify.css';
@@ -19,6 +35,15 @@ const ProjectPublishModal = ({
 }) => {
     const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
     const [work, setWork] = React.useState<PublishWorkInfo>(workInfo);
+    const [thumbnailImage, setThumbnailImage] = React.useState<string>(
+        work.thumbnail || 'https://static0.xesimg.com/talcode/assets/py/default-python-thumbnail.png',
+    );
+    const [origin, setOrigin] = React.useState<string>(work.created_source || 'original');
+
+    const workNameRef = React.useRef<HTMLInputElement>(null);
+    const workTagsRef = React.useRef<string>('');
+    const thumbnailUploadRef = React.useRef<HTMLInputElement>(null);
+    const descriptionTextRef = React.useRef<HTMLTextAreaElement>(null);
 
     let lang = workInfo.lang;
     if (lang === 'webpy' || lang === 'python') {
@@ -30,40 +55,46 @@ const ProjectPublishModal = ({
     }
 
     const onClickPublish = async () => {
-        // @ts-ignore
-        if (workNameRef.current.value === '' || workTagsRef.current === '') {
-            setAlerts([<AutoCloseAlert severity="warning">有选项未填写！</AutoCloseAlert>, ...alerts]);
+        if (!workNameRef.current?.value || !workTagsRef.current) {
+            setAlerts([
+                <AutoCloseAlert key="warning" severity="warning">
+                    有选项未填写！
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
             return;
         }
-        await fetch(`/api/${lang}/${work.id}/publish`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                projectId: work.id,
-                // @ts-ignore
-                name: workNameRef.current.value,
-                // @ts-ignore
-                tags: workTagsRef.current.trimEnd(),
-                created_source: origin,
-                thumbnail: thumbnailImage,
-                hidden_code: 2,
-                // @ts-ignore
-                description: descriptionTextRef.current.value,
-            }),
-        });
-        setIsShow(false);
-        setAlerts([<AutoCloseAlert severity="success">已发布</AutoCloseAlert>, ...alerts]);
-    };
 
-    // 提交内容
-    const workNameRef = React.useRef<HTMLInputElement>(null);
-    const workTagsRef = React.useRef<string>(null);
-    // const thumbnailImageRef = React.useRef<HTMLImageElement>(null);
-    const [thumbnailImage, setThumbnailImage] = React.useState<string>(
-        work.thumbnail || 'https://static0.xesimg.com/talcode/assets/py/default-python-thumbnail.png',
-    );
-    const descriptionTextRef = React.useRef<HTMLTextAreaElement>(null);
-    const [origin, setOrigin] = React.useState<string>(work.created_source || 'original');
+        try {
+            await fetch(`/api/${lang}/${work.id}/publish`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    projectId: work.id,
+                    name: workNameRef.current.value,
+                    tags: workTagsRef.current.trimEnd(),
+                    created_source: origin,
+                    thumbnail: thumbnailImage,
+                    hidden_code: 2,
+                    description: descriptionTextRef.current?.value,
+                }),
+            });
+            setIsShow(false);
+            setAlerts([
+                <AutoCloseAlert key="success" severity="success">
+                    已发布
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
+        } catch (error) {
+            setAlerts([
+                <AutoCloseAlert key="error" severity="error">
+                    发布失败，请重试
+                </AutoCloseAlert>,
+                ...alerts,
+            ]);
+        }
+    };
 
     const handleChangeOrigin = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOrigin(e.target.value);
@@ -77,6 +108,7 @@ const ProjectPublishModal = ({
             const response = await fetch(`/api/${now_lang}/${work.id}?id=${work.id}`);
             const responseData = await response.json();
             setWork(responseData.data);
+            setOrigin(responseData.data.created_source || 'original');
         };
 
         if (!ignore) func();
@@ -85,102 +117,150 @@ const ProjectPublishModal = ({
         };
     }, []);
 
+    const handleTagsChange = (event: any) => {
+        const tags: { value: string }[] = event.detail.tagify.getCleanValue();
+        let tag_str = '';
+        tags.forEach(tag => {
+            tag_str += tag.value.replaceAll(' ', '&nbsp;') + ' ';
+        });
+        workTagsRef.current = tag_str;
+    };
+
     return (
-        <Modal show={isShow} centered={true} dialogClassName="publish-modal" contentClassName="publish-modal-content">
-            <Modal.Header>
-                <Modal.Title>发布作品</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Dialog open={isShow} onClose={() => setIsShow(false)} maxWidth="md" fullWidth>
+            <DialogTitle>发布作品</DialogTitle>
+
+            <DialogContent>
                 <div className="alert-list">{alerts}</div>
-                <Row>
-                    <Col sm={6}>
-                        <p>作品封面</p>
-                        <img src={thumbnailImage} alt="作品封面" style={{ width: '100%' }} />
-                    </Col>
-                    <Col sm={6}>
-                        <Form.Label>* 作品名称</Form.Label>
-                        <Form.Control
-                            ref={workNameRef}
-                            type="text"
-                            placeholder="请输入作品名称"
-                            defaultValue={work.name}
-                        />
 
-                        <Form.Label>* 作品来源</Form.Label>
-                        <Form.Group>
-                            <Form.Check
-                                checked={origin === 'original'}
-                                inline
-                                onChange={handleChangeOrigin}
-                                type="radio"
-                                label="原创"
-                                name="origin"
-                                value="original"
-                                disabled={work.created_source === 'adapt'}
+                <Grid container sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1 }}>
+                        <DialogContentText sx={{ mb: 2 }}>作品封面</DialogContentText>
+                        <div className="overflow-hidden rounded">
+                            <img
+                                src={thumbnailImage}
+                                alt="作品封面"
+                                style={{ width: '100%', height: '100%', display: 'block' }}
                             />
-                            <Form.Check
-                                checked={origin === 'adapt'}
-                                inline
-                                onChange={handleChangeOrigin}
-                                type="radio"
-                                label="改编"
-                                name="origin"
-                                value="adapt"
-                                disabled={work.created_source !== 'adapt'}
-                            />
-                            <Form.Check
-                                checked={origin === 'reprint'}
-                                inline
-                                onChange={handleChangeOrigin}
-                                type="radio"
-                                label="转载"
-                                name="origin"
-                                value="reprint"
-                                disabled={work.created_source === 'adapt'}
-                            />
-                        </Form.Group>
+                        </div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={thumbnailUploadRef}
+                            style={{ display: 'none' }}
+                            onChange={e => {
+                                if (e.target.files && e.target.files[0]) {
+                                    const reader = new FileReader();
+                                    const file = e.target.files[0];
+                                    // @ts-ignore
+                                    const FileExtension = file.name.split('.').pop().toLowerCase();
+                                    reader.readAsArrayBuffer(file);
+                                    reader.onload = async e => {
+                                        if (e.target && e.target.result) {
+                                            const ThumbnailImageArrayBuffer = e.target.result as ArrayBuffer;
+                                            const wordArray = CryptoJS.lib.WordArray.create(ThumbnailImageArrayBuffer);
+                                            const md5 = CryptoJS.MD5(wordArray).toString();
 
-                        <Form.Label>*作品标签（空格分开两个标签）</Form.Label>
-                        <Tags
-                            whitelist={['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他']}
-                            placeholder="添加标签"
-                            settings={{
-                                dropdown: {
-                                    enabled: 0,
-                                },
+                                            const reader2 = new FileReader();
+                                            reader2.readAsText(file);
+                                            reader2.onload = async e => {
+                                                if (md5 && e.target && e.target.result) {
+                                                    const response = await fetch(
+                                                        `/api/assets/get_tss_upload_params?filename=${md5}.${FileExtension}&md5=${md5}&scene=thumbnail`,
+                                                    );
+                                                    const responseData = await response.json();
+                                                    await fetch(responseData.data.host, {
+                                                        method: 'PUT',
+                                                        headers: responseData.data.headers,
+                                                        body: e.target.result,
+                                                    });
+                                                    setThumbnailImage(responseData.data.url);
+                                                }
+                                            };
+                                        }
+                                    };
+                                }
                             }}
-                            onChange={(event: any) => {
-                                const tags: { value: string }[] = event.detail.tagify.getCleanValue();
-                                let tag_str = '';
-                                tags.forEach(tag => {
-                                    tag_str += tag.value.replaceAll(' ', '&nbsp;') + ' ';
-                                });
-                                console.log(tag_str);
-                                workTagsRef.current = tag_str;
+                        />
+                        <Button
+                            variant="contained"
+                            startIcon={<UploadIcon />}
+                            onClick={() => {
+                                if (thumbnailUploadRef.current) {
+                                    thumbnailUploadRef.current.click();
+                                }
                             }}
-                            className=""
-                        />
+                        >
+                            上传封面
+                        </Button>
+                    </div>
 
-                        <Form.Label>作品介绍</Form.Label>
-                        <Form.Control
-                            ref={descriptionTextRef}
-                            as="textarea"
-                            cols={5}
-                            rows={3}
-                            placeholder="请输入作品介绍"
-                        />
-                    </Col>
-                </Row>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={() => setIsShow(false)}>
-                    返回
-                </Button>
-                <Button variant="primary" onClick={() => onClickPublish()}>
+                    <div style={{ flex: 1 }}>
+                        <FormControl fullWidth required margin="normal">
+                            <FormLabel>作品名称</FormLabel>
+                            <TextField
+                                inputRef={workNameRef}
+                                placeholder="请输入作品名称"
+                                defaultValue={work.name}
+                                variant="outlined"
+                            />
+                        </FormControl>
+
+                        <FormControl component="fieldset" fullWidth required margin="normal">
+                            <FormLabel>作品来源</FormLabel>
+                            <RadioGroup row value={origin} onChange={handleChangeOrigin} name="origin">
+                                <FormControlLabel
+                                    value="original"
+                                    label="原创"
+                                    control={<Radio />}
+                                    disabled={work.created_source === 'adapt'}
+                                />
+                                <FormControlLabel
+                                    value="adapt"
+                                    label="改编"
+                                    control={<Radio />}
+                                    disabled={work.created_source !== 'adapt'}
+                                />
+                                <FormControlLabel
+                                    value="reprint"
+                                    label="转载"
+                                    control={<Radio />}
+                                    disabled={work.created_source === 'adapt'}
+                                />
+                            </RadioGroup>
+                        </FormControl>
+
+                        <FormControl fullWidth required margin="normal">
+                            <FormLabel>作品标签</FormLabel>
+                            <Tags
+                                whitelist={['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他']}
+                                placeholder="添加标签"
+                                settings={{ dropdown: { enabled: 0 } }}
+                                onChange={handleTagsChange}
+                            />
+                        </FormControl>
+
+                        <FormControl fullWidth margin="normal">
+                            <FormLabel>作品介绍</FormLabel>
+                            <TextField
+                                inputRef={descriptionTextRef}
+                                placeholder="请输入作品介绍"
+                                multiline
+                                rows={3}
+                                variant="outlined"
+                            />
+                        </FormControl>
+                    </div>
+                </Grid>
+            </DialogContent>
+
+            <DialogActions>
+                <Button onClick={() => setIsShow(false)}>返回</Button>
+                <Button onClick={onClickPublish} color="primary">
                     确定发布
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     );
 };
 
