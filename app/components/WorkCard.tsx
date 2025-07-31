@@ -41,11 +41,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                     </Tooltip>
 
                     <div className="d-flex justify-content-between align-items-center">
-                        <a
-                            href={author_url}
-                            target="_blank"
-                            className="text-truncate text-blue fs-7 z-index-2"
-                        >
+                        <a href={author_url} target="_blank" className="text-truncate text-blue fs-7 z-index-2">
                             <span>{work.username}</span>
                         </a>
                         <div style={{ display: 'flex', gap: '10px' }}>

@@ -48,7 +48,6 @@
 - [x] 关于 /about
 
 - [x] 个人主页
-
     - [x] 主页 /space/:userId/home
     - [x] 封面 /space/:userId/cover
     - [x] 作品 /space/:userId/projects
@@ -56,7 +55,6 @@
     - [x] 社交 /space/:userId/social
 
 - [ ] 消息中心
-
     - [x] 评论与回复 /message/1
     - [ ] 点赞与收藏
     - [x] 关注 /message/5
@@ -64,15 +62,13 @@
     - [ ] 系统消息
 
 - [ ] 作品展示页面 /project
-
     - [ ] 作品展示
     - [ ] 评论
 
 - [ ] 作品发布组件 ProjectPublishModal.tsx
-
     - [x] 基本信息填写
-    - [x] 标签选择 (不完全，无自定义标签)
-    - [ ] 封面上传
+    - [x] 标签选择
+    - [x] 封面上传
 
 ### 作品部分
 
