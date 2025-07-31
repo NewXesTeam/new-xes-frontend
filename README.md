@@ -65,7 +65,7 @@
     - [ ] 作品展示
     - [ ] 评论
 
-- [ ] 作品发布组件 ProjectPublishModal.tsx
+- [x] 作品发布组件 ProjectPublishModal.tsx
     - [x] 基本信息填写
     - [x] 标签选择
     - [x] 封面上传
