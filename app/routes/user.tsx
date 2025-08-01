@@ -60,138 +60,117 @@ const FixedWorkCard = (
         };
 
         return (
-            <Tooltip placement='top' title={work.name}>
-            <Card
-                className='mb-3 position-relative'
-                onMouseEnter={() => setIsShowOperators(true)}
-                onMouseLeave={() => setIsShowOperators(false)}
-            >
-                <CardMedia
-                    component="img"
-                    height="168"
-                    image={
-                        work.thumbnail ||
-                        'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
-                    }
-                    sx={{ cursor: 'pointer' }}
-                    onClick={() => window.open(link, '_blank')}
-                    alt={work.name}
-                />
-
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        display: isShowOperators ? 'flex' : 'none',
-                        gap: 1,
-                        zIndex: 2,
-                    }}
+            <Tooltip placement="top" title={work.name}>
+                <Card
+                    className="mb-3 position-relative"
+                    onMouseEnter={() => setIsShowOperators(true)}
+                    onMouseLeave={() => setIsShowOperators(false)}
                 >
-                    <Button
-                        size="small"
-                        startIcon={<EditIcon />}
-                        onClick={() => window.open(editLink, '_blank')}
-                        variant="contained"
-                        color="primary"
-                        sx={{ minWidth: 'auto', padding: '4px 8px' }}
-                    >
-                        编辑
-                    </Button>
+                    <CardMedia
+                        component="img"
+                        height="168"
+                        image={
+                            work.thumbnail ||
+                            'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
+                        }
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() => window.open(link, '_blank')}
+                        alt={work.name}
+                    />
 
-                    {work.published === 0 && !work.removed && (
+                    <Box
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            display: isShowOperators ? 'flex' : 'none',
+                            gap: 1,
+                            zIndex: 2,
+                        }}
+                    >
                         <Button
                             size="small"
-                            startIcon={<PublishIcon />}
-                            onClick={() => {
-                                let workData = work as unknown as PublishWorkInfo;
-                                workData.created_source = 'original';
-                                onClickPublish(workData);
-                            }}
+                            startIcon={<EditIcon />}
+                            onClick={() => window.open(editLink, '_blank')}
                             variant="contained"
-                            color="success"
+                            color="primary"
                             sx={{ minWidth: 'auto', padding: '4px 8px' }}
                         >
-                            发布
+                            编辑
                         </Button>
-                    )}
 
-                    {work.published === 1 && (
-                        <Button
-                            size="small"
-                            startIcon={<UnpublishIcon />}
-                            onClick={() => {
-                                let workData = work as unknown as PublishWorkInfo;
-                                onClickCancelPublish(workData);
-                            }}
-                            variant="contained"
-                            color="error"
-                            sx={{ minWidth: 'auto', padding: '4px 8px' }}
-                        >
-                            取消发布
-                        </Button>
-                    )}
-                </Box>
+                        {work.published === 0 && !work.removed && (
+                            <Button
+                                size="small"
+                                startIcon={<PublishIcon />}
+                                onClick={() => {
+                                    let workData = work as unknown as PublishWorkInfo;
+                                    workData.created_source = 'original';
+                                    onClickPublish(workData);
+                                }}
+                                variant="contained"
+                                color="success"
+                                sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                            >
+                                发布
+                            </Button>
+                        )}
 
-                <CardContent sx={{ paddingBottom: '4px' }}>
-                    <Typography
-                        gutterBottom
-                        variant="h6"
-                        component="div"
-                        noWrap
-                    >
-                        <a href={link} target="_blank" rel="noopener noreferrer" className='text-decoration-none'>
-                            {work.name}
-                        </a>
-                    </Typography>
+                        {work.published === 1 && (
+                            <Button
+                                size="small"
+                                startIcon={<UnpublishIcon />}
+                                onClick={() => {
+                                    let workData = work as unknown as PublishWorkInfo;
+                                    onClickCancelPublish(workData);
+                                }}
+                                variant="contained"
+                                color="error"
+                                sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                            >
+                                取消发布
+                            </Button>
+                        )}
+                    </Box>
 
-                    <Box className="d-flex justify-content-between align-items-center">
-                        <Typography variant="body2" color="text.secondary">
-                            {work.username}
+                    <CardContent sx={{ paddingBottom: '4px' }}>
+                        <Typography gutterBottom variant="h6" component="div" noWrap>
+                            <a href={link} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                {work.name}
+                            </a>
                         </Typography>
 
-                        <Box sx={{ display: 'flex', gap: '10px' }}>
-                            <Badge
-                                badgeContent={work.views}
-                                color="info"
-                                showZero
-                            >
-                                <VisibilityIcon fontSize="small" />
-                            </Badge>
-                            <Badge
-                                badgeContent={work.likes}
-                                color="primary"
-                                showZero
-                            >
-                                <FavoriteIcon fontSize="small" />
-                            </Badge>
-                            <Badge
-                                badgeContent={work.unlikes}
-                                color="error"
-                                showZero
-                            >
-                                <ThumbDownIcon fontSize="small" />
-                            </Badge>
-                            <Badge
-                                badgeContent={work.comments}
-                                color="success"
-                                showZero
-                            >
-                                <CommentIcon fontSize="small" />
-                            </Badge>
-                        </Box>
-                    </Box>
-                </CardContent>
+                        <Box className="d-flex justify-content-between align-items-center">
+                            <Typography variant="body2" color="text.secondary">
+                                {work.username}
+                            </Typography>
 
-                <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                    <Chip
-                        label={workStatus}
-                        size="small"
-                        color={statusColors[workStatus as keyof typeof statusColors] as any}
-                        variant="outlined"
-                    />
-                </Box>
-            </Card>
+                            <Box sx={{ display: 'flex', gap: '10px' }}>
+                                <Badge badgeContent={work.views} color="info" showZero>
+                                    <VisibilityIcon fontSize="small" />
+                                </Badge>
+                                <Badge badgeContent={work.likes} color="primary" showZero>
+                                    <FavoriteIcon fontSize="small" />
+                                </Badge>
+                                <Badge badgeContent={work.unlikes} color="error" showZero>
+                                    <ThumbDownIcon fontSize="small" />
+                                </Badge>
+                                <Badge badgeContent={work.comments} color="success" showZero>
+                                    <CommentIcon fontSize="small" />
+                                </Badge>
+                            </Box>
+                        </Box>
+                    </CardContent>
+
+                    <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                        <Chip
+                            label={workStatus}
+                            size="small"
+                            color={statusColors[workStatus as keyof typeof statusColors] as any}
+                            variant="outlined"
+                        />
+                    </Box>
+                </Card>
             </Tooltip>
         );
     };
@@ -348,9 +327,7 @@ export default function UserPage() {
                             <Tab
                                 label={
                                     <Tooltip title="（隋唐练习）">
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                            随堂练习
-                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>随堂练习</Box>
                                     </Tooltip>
                                 }
                                 value="homework"
