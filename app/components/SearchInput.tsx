@@ -42,6 +42,7 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                                         key={index}
                                         onClick={() => {
                                             event.target.value = word.replace(/<em>/g, '').replace(/<\/em>/g, '');
+                                            setKeywordInput(word.replace(/<em>/g, '').replace(/<\/em>/g, ''));
                                             setIsShowSuggestions(false);
                                         }}
                                         ref={element => {
