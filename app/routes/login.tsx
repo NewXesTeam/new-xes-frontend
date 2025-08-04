@@ -1,5 +1,16 @@
 import * as React from 'react';
-import { Form, Row, Col, Button, InputGroup, Alert } from 'react-bootstrap';
+import {
+    Box,
+    TextField,
+    Button,
+    Alert,
+    Checkbox,
+    FormControlLabel,
+    Typography,
+    Paper,
+    InputAdornment,
+    Container,
+} from '@mui/material';
 import { checkLoggedIn } from '@/utils';
 
 import type { CaptchaPacket, LoginPacket } from '@/interfaces/login';
@@ -111,107 +122,169 @@ export default function LoginPage() {
     }, []);
 
     return (
-        <>
-            <Row className="justify-content-md-center width-100 height-100" style={{ background: '#ff4d45' }}>
-                <Col
-                    xs={12}
-                    sm={8}
-                    md={6}
-                    lg={4}
-                    className="blur-glass-background login-form-container shadow margin-auto"
+        <Box
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                p: 2,
+            }}
+        >
+            <Container maxWidth="sm">
+                <Paper
+                    elevation={8}
+                    sx={{
+                        p: 4,
+                        borderRadius: 2,
+                        backdropFilter: 'blur(10px)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    }}
+                    className="login-form-container"
                 >
-                    <h1>欢迎登录 NewXesFrontend</h1>
+                    <Typography variant="h4" component="h1" gutterBottom align="center">
+                        欢迎登录 NewXesFrontend
+                    </Typography>
 
-                    <Form onSubmit={loginEvent}>
-                        <Alert variant="danger" hidden={!errorValue}>
-                            {errorValue}
-                        </Alert>
-                        <Alert variant="success" hidden={!successValue}>
-                            {successValue}
-                        </Alert>
+                    <Box component="form" onSubmit={loginEvent} noValidate sx={{ mt: 1 }}>
+                        {errorValue && (
+                            <Alert severity="error" sx={{ mb: 2 }}>
+                                {errorValue}
+                            </Alert>
+                        )}
 
-                        <InputGroup>
-                            <InputGroup.Text>手机号</InputGroup.Text>
-                            <Form.Control
-                                type="number"
-                                name="symbol"
-                                title="手机号"
-                                placeholder="13333333333"
-                                disabled={passportReadOnly}
-                                value={symbolValue}
-                                onChange={event => setSymbolValue(event.target.value)}
-                            />
-                        </InputGroup>
+                        {successValue && (
+                            <Alert severity="success" sx={{ mb: 2 }}>
+                                {successValue}
+                            </Alert>
+                        )}
 
-                        <InputGroup>
-                            <InputGroup.Text>密码</InputGroup.Text>
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                title="密码"
-                                placeholder="123456"
-                                disabled={passportReadOnly}
-                                value={passwordValue}
-                                onChange={event => setPasswordValue(event.target.value)}
-                            />
-                        </InputGroup>
-
-                        <Form.Check
-                            type="checkbox"
-                            name="我已阅读并同意各种条款"
-                            title="我已阅读并同意各种条款"
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="symbol"
+                            label="手机号"
+                            name="symbol"
+                            autoComplete="tel"
+                            autoFocus
                             disabled={passportReadOnly}
+                            value={symbolValue}
+                            onChange={event => setSymbolValue(event.target.value)}
+                            inputProps={{
+                                type: 'number',
+                                placeholder: '13333333333',
+                                title: '手机号',
+                            }}
+                        />
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="密码"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            disabled={passportReadOnly}
+                            value={passwordValue}
+                            onChange={event => setPasswordValue(event.target.value)}
+                            inputProps={{
+                                placeholder: '123456',
+                                title: '密码',
+                            }}
+                        />
+
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    name="privacy"
+                                    color="primary"
+                                    checked={privacyValue}
+                                    disabled={passportReadOnly}
+                                    onChange={event => setPrivacyValue(event.target.checked)}
+                                />
+                            }
                             label={
-                                <div>
+                                <Box component="div" sx={{ fontSize: '0.875rem' }}>
                                     我已阅读并同意
                                     <a
                                         href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/agreement"
                                         target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ margin: '0 4px', color: '#1976d2' }}
                                     >
                                         《学而思网校用户协议》
                                     </a>
                                     、
-                                    <a href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/privacy" target="_blank">
+                                    <a
+                                        href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/privacy"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ margin: '0 4px', color: '#1976d2' }}
+                                    >
                                         《用户个人信息保护政策》
                                     </a>
                                     、
                                     <a
                                         href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/childpolicy"
                                         target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ margin: '0 4px', color: '#1976d2' }}
                                     >
                                         《儿童个人信息保护规则》
                                     </a>
                                     、
-                                    <a href="/eula" target="_blank">
+                                    <a
+                                        href="/eula"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ margin: '0 4px', color: '#1976d2' }}
+                                    >
                                         《NewXesFrontend 最终用户协议》
                                     </a>
-                                </div>
+                                </Box>
                             }
-                            value={Number(privacyValue)}
-                            onChange={event => setPrivacyValue(event.target.checked)}
+                            sx={{ mt: 2, mb: 2 }}
                         />
 
-                        <InputGroup hidden={visuallyValue}>
-                            <InputGroup.Text>验证码</InputGroup.Text>
-                            <InputGroup.Text>
-                                <img src={captchaBase64} alt="验证码" />
-                            </InputGroup.Text>
-                            <Form.Control
-                                type="text"
+                        {!visuallyValue && (
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="captcha"
+                                label="验证码"
                                 name="captcha"
-                                title="验证码"
-                                placeholder="abcd"
                                 value={captchaAnswer}
                                 onChange={event => setCaptchaAnswer(event.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <img src={captchaBase64} alt="验证码" style={{ height: '40px' }} />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                inputProps={{
+                                    placeholder: 'abcd',
+                                    title: '验证码',
+                                }}
                             />
-                        </InputGroup>
+                        )}
 
-                        <Button type="submit" variant="primary">
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2, py: 1.5 }}
+                            color="primary"
+                        >
                             登录
                         </Button>
-                    </Form>
-                </Col>
-            </Row>
-        </>
+                    </Box>
+                </Paper>
+            </Container>
+        </Box>
     );
 }
