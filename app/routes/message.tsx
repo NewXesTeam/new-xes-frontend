@@ -1,6 +1,16 @@
 import * as React from 'react';
-import { Container, Nav, Row, Col } from 'react-bootstrap';
-import { Badge, Card } from '@mui/material';
+import {
+    Badge,
+    Card,
+    Container,
+    Grid,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Typography,
+    Box,
+} from '@mui/material';
 import NavbarComponent from '@/components/Navbar';
 import { CommentList, FollowList } from '@/components/MessageList';
 import { Pagination } from '@/components/Pagination';
@@ -28,7 +38,7 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
     };
 
     const category: string = loaderData.category;
-    const [messages, setMessages] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
+    const [messages, setMessages] = React.useState<React.JSX.Element>(<Typography variant="h6">加载中...</Typography>);
 
     const [currentTab, setCurrentTab] = React.useState(category);
     const [currentPage, setCurrentPage] = React.useState(1);
@@ -45,26 +55,28 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
             await readMessages();
 
             if (responseData.data['total'] === 0) {
-                setMessages(<h3>暂无消息</h3>);
+                setMessages(<Typography variant="h6">暂无消息</Typography>);
+            } else {
+                setMessages(
+                    <>
+                        {currentTab === '1' && (
+                            <CommentList messages={responseData} onRead={readMessages}></CommentList>
+                        )}
+                        {currentTab === '5' && <FollowList messages={responseData} onRead={readMessages}></FollowList>}
+                        {responseData.data.total > 10 && (
+                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mt: 2 }}>
+                                <Pagination
+                                    pageCount={Math.ceil(responseData.data.total / 10)}
+                                    value={currentPage}
+                                    handlePageChange={page => {
+                                        setCurrentPage(page);
+                                    }}
+                                />
+                            </Box>
+                        )}
+                    </>,
+                );
             }
-            setMessages(
-                <>
-                    {currentTab === '1' && <CommentList messages={responseData} onRead={readMessages}></CommentList>}
-                    {currentTab === '5' && <FollowList messages={responseData} onRead={readMessages}></FollowList>}
-                    {responseData.data.total > 10 && (
-                        <div style={{ width: '100%' }}>
-                            <Pagination
-                                pageCount={Math.ceil(responseData.data.total / 10)}
-                                value={currentPage}
-                                handlePageChange={page => {
-                                    setCurrentPage(page);
-                                }}
-                                className="mt-2 mx-auto width-fit-content"
-                            />
-                        </div>
-                    )}
-                </>,
-            );
         };
 
         if (!ignore) func();
@@ -73,61 +85,81 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
         };
     }, [currentTab, currentPage]);
 
+    const handleTabChange = (eventKey: string) => {
+        if (eventKey !== currentTab) {
+            history.pushState(null, '', `/message/${eventKey}`);
+            window.scrollTo(0, 0);
+            setCurrentTab(eventKey);
+            setCurrentPage(1);
+        }
+    };
+
     return (
         <>
             <NavbarComponent />
 
-            <Container className="mt-5">
-                <Row className="mt-3">
-                    <Col
-                        xs={12}
-                        lg={2}
-                        style={{
+            <Container maxWidth="lg" sx={{ mt: 5 }}>
+                <Grid container spacing={3} sx={{ mt: 3 }}>
+                    <Grid
+                        // xs={12}
+                        // lg={2}
+                        size={{ xs: 12, lg: 2 }}
+                        sx={{
                             position: 'sticky',
                             top: '10px',
                             height: 'fit-content',
-                            marginBottom: '10px',
+                            mb: 2,
                             zIndex: 1,
                         }}
                     >
-                        <Card className="shadow" style={{ padding: '5px' }}>
-                            <h2>消息中心</h2>
-                            <Nav
-                                className="flex-column"
-                                variant="pills"
-                                defaultActiveKey={currentTab}
-                                onSelect={(eventKey: string | null) => {
-                                    if (eventKey !== currentTab && eventKey !== null) {
-                                        // redirect(`/message/${eventKey}`);
-                                        history.pushState({ category: eventKey }, '', `/message/${eventKey}`);
-                                        document.documentElement.scrollTop = 0;
-                                        setCurrentTab(eventKey);
-                                        setCurrentPage(1);
-                                    }
-                                }}
-                            >
-                                <Nav.Item>
-                                    <Nav.Link eventKey="1">
-                                        <Badge color="error" badgeContent={messageData?.data[0].count}>
-                                            评论和回复
-                                        </Badge>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="5">
-                                        <Badge color="error" badgeContent={messageData?.data[2].count}>
-                                            关注
-                                        </Badge>
-                                    </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
+                        <Card sx={{ p: 2, boxShadow: 3 }}>
+                            <Typography variant="h5" gutterBottom>
+                                消息中心
+                            </Typography>
+                            <List component="nav">
+                                <ListItem disablePadding>
+                                    <ListItemButton selected={currentTab === '1'} onClick={() => handleTabChange('1')}>
+                                        <ListItemText
+                                            primary={
+                                                <Box display="flex" alignItems="center">
+                                                    评论和回复
+                                                    <Badge
+                                                        color="error"
+                                                        badgeContent={messageData?.data[0].count}
+                                                        sx={{ ml: 1 }}
+                                                    />
+                                                </Box>
+                                            }
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                                <ListItem disablePadding>
+                                    <ListItemButton selected={currentTab === '5'} onClick={() => handleTabChange('5')}>
+                                        <ListItemText
+                                            primary={
+                                                <Box display="flex" alignItems="center">
+                                                    关注
+                                                    <Badge
+                                                        color="error"
+                                                        badgeContent={messageData?.data[2].count}
+                                                        sx={{ ml: 1 }}
+                                                    />
+                                                </Box>
+                                            }
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            </List>
                         </Card>
-                    </Col>
-                    <Col xs={12} lg={10}>
-                        <h2>{['评论和回复', '', '', '', '关注'][parseInt(currentTab) - 1]}</h2>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, lg: 10 }}>
+                        <Typography variant="h4" gutterBottom>
+                            {['评论和回复', '', '', '', '关注'][parseInt(currentTab) - 1]}
+                        </Typography>
                         {messages}
-                    </Col>
-                </Row>
+                    </Grid>
+                </Grid>
             </Container>
         </>
     );

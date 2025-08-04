@@ -1,7 +1,21 @@
 import * as React from 'react';
 import { redirect } from 'react-router';
-import { Tabs, Tab, Nav, Form, Spinner } from 'react-bootstrap';
-import { Button, Container, Card, CardContent, Typography, CardHeader, Stack, TextField } from '@mui/material';
+import {
+    Box,
+    Button,
+    Container,
+    Card,
+    CardContent,
+    CircularProgress,
+    Tabs,
+    Tab,
+    Typography,
+    ToggleButtonGroup,
+    ToggleButton,
+    CardHeader,
+    Stack,
+    TextField,
+} from '@mui/material';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -144,25 +158,21 @@ const SpaceTabs = {
 
                 setPageComponent(
                     <>
-                        <Nav
+                        <ToggleButtonGroup
                             className="mb-2 right-padding"
-                            variant="pills"
-                            defaultActiveKey="time"
-                            onSelect={(eventKey: string | null) => {
-                                setOrderType(eventKey ?? 'latest');
-                                setCurrentPage(1);
+                            exclusive
+                            value={orderType}
+                            onChange={(event, newType) => {
+                                if (newType !== null) {
+                                    setOrderType(newType);
+                                    setCurrentPage(1);
+                                }
                             }}
                         >
-                            <Nav.Item>
-                                <Nav.Link eventKey="time">最新发布</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="likes">点赞最多</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="comments">评论最多</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
+                            <ToggleButton value="time">最新发布</ToggleButton>
+                            <ToggleButton value="likes">点赞最多</ToggleButton>
+                            <ToggleButton value="comments">评论最多</ToggleButton>
+                        </ToggleButtonGroup>
                         <WorkList works={responseData.data.data} />
                         {responseData.data.total > 20 && (
                             <div style={{ width: '100%' }}>
@@ -277,19 +287,20 @@ const SpaceTabs = {
 
         return (
             <Container className="mt-2">
-                <Nav
-                    className="mb-2"
-                    variant="pills"
-                    defaultActiveKey="follows"
-                    onSelect={(eventKey: string | null) => setCurrentTab(eventKey || 'follows')}
+                <ToggleButtonGroup
+                    className="mb-2 right-padding"
+                    exclusive
+                    value={currentTab}
+                    onChange={(event, newTab) => {
+                        if (newTab !== null) {
+                            setCurrentTab(newTab);
+                            setCurrentPage(1);
+                        }
+                    }}
                 >
-                    <Nav.Item>
-                        <Nav.Link eventKey="follows">TA 的关注</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="fans">TA 的粉丝</Nav.Link>
-                    </Nav.Item>
-                </Nav>
+                    <ToggleButton value="follows">TA 的关注</ToggleButton>
+                    <ToggleButton value="fans">TA 的粉丝</ToggleButton>
+                </ToggleButtonGroup>
                 {pageComponent}
             </Container>
         );
@@ -334,8 +345,8 @@ export function HydrateFallback() {
         <>
             <NavbarComponent />
             <Container className="mt-2">
-                <Spinner />
-                <span style={{ fontSize: '24px' }}>Loading...</span>
+                <CircularProgress />
+                <span style={{ fontSize: '30px' }}>Loading...</span>
             </Container>
         </>
     );
@@ -494,7 +505,33 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                 </Stack>
             </Container>
 
-            <Tabs
+            <Box className="mt-5 d-flex justify-content-center">
+                <Tabs
+                    value={tab}
+                    onChange={(event, value) => {
+                        if (value) {
+                            history.pushState({ tab: value }, '', `/space/${userId}/${value}`);
+                            setTab(value);
+                        }
+                    }}
+                >
+                    <Tab value="home" label="主页" />
+                    <Tab value="cover" label="封面" />
+                    <Tab value="projects" label="作品" />
+                    <Tab value="favorites" label="收藏" />
+                    <Tab value="social" label="社交" />
+                </Tabs>
+            </Box>
+
+            <div className="mt-5 m-4">
+                {tab === 'home' && <SpaceTabs.HomeTab userId={userId} />}
+                {tab === 'cover' && <SpaceTabs.CoverTab userId={userId} />}
+                {tab === 'projects' && <SpaceTabs.ProjectsTab userId={userId} />}
+                {tab === 'favorites' && <SpaceTabs.FavoritesTab userId={userId} />}
+                {tab === 'social' && <SpaceTabs.SocialTab userId={userId} />}
+            </div>
+
+            {/* <Tabs
                 className="mt-5 justify-content-center"
                 transition={false}
                 activeKey={tab}
@@ -521,8 +558,7 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                 <Tab eventKey="social" title="社交" mountOnEnter unmountOnExit>
                     <SpaceTabs.SocialTab userId={userId} />
                 </Tab>
-                {/* 不打算支持垃圾勋章 */}
-            </Tabs>
+            </Tabs> */}
         </>
     );
 }
