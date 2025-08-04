@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { UserAndWorkCard } from './UserAndWorkCard';
-import { Stack } from 'react-bootstrap';
+import { Stack } from '@mui/material';
 
 const UserAndWorkList = ({ infos }: { infos: any[] }) => {
     const cards = infos.map((info, index) => (

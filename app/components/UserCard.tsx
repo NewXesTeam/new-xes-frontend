@@ -70,7 +70,7 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
 
     return (
         <Tooltip title={`粉丝：${user.fans}   关注：${user.follows}`}>
-            <Card style={{ padding: '10px' }}>
+            <Card style={{ padding: '10px' }} className="position-relative">
                 <img
                     src={user.avatar_path}
                     alt={user.realname}
@@ -78,7 +78,8 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
                     width={80}
                     style={{ borderRadius: '50%' }}
                 />
-                <a href={userLink} target="_blank">
+                <br />
+                <a href={userLink} target="_blank" className="stretched-link">
                     {user.realname}
                 </a>
             </Card>

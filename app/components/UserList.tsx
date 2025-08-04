@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { Stack } from '@mui/material';
 import { HorizontalUserCard, SmallUserCard } from './UserCard';
 
@@ -18,13 +17,13 @@ const UserVerticalList = ({ users }: { users: SimpleUserInfo[] }) => {
 };
 
 const UserHorizontalList = ({ users }: { users: SimpleUserInfo[] }) => {
-    const cards = users.map(user => (
-        <Col key={user.id}>
-            <SmallUserCard user={user} />
-        </Col>
-    ));
+    const cards = users.map(user => <SmallUserCard user={user} />);
 
-    return <Row xs="auto">{cards}</Row>;
+    return (
+        <Stack direction="row" spacing={2}>
+            {cards}
+        </Stack>
+    );
 };
 
 export { UserVerticalList, UserHorizontalList };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container } from '@mui/material';
 import NavbarComponent from '@/components/Navbar';
 
 export default function AboutPage() {

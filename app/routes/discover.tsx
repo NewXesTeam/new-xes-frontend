@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Nav } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { redirect } from 'react-router';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
@@ -38,53 +38,39 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
             }
             setWorks(
                 <>
-                    <div className="d-flex justify-content-between">
-                        <Nav
-                            className="mb-2 left-padding"
-                            variant="pills"
-                            defaultActiveKey=""
-                            onSelect={(eventKey: string | null) => {
-                                if (eventKey !== orderLang) {
-                                    setOrderLang(eventKey ?? '');
+                    <div className="d-flex justify-content-between mb-3">
+                        <ToggleButtonGroup
+                            className="left-padding"
+                            value={orderLang}
+                            exclusive
+                            onChange={(event, newLang) => {
+                                if (newLang !== null) {
+                                    setOrderLang(newLang);
                                     setCurrentPage(1);
                                 }
                             }}
                         >
-                            <Nav.Item>
-                                <Nav.Link eventKey="">全部</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="scratch">TurboWarp</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="python">Python</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="cpp">C++</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
+                            <ToggleButton value="">全部</ToggleButton>
+                            <ToggleButton value="scratch">TurboWarp</ToggleButton>
+                            <ToggleButton value="python">Python</ToggleButton>
+                            <ToggleButton value="cpp">C++</ToggleButton>
+                        </ToggleButtonGroup>
 
-                        <Nav
+                        <ToggleButtonGroup
                             className="mb-2 right-padding"
-                            variant="pills"
-                            defaultActiveKey="latest"
-                            onSelect={(eventKey: string | null) => {
-                                if (eventKey !== orderType) {
-                                    setOrderType(eventKey ?? 'latest');
+                            exclusive
+                            value={orderType}
+                            onChange={(event, newType) => {
+                                if (newType !== null) {
+                                    setOrderType(newType);
                                     setCurrentPage(1);
                                 }
                             }}
                         >
-                            <Nav.Item>
-                                <Nav.Link eventKey="latest">最新发布</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="popular">最受欢迎</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="courses">随堂练习</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
+                            <ToggleButton value="latest">最新发布</ToggleButton>
+                            <ToggleButton value="popular">最受欢迎</ToggleButton>
+                            <ToggleButton value="courses">随堂练习</ToggleButton>
+                        </ToggleButtonGroup>
                     </div>
 
                     <WorkList works={responseData.data} />
@@ -113,7 +99,7 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
     return (
         <>
             <NavbarComponent />
-            <Container className="mt-5">{works}</Container>
+            <div className="mt-5 m-4">{works}</div>
         </>
     );
 }

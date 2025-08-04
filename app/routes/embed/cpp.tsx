@@ -2,6 +2,8 @@ import * as React from 'react';
 import WSTerminal from '@/components/WSTerminal';
 import '@/styles/app.scss';
 
+import type { BasicResponse } from '@/interfaces/common';
+import type { PublishWorkInfo } from '@/interfaces/work';
 import type { Route } from './+types/cpp';
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -21,6 +23,19 @@ export default function EmbedPythonPage({ loaderData }: Route.ComponentProps) {
     }
 
     const id = loaderData.id;
+    const [code, setCode] = React.useState('');
+    React.useEffect(() => {
+        let ignore = false;
+        const func = async () => {
+            const response = await fetch(`/api/compilers/v2/${id}`);
+            const responseData: BasicResponse<PublishWorkInfo> = await response.json();
+            setCode(responseData.data.xml);
+        };
+        if (!ignore) func();
+        return () => {
+            ignore = true;
+        };
+    }, []);
 
-    return <WSTerminal id={id} />;
+    return <WSTerminal lang={'cpp'} code={code} />;
 }
