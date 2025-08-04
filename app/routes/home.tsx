@@ -4,8 +4,14 @@ import WorkList from '@/components/WorkList';
 import { Typography } from '@mui/material';
 
 import type { Work } from '@/interfaces/work';
+import type { Route } from './+types/home';
 
-export default function IndexPage() {
+export async function loader({ request }: Route.LoaderArgs) {
+    return {
+        isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
+    };
+}
+export default function IndexPage({ loaderData }: Route.ComponentProps) {
     const [works, setWorks] = React.useState<Array<Work>>([]);
 
     React.useEffect(() => {
@@ -28,9 +34,16 @@ export default function IndexPage() {
         <>
             <NavbarComponent />
             <div className="mt-5 mb-5">
-                <Typography variant="h4" component="h1" className="text-center">
-                    我的关注
-                </Typography>
+                {!loaderData.isLoggedIn && (
+                    <Typography variant="h4" component="h1" className="text-center">
+                        欢迎来到NewXesFrontend
+                    </Typography>
+                )}
+                {loaderData.isLoggedIn && (
+                    <Typography variant="h4" component="h1" className="text-center">
+                        我的关注
+                    </Typography>
+                )}
                 <WorkList works={works} className="m-4" />
             </div>
         </>

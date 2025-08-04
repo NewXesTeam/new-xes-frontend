@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { redirect } from 'react-router';
 import {
+    Avatar,
     Box,
     Button,
     Container,
@@ -19,7 +20,6 @@ import {
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import NavbarComponent from '@/components/Navbar';
 import WorkList from '@/components/WorkList';
-import Avatar from '@/components/Avatar';
 import { SmallWorkCard } from '@/components/WorkCard';
 import { UserVerticalList, UserHorizontalList } from '@/components/UserList';
 import { Pagination } from '@/components/Pagination';
@@ -432,9 +432,9 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
                     >
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar
-                                size={128}
-                                name={spaceProfileData.data.realname}
-                                avatarUrl={spaceProfileData.data.avatar_path}
+                                sx={{ width: 128, height: 128 }}
+                                alt={spaceProfileData.data.realname}
+                                src={spaceProfileData.data.avatar_path}
                             />
                             <div style={{ textAlign: 'left' }}>
                                 <Typography variant="h5" component="div">

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { AppBar, Badge, Menu, MenuItem, IconButton, Divider, Button } from '@mui/material';
+import { Avatar, Badge, Menu, MenuItem, IconButton, Divider, Button } from '@mui/material';
 import { NavLink } from 'react-router';
-import Avatar from './Avatar';
 import SearchInput from './SearchInput';
 import { checkLoggedIn } from '@/utils';
 
@@ -68,7 +67,7 @@ const UserMenu = ({
                 aria-expanded={openUserMenu ? 'true' : undefined}
                 onClick={event => setAnchorEl(event.currentTarget)}
             >
-                <Avatar name={userInfo.name} avatarUrl={userInfo.avatar_path} size={40} />
+                <Avatar alt={userInfo.name} src={userInfo.avatar_path} sx={{ width: 40, height: 40 }} />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
+import { Avatar, Container, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import { redirect } from 'react-router';
 import NavbarComponent from '@/components/Navbar';
 
@@ -36,7 +36,11 @@ export default function UserInfoPage({ loaderData }: Route.ComponentProps) {
             setInfo(
                 <>
                     <div>
-                        <img src={infoResponseData.data.avatar_path} alt="头像" />
+                        <Avatar
+                            alt={infoResponseData.data.realname}
+                            src={infoResponseData.data.avatar_path}
+                            sx={{ width: 128, height: 128 }}
+                        />
                         <h2>{infoResponseData.data.realname}</h2>
                         <h3 className="text-danger">
                             Dangerous: 消息中心的“点赞与收藏”部分的api有问题，会返回包括但不限于下面他人不可见的内容。
