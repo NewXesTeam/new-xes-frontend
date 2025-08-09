@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Work } from '@/interfaces/work';
-import { Row, Col } from 'react-bootstrap';
+import { Grid } from '@mui/material';
 import WorkCard from './WorkCard';
 import { RemovedWorkCard } from './WorkCard';
 
@@ -20,23 +20,23 @@ const WorkList = ({
             return null;
         } else if (work.removed && enableRemoved) {
             return (
-                <Col key={work.topic_id}>
+                <Grid key={work.topic_id} size={{ xs: 6, sm: 4, md: 3, lg: 2.4, xl: 2.4 }}>
                     <RemovedWorkCard />
-                </Col>
+                </Grid>
             );
         } else {
             return (
-                <Col key={work.topic_id}>
+                <Grid key={work.topic_id} size={{ xs: 6, sm: 4, md: 3, lg: 2.4, xl: 2.4 }}>
                     <WorkCardInterface work={work} />
-                </Col>
+                </Grid>
             );
         }
     });
 
     return (
-        <Row xs={1} sm={2} md={3} lg={4} xl={5} className={className}>
+        <Grid container spacing={2} className={className}>
             {cards}
-        </Row>
+        </Grid>
     );
 };
 

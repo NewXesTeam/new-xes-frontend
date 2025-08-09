@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextField, Box, styled, InputBase, alpha } from '@mui/material';
+import { Box, styled, InputBase, alpha } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import type { Associate_words } from '@/interfaces/common';
 import '@/styles/search.scss';
@@ -73,6 +73,7 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                             key={index}
                             onClick={() => {
                                 event.target.value = word.replace(/<em>/g, '').replace(/<\/em>/g, '');
+                                setKeywordInput(word.replace(/<em>/g, '').replace(/<\/em>/g, ''));
                                 setIsShowSuggestions(false);
                             }}
                             ref={element => {
@@ -118,6 +119,9 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                                 clearTimeout(timerRef.current);
                             }
                         }, 100);
+                    }}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setKeywordInput(event.target.value);
                     }}
                 />
             </Search>

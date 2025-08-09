@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
-import type { BasicResponse } from '@/interfaces/common';
-import type { PublishWorkInfo } from '@/interfaces/work';
+import { Button } from '@mui/material';
 import { b64_to_utf8 } from '@/utils';
 import '@/styles/xterm.scss';
 
@@ -27,11 +25,13 @@ const xtermTheme = {
     brightWhite: '#FFFFFF',
 };
 
-const WSTerminal = ({ id }: { id: number | string }) => {
+const WSTerminal = ({ code, lang }: { code: string; lang: string }) => {
     const [runningState, setRunningState] = React.useState<boolean>(false);
     const [terminal, setTerminal] = React.useState<any>(null);
     const [addons, setAddons] = React.useState<any[]>([]);
     const websocket = React.useRef<WebSocket>(null);
+
+    const terminalRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const func = async () => {
@@ -85,8 +85,6 @@ const WSTerminal = ({ id }: { id: number | string }) => {
             return;
         }
 
-        const response = await fetch(`/api/compilers/v2/${id}`);
-        const responseData: BasicResponse<PublishWorkInfo> = await response.json();
         websocket.current = new WebSocket(`wss://codedynamic.xueersi.com/api/compileapi/ws/run`);
 
         const term = terminal;
@@ -102,9 +100,9 @@ const WSTerminal = ({ id }: { id: number | string }) => {
             ws.send(
                 '7' +
                     JSON.stringify({
-                        xml: responseData.data.xml,
+                        xml: code,
                         type: 'run',
-                        lang: responseData.data.lang,
+                        lang: lang,
                         original_id: 1,
                     }),
             );
@@ -165,12 +163,11 @@ const WSTerminal = ({ id }: { id: number | string }) => {
 
     React.useEffect(() => {
         if (terminal && addons.length > 0) {
-            const terminalRef = document.getElementById('terminal-container');
-            if (terminalRef && !terminal.element) {
+            if (terminalRef.current && !terminal.element) {
                 for (const addon of addons) {
                     terminal.loadAddon(addon);
                 }
-                terminal.open(terminalRef);
+                terminal.open(terminalRef.current);
                 addons[0].fit();
                 window.addEventListener('resize', () => {
                     addons[0].fit();
@@ -180,22 +177,16 @@ const WSTerminal = ({ id }: { id: number | string }) => {
     }, [terminal, addons]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div style={{ height: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button variant="primary" onClick={() => onClickRun()}>
+                <Button color="primary" variant="contained" onClick={() => onClickRun()}>
                     {runningState ? '运行中' : '运行'}
                 </Button>
-                <Button variant="primary" onClick={() => terminal && terminal.reset()}>
+                <Button color="primary" variant="contained" onClick={() => terminal && terminal.reset()}>
                     清除终端
                 </Button>
             </div>
-            <div
-                id="terminal-container"
-                style={{
-                    flexGrow: 1,
-                    width: '100%',
-                }}
-            />
+            <div ref={terminalRef} />
         </div>
     );
 };

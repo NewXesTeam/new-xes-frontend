@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Tooltip, Card, CardContent, Stack, Button, Typography } from '@mui/material';
-import Avatar from './Avatar';
+import { Avatar, Tooltip, Card, CardContent, Stack, Button, Typography } from '@mui/material';
 
 import type { SimpleUserInfo } from '@/interfaces/user';
 
@@ -11,7 +10,7 @@ const HorizontalUserCard = ({
 }: {
     user: SimpleUserInfo;
     className?: string;
-    children: React.ReactNode;
+    children: React.ReactNode | null;
 }) => {
     const [userFollowed, setUserFollowed] = React.useState(user.is_follow || user.is_followed);
     const userLink = `/space/${user.id}/home`;
@@ -31,7 +30,7 @@ const HorizontalUserCard = ({
                 <Stack direction="row" alignItems="center" spacing={2} justifyContent="space-between">
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <a href={userLink} target="_blank" style={{ textDecoration: 'none' }}>
-                            <Avatar name={user.realname} avatarUrl={user.avatar_path} size={108} />
+                            <Avatar alt={user.realname} src={user.avatar_path} sx={{ width: 108, height: 108 }} />
                         </a>
                         <div>
                             <Typography
@@ -70,7 +69,7 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
 
     return (
         <Tooltip title={`粉丝：${user.fans}   关注：${user.follows}`}>
-            <Card style={{ padding: '10px' }}>
+            <Card style={{ padding: '10px' }} className="position-relative">
                 <img
                     src={user.avatar_path}
                     alt={user.realname}
@@ -78,7 +77,8 @@ const SmallUserCard = ({ user }: { user: SimpleUserInfo }) => {
                     width={80}
                     style={{ borderRadius: '50%' }}
                 />
-                <a href={userLink} target="_blank">
+                <br />
+                <a href={userLink} target="_blank" className="stretched-link">
                     {user.realname}
                 </a>
             </Card>

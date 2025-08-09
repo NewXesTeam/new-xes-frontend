@@ -264,11 +264,11 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
                 </Tabs>
             </Box>
 
-            <Container className="mt-5">
+            <div className="mt-5 m-4">
                 {tab === 'all' && <SearchTabs.AllTab keyword={keyword} />}
                 {tab === 'users' && <SearchTabs.AuthorTab keyword={keyword} />}
                 {tab === 'projects' && <SearchTabs.ProjectsTab keyword={keyword} />}
-            </Container>
+            </div>
         </>
     );
 }

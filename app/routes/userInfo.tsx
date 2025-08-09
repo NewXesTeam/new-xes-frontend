@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Container } from 'react-bootstrap';
+import { Avatar, Container, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import { redirect } from 'react-router';
 import NavbarComponent from '@/components/Navbar';
 
@@ -36,69 +36,73 @@ export default function UserInfoPage({ loaderData }: Route.ComponentProps) {
             setInfo(
                 <>
                     <div>
-                        <img src={infoResponseData.data.avatar_path} alt="头像" />
+                        <Avatar
+                            alt={infoResponseData.data.realname}
+                            src={infoResponseData.data.avatar_path}
+                            sx={{ width: 128, height: 128 }}
+                        />
                         <h2>{infoResponseData.data.realname}</h2>
-                        <h3 color="red">
+                        <h3 className="text-danger">
                             Dangerous: 消息中心的“点赞与收藏”部分的api有问题，会返回包括但不限于下面他人不可见的内容。
                         </h3>
                     </div>
                     <Table>
-                        <thead>
-                            <tr>
-                                <th>属性</th>
-                                <th>值</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>用户 ID</th>
-                                <td>{infoResponseData.data.user_id}</td>
-                            </tr>
-                            <tr>
-                                <th>用户名（他人不可见）</th>
-                                <td>{infoResponseData.data.name}</td>
-                            </tr>
-                            <tr>
-                                <th>真名</th>
-                                <td>{infoResponseData.data.realname}</td>
-                            </tr>
-                            <tr>
-                                <th>昵称（他人不可见）</th>
-                                <td>{infoResponseData.data.nickname}</td>
-                            </tr>
-                            <tr>
-                                <th>英文名（他人不可见）</th>
-                                <td>{infoResponseData.data.en_name}</td>
-                            </tr>
-                            <tr>
-                                <th>性别（他人不可见）</th>
-                                <td>{sexName}</td>
-                            </tr>
-                            <tr>
-                                <th>头像 URL</th>
-                                <td>{infoResponseData.data.avatar_path}</td>
-                            </tr>
-                            <tr>
-                                <th>创建时间（他人不可见）</th>
-                                <td>{infoResponseData.data.create_time}</td>
-                            </tr>
-                            <tr>
-                                <th>年级名称（他人不可见）</th>
-                                <td>{infoResponseData.data.grade_name}</td>
-                            </tr>
-                            <tr>
-                                <th>个人签名</th>
-                                <td>{spaceProfileData.data.signature}</td>
-                            </tr>
-                            <tr>
-                                <th>关注数量</th>
-                                <td>{spaceProfileData.data.follows}</td>
-                            </tr>
-                            <tr>
-                                <th>粉丝数量</th>
-                                <td>{spaceProfileData.data.fans}</td>
-                            </tr>
-                        </tbody>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>属性</TableCell>
+                                <TableCell>值</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell component={'th'}>用户 ID</TableCell>
+                                <TableCell>{infoResponseData.data.user_id}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>用户名（他人不可见）</TableCell>
+                                <TableCell>{infoResponseData.data.name}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>真名</TableCell>
+                                <TableCell>{infoResponseData.data.realname}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>昵称（他人不可见）</TableCell>
+                                <TableCell>{infoResponseData.data.nickname}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>英文名（他人不可见）</TableCell>
+                                <TableCell>{infoResponseData.data.en_name}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>性别</TableCell>
+                                <TableCell>{sexName}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>头像 URL</TableCell>
+                                <TableCell>{infoResponseData.data.avatar_path}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>创建时间（他人不可见）</TableCell>
+                                <TableCell>{infoResponseData.data.create_time}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>年级名称（他人不可见）</TableCell>
+                                <TableCell>{infoResponseData.data.grade_name}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>个人签名</TableCell>
+                                <TableCell>{spaceProfileData.data.signature}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>关注数量</TableCell>
+                                <TableCell>{spaceProfileData.data.follows}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell component={'th'}>粉丝数量</TableCell>
+                                <TableCell>{spaceProfileData.data.fans}</TableCell>
+                            </TableRow>
+                        </TableBody>
                     </Table>
                 </>,
             );

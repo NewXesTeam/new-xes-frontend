@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Card, Button, CardContent, Stack, Tooltip, Badge } from '@mui/material';
+import { Avatar, Card, Button, CardContent, Stack, Tooltip, Badge } from '@mui/material';
 import AutoCloseAlert from './AutoCloseAlert';
 import CommentBox from './CommentBox';
-import Avatar from './Avatar';
 import { processEmojiReplace, processLinkReplace } from '@/utils';
 import { v4 as uuidV4 } from 'uuid';
 import DOMPurify from 'dompurify';
@@ -54,9 +53,9 @@ const CommentCard = ({
                         >
                             <a href={sendUserLink} target="_blank" style={{ alignSelf: 'flex-start' }}>
                                 <Avatar
-                                    name={message.send_username}
-                                    avatarUrl={message.send_user_avatar_path}
-                                    size={50}
+                                    alt={message.send_username}
+                                    src={message.send_user_avatar_path}
+                                    sx={{ width: 50, height: 50 }}
                                 />
                             </a>
                         </Badge>
@@ -246,9 +245,9 @@ const FollowCard = ({
                             >
                                 <a href={userLink} target="_blank">
                                     <Avatar
-                                        name={message.send_username}
-                                        avatarUrl={message.send_user_avatar_path}
-                                        size={50}
+                                        alt={message.send_username}
+                                        src={message.send_user_avatar_path}
+                                        sx={{ width: 50, height: 50 }}
                                     />
                                 </a>
                             </Badge>

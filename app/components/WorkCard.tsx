@@ -1,6 +1,10 @@
 import * as React from 'react';
-import { Badge, Card, CardMedia, CardContent, Typography, Tooltip } from '@mui/material';
+import { Badge, Card, CardMedia, CardContent, Typography, Tooltip, CardHeader } from '@mui/material';
 import { getWorkLink } from '@/utils';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import CommentIcon from '@mui/icons-material/Comment';
 import type { Work } from '@/interfaces/work';
 
 const WorkCard = ({ work }: { work: Work }) => {
@@ -19,6 +23,8 @@ const WorkCard = ({ work }: { work: Work }) => {
                     alt={work.name.replace(/<em>|<\/em>/g, '')}
                     width={224}
                     height={168}
+                    onClick={() => window.open(link, '_blank')}
+                    style={{ cursor: 'pointer' }}
                     src={
                         work.thumbnail ||
                         'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
@@ -28,40 +34,34 @@ const WorkCard = ({ work }: { work: Work }) => {
                 <CardContent>
                     <Tooltip placement="top" title={work.name.replace(/<em>|<\/em>/g, '')}>
                         <Typography
-                            sx={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                color: 'blue',
-                                fontSize: '16px',
-                            }}
+                            className="text-truncate text-blue fs-5"
+                            color="blue"
                             gutterBottom
                             variant="h5"
                             component="div"
                         >
-                            <a href={link} className="text-decoration-none stretched-link" target="_blank">
+                            <a href={link} className="text-decoration-none" target="_blank">
                                 {work.name.replace(/<em>|<\/em>/g, '')}
                             </a>
                         </Typography>
                     </Tooltip>
 
                     <div className="d-flex justify-content-between align-items-center">
-                        <a href={author_url} target="_blank" style={{ zIndex: 2 }}>
-                            <span style={{ fontSize: '14px' }}>{work.username}</span>
+                        <a href={author_url} target="_blank" className="text-truncate text-blue fs-7 z-index-2">
+                            <span>{work.username}</span>
                         </a>
                         <div style={{ display: 'flex', gap: '10px', zoom: 0.75 }}>
                             <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
-                                👀
+                                <VisibilityIcon />
                             </Badge>
                             <Badge badgeContent={work.likes} color="primary" aria-label="点赞数" showZero>
-                                👍
+                                <FavoriteIcon />
                             </Badge>
-                            <br />
                             <Badge badgeContent={work.unlikes} color="error" aria-label="点踩数" showZero>
-                                👎
+                                <ThumbDownIcon />
                             </Badge>
                             <Badge badgeContent={work.comments} color="success" aria-label="评论数" showZero>
-                                💬
+                                <CommentIcon />
                             </Badge>
                         </div>
                     </div>
@@ -93,27 +93,15 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
         `}
         >
             <Tooltip placement="bottom" title={work.name}>
-                <Card>
-                    <Typography
-                        sx={{
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            color: 'blue',
-                            fontSize: '16px',
-                            maxWidth: '100px',
-                        }}
-                        gutterBottom
-                        variant="h5"
-                        component="div"
-                    >
-                        <a href={getWorkLink(work)} className="stretched-link">
+                <Card className="mb-3 position-relative">
+                    <Typography className="text-truncate text-blue fs-5">
+                        <a href={getWorkLink(work)} className="stretched-link text-decoration-none">
                             {work.name}
                         </a>
                     </Typography>
-                    <CardContent className="py-0">
+                    <CardMedia>
                         <img src={work.thumbnail} height={138} className="m-auto" alt={work.name} />
-                    </CardContent>
+                    </CardMedia>
                 </Card>
             </Tooltip>
         </Tooltip>
