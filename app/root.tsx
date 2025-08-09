@@ -6,7 +6,7 @@ import '@/styles/app.scss';
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="zh">
+        <html lang="zh" style={{ zoom: '1' }}>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />

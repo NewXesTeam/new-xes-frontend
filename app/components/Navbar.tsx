@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
-import { Avatar, Badge, Menu, MenuItem, IconButton, Divider, Button } from '@mui/material';
+import { Container } from 'react-bootstrap';
+import { AppBar, Avatar, Badge, Menu, MenuItem, IconButton, Divider, Button, Toolbar, Box } from '@mui/material';
 import { NavLink } from 'react-router';
 import SearchInput from './SearchInput';
 import { checkLoggedIn } from '@/utils';
@@ -36,7 +36,7 @@ const UserMenu = ({
                 onClick={event => setMessageEl(event.currentTarget)}
             >
                 <Badge color="error" badgeContent={totalMessageCount}>
-                    消息
+                    <span style={{ color: 'white' }}>消息</span>
                 </Badge>
             </Button>
             <Menu
@@ -108,7 +108,7 @@ const CreateMenu = () => {
                 aria-expanded={openCreateMenu ? 'true' : undefined}
                 onClick={event => setAnchorEl(event.currentTarget)}
             >
-                创作
+                <span style={{ color: "white" }}>创作</span>
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -172,26 +172,37 @@ const NavbarComponent = () => {
     }, []);
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary shadow">
+        <AppBar className="shadow" position="static">
             <Container>
-                <NavLink className="navbar-brand" to="/">
-                    <img src={logoImg} width={190} height={37} alt="logo"></img>
-                </NavLink>
+                <Toolbar>
+                    <NavLink to="/">
+                        <img src={logoImg} width={190} height={37} alt="logo"></img>
+                    </NavLink>
 
-                <Navbar.Collapse>
-                    <Nav className="me-auto">
-                        <NavLink className="nav-link" to="/">
-                            主页
-                        </NavLink>
-                        <NavLink className="nav-link" to="/discover">
+                    <Box className="me-auto d-flex">
+                        <Button
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            onClick={() => location.href = '/'}
+                        >
+                            首页
+                        </Button>
+
+                        <Button
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            onClick={() => location.href = '/discover'}
+                        >
                             发现
-                        </NavLink>
-                        <NavLink className="nav-link" to="/about">
-                            关于
-                        </NavLink>
-                    </Nav>
+                        </Button>
 
-                    <Nav className="ms-auto" style={{ alignItems: 'center' }}>
+                        <Button
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            onClick={() => location.href = '/about'}
+                        >
+                            关于
+                        </Button>
+                    </Box>
+
+                    <Box className="ms-auto d-flex">
                         <SearchInput />
 
                         {userInfo ? (
@@ -202,25 +213,19 @@ const NavbarComponent = () => {
                                 onLogout={logoutEvent}
                             />
                         ) : (
-                            <NavLink className="nav-link" to="/login">
+                            <Button
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                onClick={() => location.href = '/login'}
+                            >
                                 登录
-                            </NavLink>
+                            </Button>
                         )}
 
-                        {/* <NavDropdown title="创作" align={'end'}>
-                            <NavDropdown.Item href="#">TurboWarp</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#">Python 基础</NavDropdown.Item>
-                            <NavDropdown.Item href="#">Python 海龟</NavDropdown.Item>
-                            <NavDropdown.Item href="#">Python 本地</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#">C++</NavDropdown.Item>
-                        </NavDropdown> */}
                         <CreateMenu />
-                    </Nav>
-                </Navbar.Collapse>
+                    </Box>
+                </Toolbar>
             </Container>
-        </Navbar>
+        </AppBar>
     );
 };
 

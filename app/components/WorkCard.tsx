@@ -50,7 +50,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                         <a href={author_url} target="_blank" className="text-truncate text-blue fs-7 z-index-2">
                             <span>{work.username}</span>
                         </a>
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '10px', zoom: 0.75 }}>
                             <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
                                 <VisibilityIcon />
                             </Badge>
