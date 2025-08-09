@@ -13,7 +13,8 @@ import {
     Tabs,
     Tab,
     Chip,
-    Divider,
+    CardActionArea,
+    CardActions,
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -23,7 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import PublishIcon from '@mui/icons-material/Publish';
 import UnpublishIcon from '@mui/icons-material/Unpublished';
 
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
 import ProjectPublishModal from '@/components/ProjectPublishModal';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
@@ -32,7 +33,6 @@ import { v4 as uuidV4 } from 'uuid';
 
 import type { UserWorkList } from '@/interfaces/user';
 import type { Work, PublishWorkInfo } from '@/interfaces/work';
-import '@/styles/user.scss';
 
 const FixedWorkCard = (
     onClickPublish: (work: PublishWorkInfo) => void,
@@ -52,125 +52,113 @@ const FixedWorkCard = (
         }
 
         const statusColors = {
-            未发布: 'default',
-            已发布: 'success',
-            审核中: 'info',
-            已下架: 'error',
+            '未发布': 'default',
+            '已发布': 'success',
+            '审核中': 'info',
+            '已下架': 'error',
         };
 
         return (
-            <Tooltip placement="top" title={work.name}>
-                <Card
-                    className="mb-3 position-relative"
-                    onMouseEnter={() => setIsShowOperators(true)}
-                    onMouseLeave={() => setIsShowOperators(false)}
-                >
-                    <CardMedia
-                        component="img"
-                        height="168"
-                        image={
-                            work.thumbnail ||
-                            'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
-                        }
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => window.open(link, '_blank')}
-                        alt={work.name}
+            <Card
+                className="relative"
+                onMouseEnter={() => setIsShowOperators(true)}
+                onMouseLeave={() => setIsShowOperators(false)}
+            >
+                <Tooltip placement="top" title={work.created_at}>
+                    <CardActionArea onClick={() => window.open(link, '_blank')}>
+                        <CardMedia
+                            component="img"
+                            alt={work.name.replace(/<em>|<\/em>/g, '')}
+                            width={224}
+                            height={168}
+                            style={{ cursor: 'pointer' }}
+                            src={
+                                work.thumbnail ||
+                                'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'
+                            }
+                        />
+
+                        <CardContent>
+                            <Typography className="text-neutral-600" sx={{ fontSize: 20 }}>
+                                {work.name.replace(/<em>|<\/em>/g, '')}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                </Tooltip>
+
+                <CardActions className="flex justify-between">
+                    <Chip
+                        label={workStatus}
+                        size="small"
+                        color={statusColors[workStatus as keyof typeof statusColors] as any}
+                        variant="outlined"
                     />
 
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            display: isShowOperators ? 'flex' : 'none',
-                            gap: 1,
-                            zIndex: 2,
-                        }}
+                    <div className="flex gap-2" style={{ zoom: 0.75 }}>
+                        <Badge badgeContent={work.views} color="info" aria-label="浏览量" showZero>
+                            <VisibilityIcon />
+                        </Badge>
+                        <Badge badgeContent={work.likes} color="primary" aria-label="点赞数" showZero>
+                            <FavoriteIcon />
+                        </Badge>
+                        <Badge badgeContent={work.unlikes} color="error" aria-label="点踩数" showZero>
+                            <ThumbDownIcon />
+                        </Badge>
+                        <Badge badgeContent={work.comments} color="success" aria-label="评论数" showZero>
+                            <CommentIcon />
+                        </Badge>
+                    </div>
+                </CardActions>
+
+                <div
+                    className="absolute top-[8px] right-[8px] gap-1 z-10"
+                    style={{ display: isShowOperators ? 'flex' : 'none' }}
+                >
+                    <Button
+                        size="small"
+                        startIcon={<EditIcon />}
+                        onClick={() => window.open(editLink, '_blank')}
+                        variant="contained"
+                        color="primary"
+                        sx={{ minWidth: 'auto', padding: '4px 8px' }}
                     >
+                        编辑
+                    </Button>
+
+                    {work.published === 0 && !work.removed && (
                         <Button
                             size="small"
-                            startIcon={<EditIcon />}
-                            onClick={() => window.open(editLink, '_blank')}
+                            startIcon={<PublishIcon />}
+                            onClick={() => {
+                                let workData = work as unknown as PublishWorkInfo;
+                                workData.created_source = 'original';
+                                onClickPublish(workData);
+                            }}
                             variant="contained"
-                            color="primary"
+                            color="success"
                             sx={{ minWidth: 'auto', padding: '4px 8px' }}
                         >
-                            编辑
+                            发布
                         </Button>
+                    )}
 
-                        {work.published === 0 && !work.removed && (
-                            <Button
-                                size="small"
-                                startIcon={<PublishIcon />}
-                                onClick={() => {
-                                    let workData = work as unknown as PublishWorkInfo;
-                                    workData.created_source = 'original';
-                                    onClickPublish(workData);
-                                }}
-                                variant="contained"
-                                color="success"
-                                sx={{ minWidth: 'auto', padding: '4px 8px' }}
-                            >
-                                发布
-                            </Button>
-                        )}
-
-                        {work.published === 1 && (
-                            <Button
-                                size="small"
-                                startIcon={<UnpublishIcon />}
-                                onClick={() => {
-                                    let workData = work as unknown as PublishWorkInfo;
-                                    onClickCancelPublish(workData);
-                                }}
-                                variant="contained"
-                                color="error"
-                                sx={{ minWidth: 'auto', padding: '4px 8px' }}
-                            >
-                                取消发布
-                            </Button>
-                        )}
-                    </Box>
-
-                    <CardContent sx={{ paddingBottom: '4px' }}>
-                        <Typography gutterBottom variant="h6" component="div" noWrap>
-                            <a href={link} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
-                                {work.name}
-                            </a>
-                        </Typography>
-
-                        <Box className="d-flex justify-content-between align-items-center">
-                            <Typography variant="body2" color="text.secondary">
-                                {work.username}
-                            </Typography>
-
-                            <Box sx={{ display: 'flex', gap: '10px' }}>
-                                <Badge badgeContent={work.views} color="info" showZero>
-                                    <VisibilityIcon fontSize="small" />
-                                </Badge>
-                                <Badge badgeContent={work.likes} color="primary" showZero>
-                                    <FavoriteIcon fontSize="small" />
-                                </Badge>
-                                <Badge badgeContent={work.unlikes} color="error" showZero>
-                                    <ThumbDownIcon fontSize="small" />
-                                </Badge>
-                                <Badge badgeContent={work.comments} color="success" showZero>
-                                    <CommentIcon fontSize="small" />
-                                </Badge>
-                            </Box>
-                        </Box>
-                    </CardContent>
-
-                    <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                        <Chip
-                            label={workStatus}
+                    {work.published === 1 && (
+                        <Button
                             size="small"
-                            color={statusColors[workStatus as keyof typeof statusColors] as any}
-                            variant="outlined"
-                        />
-                    </Box>
-                </Card>
-            </Tooltip>
+                            startIcon={<UnpublishIcon />}
+                            onClick={() => {
+                                let workData = work as unknown as PublishWorkInfo;
+                                onClickCancelPublish(workData);
+                            }}
+                            variant="contained"
+                            color="error"
+                            sx={{ minWidth: 'auto', padding: '4px 8px' }}
+                        >
+                            取消发布
+                        </Button>
+                    )}
+                </div>
+            </Card>
         );
     };
 };
@@ -308,8 +296,6 @@ export default function UserPage() {
                 {alerts}
             </Box>
 
-            <NavbarComponent />
-
             {showPublishModal && publishWork.current && (
                 <ProjectPublishModal
                     workInfo={publishWork.current}
@@ -318,50 +304,61 @@ export default function UserPage() {
                 />
             )}
 
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Card sx={{ mb: 3, boxShadow: 1 }}>
-                    <CardContent sx={{ p: 3 }}>
-                        <Tabs value={type} onChange={handleTypeChange} sx={{ mb: 3 }}>
-                            <Tab label="个人创作" value="normal" />
-                            <Tab
-                                label={
-                                    <Tooltip title="（隋唐练习）">
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>随堂练习</Box>
-                                    </Tooltip>
-                                }
-                                value="homework"
-                            />
-                        </Tabs>
+            <AppLayout>
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                    <Tabs value={type} onChange={handleTypeChange} sx={{ mb: 3 }}>
+                        <Tab label="个人创作" value="normal" />
+                        <Tab
+                            label={
+                                <Tooltip title="（隋唐练习）" placement="top">
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>随堂练习</Box>
+                                </Tooltip>
+                            }
+                            value="homework"
+                        />
+                    </Tabs>
 
-                        <Divider sx={{ mb: 3 }} />
+                    <Card sx={{ mb: 3, boxShadow: 1 }}>
+                        <CardContent sx={{ p: 3 }}>
+                            <div className="flex gap-4 items-center">
+                                <span>类型</span>
 
-                        <Box sx={{ mb: 3 }}>
-                            <Tabs value={lang} onChange={handleLangChange} variant="scrollable" scrollButtons="auto">
-                                <Tab label="TurboWarp" value="projects" />
-                                <Tab label="Python" value="python" />
-                                <Tab label="C++" value="compilers" />
-                            </Tabs>
-                        </Box>
+                                <Tabs
+                                    value={lang}
+                                    className="mb-2"
+                                    onChange={handleLangChange}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                >
+                                    <Tab label="TurboWarp" value="projects" />
+                                    <Tab label="Python" value="python" />
+                                    <Tab label="C++" value="compilers" />
+                                </Tabs>
+                            </div>
 
-                        <Box>
-                            <Tabs
-                                value={status}
-                                onChange={handleStatusChange}
-                                variant="scrollable"
-                                scrollButtons="auto"
-                            >
-                                <Tab label="全部" value="all" />
-                                <Tab label="未发布" value="0" />
-                                <Tab label="审核中" value="2" />
-                                <Tab label="已发布" value="1" />
-                                <Tab label="已下架" value="removed" />
-                            </Tabs>
-                        </Box>
-                    </CardContent>
-                </Card>
+                            <div className="flex gap-4 items-center">
+                                <span>状态</span>
 
-                {pageComponent}
-            </Container>
+                                <Tabs
+                                    value={status}
+                                    className="mb-2"
+                                    onChange={handleStatusChange}
+                                    variant="scrollable"
+                                    scrollButtons="auto"
+                                >
+                                    <Tab label="全部" value="all" />
+                                    <Tab label="未发布" value="0" />
+                                    <Tab label="审核中" value="2" />
+                                    <Tab label="已发布" value="1" />
+                                    <Tab label="已下架" value="removed" />
+                                </Tabs>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {pageComponent}
+                </Container>
+            </AppLayout>
         </>
     );
 }

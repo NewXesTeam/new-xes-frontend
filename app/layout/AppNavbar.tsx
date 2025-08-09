@@ -1,14 +1,23 @@
-import * as React from 'react';
-import { Container } from 'react-bootstrap';
-import { AppBar, Avatar, Badge, Menu, MenuItem, IconButton, Divider, Button, Toolbar, Box } from '@mui/material';
+﻿import * as React from 'react';
+import {
+    AppBar,
+    Avatar,
+    Badge,
+    Menu,
+    MenuItem,
+    IconButton,
+    Divider,
+    Button,
+    Toolbar,
+    Box,
+} from '@mui/material';
 import { NavLink } from 'react-router';
-import SearchInput from './SearchInput';
+import SearchInput from '../components/SearchInput';
 import { checkLoggedIn } from '@/utils';
 
 import type { UserInfo } from '@/interfaces/user';
 import type { MessageData } from '@/interfaces/message';
-import logoImg from '@/static/logo.png';
-import '@/styles/search.scss';
+import '@/styles/search.css';
 
 const UserMenu = ({
     userInfo,
@@ -108,7 +117,7 @@ const CreateMenu = () => {
                 aria-expanded={openCreateMenu ? 'true' : undefined}
                 onClick={event => setAnchorEl(event.currentTarget)}
             >
-                <span style={{ color: "white" }}>创作</span>
+                <span style={{ color: 'white' }}>创作</span>
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -142,7 +151,7 @@ const CreateMenu = () => {
     );
 };
 
-const NavbarComponent = () => {
+const AppNavbar = () => {
     const [userInfo, setUserInfo] = React.useState<UserInfo['data'] | null>(null);
     const [messageData, setMessageData] = React.useState<MessageData | null>(null);
     const [totalMessageCount, setTotalMessageCount] = React.useState(0);
@@ -173,36 +182,27 @@ const NavbarComponent = () => {
 
     return (
         <AppBar className="shadow" position="static">
-            <Container>
+            <div className="container mx-auto">
                 <Toolbar>
-                    <NavLink to="/">
-                        <img src={logoImg} width={190} height={37} alt="logo"></img>
+                    <NavLink to="/" className="mr-2">
+                        <span style={{ fontSize: '24px' }}>XesCoding</span>
                     </NavLink>
 
-                    <Box className="me-auto d-flex">
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/'}
-                        >
+                    <Box className="me-auto flex gap-2">
+                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/')}>
                             首页
                         </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/discover'}
-                        >
+                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/discover')}>
                             发现
                         </Button>
 
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/about'}
-                        >
+                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/about')}>
                             关于
                         </Button>
                     </Box>
 
-                    <Box className="ms-auto d-flex">
+                    <Box className="ms-auto flex gap-2">
                         <SearchInput />
 
                         {userInfo ? (
@@ -214,8 +214,8 @@ const NavbarComponent = () => {
                             />
                         ) : (
                             <Button
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                                onClick={() => location.href = '/login'}
+                                sx={{ color: 'white', display: 'block' }}
+                                onClick={() => (location.href = '/login')}
                             >
                                 登录
                             </Button>
@@ -224,9 +224,9 @@ const NavbarComponent = () => {
                         <CreateMenu />
                     </Box>
                 </Toolbar>
-            </Container>
+            </div>
         </AppBar>
     );
 };
 
-export default NavbarComponent;
+export default AppNavbar;

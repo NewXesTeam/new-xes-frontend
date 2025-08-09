@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from '@mui/material';
 import AceEditor from 'react-ace';
 import xterm from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit/src/FitAddon';
 import { checkLoggedIn, b64_to_utf8, getTemplate } from '@/utils';
-import '@/styles/app.scss';
-import '@/styles/xterm.scss';
+import '@/styles/app.css';
+import '@/styles/xterm.css';
 import '@xterm/xterm/css/xterm.css';
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/theme-textmate';
@@ -22,7 +22,7 @@ export default function IdeCppPage() {
     }
 
     const param: URLSearchParams = new URLSearchParams(location.search);
-    const id: string = param.get('id');
+    const id: string = param.get('id') as unknown as string;
 
     const [runningState, setRunningState] = React.useState<boolean>(false);
     const [code, setCode] = React.useState<string>('');
@@ -66,7 +66,7 @@ export default function IdeCppPage() {
         }),
     );
 
-    let ws: WebSocket | null = null;
+    let ws: WebSocket;
 
     const onClickRun = async () => {
         const term = terminal.current;
@@ -185,12 +185,12 @@ export default function IdeCppPage() {
 
     return (
         <>
-            <Button style={{ position: 'absolute', left: '0px' }} variant="primary" onClick={() => onClickRun()}>
+            <Button style={{ position: 'absolute', left: '0px' }} variant="contained" onClick={() => onClickRun()}>
                 运行
             </Button>
             <Button
                 style={{ position: 'absolute', right: '0px' }}
-                variant="primary"
+                variant="contained"
                 onClick={() => {
                     terminal.current.reset();
                 }}

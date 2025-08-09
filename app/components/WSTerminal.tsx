@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from '@mui/material';
 import { b64_to_utf8 } from '@/utils';
-import '@/styles/xterm.scss';
+import '@/styles/xterm.css';
 
 const xtermTheme = {
     foreground: '#F8F8F8',

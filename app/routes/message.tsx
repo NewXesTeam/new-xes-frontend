@@ -11,7 +11,7 @@ import {
     Typography,
     Box,
 } from '@mui/material';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import { CommentList, FollowList } from '@/components/MessageList';
 import { Pagination } from '@/components/Pagination';
 
@@ -95,11 +95,9 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
     };
 
     return (
-        <>
-            <NavbarComponent />
-
-            <Container maxWidth="lg" sx={{ mt: 5 }}>
-                <Grid container spacing={3} sx={{ mt: 3 }}>
+        <AppLayout>
+            <Container maxWidth="lg">
+                <Grid container spacing={3}>
                     <Grid
                         // xs={12}
                         // lg={2}
@@ -161,6 +159,6 @@ export default function MessagePage({ loaderData }: Route.ComponentProps) {
                     </Grid>
                 </Grid>
             </Container>
-        </>
+        </AppLayout>
     );
 }

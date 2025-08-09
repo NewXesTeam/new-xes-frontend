@@ -1,0 +1,10 @@
+﻿.login-form-container {
+    border-radius: 20px;
+    padding: 20px;
+    height: max-content;
+    margin: auto;
+}
+
+.login-form-container > h1 {
+    margin-bottom: 20px;
+}

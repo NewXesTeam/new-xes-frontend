@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Avatar, Container, Table, TableHead, TableRow, TableBody, TableCell } from '@mui/material';
 import { redirect } from 'react-router';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 
 import type { UserInfo } from '@/interfaces/user';
 import type { SpaceProfile } from '@/interfaces/space';
@@ -42,7 +42,7 @@ export default function UserInfoPage({ loaderData }: Route.ComponentProps) {
                             sx={{ width: 128, height: 128 }}
                         />
                         <h2>{infoResponseData.data.realname}</h2>
-                        <h3 className="text-danger">
+                        <h3 className="text-rose-600">
                             Dangerous: 消息中心的“点赞与收藏”部分的api有问题，会返回包括但不限于下面他人不可见的内容。
                         </h3>
                     </div>
@@ -115,14 +115,13 @@ export default function UserInfoPage({ loaderData }: Route.ComponentProps) {
     }, []);
 
     return (
-        <>
-            <NavbarComponent />
-            <Container className="mt-5">
+        <AppLayout>
+            <Container>
                 <h1>个人信息展示页面</h1>
                 <hr />
                 {info}
                 <span className="d-block text-center width-100">「国之殇，未敢忘。——尸体的神韵」</span>
             </Container>
-        </>
+        </AppLayout>
     );
 }

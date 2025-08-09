@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, styled, InputBase, alpha } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import type { Associate_words } from '@/interfaces/common';
-import '@/styles/search.scss';
+import '@/styles/search.css';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -11,10 +11,8 @@ const Search = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
         width: 'auto',
     },
 }));
@@ -89,14 +87,14 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                 setIsShowSuggestions(false);
             }
         }, 500);
-    }
+    };
 
     return (
         <Box
             component="form"
             role="search"
             action="/search"
-            className="me-2"
+            className="relative"
             onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
                 event.preventDefault();
                 window.location.href = `/search?keyword=${keyword_input}`;
@@ -109,7 +107,12 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                 </SearchIconWrapper>
                 <StyledInputBase
                     placeholder="搜索..."
-                    inputProps={{ 'aria-label': 'search', type: 'search', name: 'keyword', defaultValue: keyword_input }}
+                    inputProps={{
+                        'aria-label': 'search',
+                        type: 'search',
+                        name: 'keyword',
+                        defaultValue: keyword_input,
+                    }}
                     onInput={handleInputChange}
                     onBlur={() => {
                         setTimeout(() => {
@@ -123,11 +126,15 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         setKeywordInput(event.target.value);
                     }}
+                    autoComplete="off"
                 />
+                <ul
+                    className="suggestions-list"
+                    style={{ display: is_show_suggestions ? 'block' : 'none', zIndex: 9999 }}
+                >
+                    {suggestions}
+                </ul>
             </Search>
-            <ul id="suggestions-list" style={{ display: is_show_suggestions ? 'block' : 'none', zIndex: 9999 }}>
-                {suggestions}
-            </ul>
         </Box>
     );
 };

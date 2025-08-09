@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { redirect } from 'react-router';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
 import { Pagination } from '@/components/Pagination';
 
@@ -38,41 +38,6 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
             }
             setWorks(
                 <>
-                    <div className="d-flex justify-content-between mb-3">
-                        <ToggleButtonGroup
-                            className="left-padding"
-                            value={orderLang}
-                            exclusive
-                            onChange={(event, newLang) => {
-                                if (newLang !== null) {
-                                    setOrderLang(newLang);
-                                    setCurrentPage(1);
-                                }
-                            }}
-                        >
-                            <ToggleButton value="">全部</ToggleButton>
-                            <ToggleButton value="scratch">TurboWarp</ToggleButton>
-                            <ToggleButton value="python">Python</ToggleButton>
-                            <ToggleButton value="cpp">C++</ToggleButton>
-                        </ToggleButtonGroup>
-
-                        <ToggleButtonGroup
-                            className="mb-2 right-padding"
-                            exclusive
-                            value={orderType}
-                            onChange={(event, newType) => {
-                                if (newType !== null) {
-                                    setOrderType(newType);
-                                    setCurrentPage(1);
-                                }
-                            }}
-                        >
-                            <ToggleButton value="latest">最新发布</ToggleButton>
-                            <ToggleButton value="popular">最受欢迎</ToggleButton>
-                            <ToggleButton value="courses">随堂练习</ToggleButton>
-                        </ToggleButtonGroup>
-                    </div>
-
                     <WorkList works={responseData.data} />
                     {responseData.total > 20 && (
                         <div style={{ width: '100%' }}>
@@ -82,7 +47,7 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
                                 handlePageChange={page => {
                                     setCurrentPage(page);
                                 }}
-                                className="m-auto width-fit-content"
+                                className="mx-auto w-fit"
                             />
                         </div>
                     )}
@@ -97,9 +62,43 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
     }, [currentPage, orderLang, orderType]);
 
     return (
-        <>
-            <NavbarComponent />
-            <div className="mt-5 m-4">{works}</div>
-        </>
+        <AppLayout>
+            <div className="container mx-auto">
+                <div className="flex justify-between mb-3">
+                    <ToggleButtonGroup
+                        value={orderLang}
+                        exclusive
+                        onChange={(event, newLang) => {
+                            if (newLang !== null) {
+                                setOrderLang(newLang);
+                                setCurrentPage(1);
+                            }
+                        }}
+                    >
+                        <ToggleButton value="">全部</ToggleButton>
+                        <ToggleButton value="scratch">TurboWarp</ToggleButton>
+                        <ToggleButton value="python">Python</ToggleButton>
+                        <ToggleButton value="cpp">C++</ToggleButton>
+                    </ToggleButtonGroup>
+
+                    <ToggleButtonGroup
+                        exclusive
+                        value={orderType}
+                        onChange={(event, newType) => {
+                            if (newType !== null) {
+                                setOrderType(newType);
+                                setCurrentPage(1);
+                            }
+                        }}
+                    >
+                        <ToggleButton value="latest">最新发布</ToggleButton>
+                        <ToggleButton value="popular">最受欢迎</ToggleButton>
+                        <ToggleButton value="courses">随堂练习</ToggleButton>
+                    </ToggleButtonGroup>
+                </div>
+
+                {works}
+            </div>
+        </AppLayout>
     );
 }

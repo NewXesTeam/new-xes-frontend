@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tab, Tabs, ToggleButton, ToggleButtonGroup, Container, Typography, Box } from '@mui/material';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
 import { Pagination } from '@/components/Pagination';
 import SearchInput from '@/components/SearchInput';
@@ -53,7 +53,7 @@ const SearchTabs = {
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="mt-2 mx-auto width-fit-content"
+                                    className="mt-2 mx-auto w-fit"
                                 />
                             </Box>
                         )}
@@ -71,7 +71,7 @@ const SearchTabs = {
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="mt-2 mx-auto width-fit-content"
+                                    className="mt-2 mx-auto w-fit"
                                 />
                             </Box>
                         )}
@@ -117,7 +117,7 @@ const SearchTabs = {
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="mt-2 mx-auto width-fit-content"
+                                    className="mt-2 mx-auto w-fit"
                                 />
                             </Box>
                         )}
@@ -157,41 +157,6 @@ const SearchTabs = {
 
                 setPageComponent(
                     <>
-                        <Box className="d-flex justify-content-between" sx={{ padding: 1 }}>
-                            <ToggleButtonGroup
-                                className="left-padding"
-                                value={lang}
-                                exclusive
-                                onChange={(event, newLang) => {
-                                    if (newLang !== null) {
-                                        setLang(newLang);
-                                        setCurrentPage(1);
-                                    }
-                                }}
-                            >
-                                <ToggleButton value="all">全部</ToggleButton>
-                                <ToggleButton value="scratch">TurboWarp</ToggleButton>
-                                <ToggleButton value="python">Python</ToggleButton>
-                                <ToggleButton value="cpp">C++</ToggleButton>
-                            </ToggleButtonGroup>
-                            <ToggleButtonGroup
-                                className="right-padding"
-                                value={orderType}
-                                exclusive
-                                onChange={(event, newOrderType) => {
-                                    if (newOrderType !== null) {
-                                        setOrderType(newOrderType);
-                                        setCurrentPage(1);
-                                    }
-                                }}
-                            >
-                                <ToggleButton value="comprehensive">综合排序</ToggleButton>
-                                <ToggleButton value="likes">点赞最多</ToggleButton>
-                                <ToggleButton value="favorites">收藏最多</ToggleButton>
-                                <ToggleButton value="source_code_views">改编最多</ToggleButton>
-                            </ToggleButtonGroup>
-                        </Box>
-
                         <WorkList works={responseData.data.data} />
                         {responseData.data.total > 50 && (
                             <Box width="100%">
@@ -201,7 +166,7 @@ const SearchTabs = {
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="m-auto width-fit-content"
+                                    className="mx-auto w-fit"
                                 />
                             </Box>
                         )}
@@ -215,7 +180,44 @@ const SearchTabs = {
             };
         }, [currentPage, lang, orderType]);
 
-        return <Container className="mt-2">{pageComponent}</Container>;
+        return (
+            <Container>
+                <Box className="flex justify-between my-1">
+                    <ToggleButtonGroup
+                        value={lang}
+                        exclusive
+                        onChange={(event, newLang) => {
+                            if (newLang !== null) {
+                                setLang(newLang);
+                                setCurrentPage(1);
+                            }
+                        }}
+                    >
+                        <ToggleButton value="all">全部</ToggleButton>
+                        <ToggleButton value="scratch">TurboWarp</ToggleButton>
+                        <ToggleButton value="python">Python</ToggleButton>
+                        <ToggleButton value="cpp">C++</ToggleButton>
+                    </ToggleButtonGroup>
+                    <ToggleButtonGroup
+                        value={orderType}
+                        exclusive
+                        onChange={(event, newOrderType) => {
+                            if (newOrderType !== null) {
+                                setOrderType(newOrderType);
+                                setCurrentPage(1);
+                            }
+                        }}
+                    >
+                        <ToggleButton value="comprehensive">综合排序</ToggleButton>
+                        <ToggleButton value="likes">点赞最多</ToggleButton>
+                        <ToggleButton value="favorites">收藏最多</ToggleButton>
+                        <ToggleButton value="source_code_views">改编最多</ToggleButton>
+                    </ToggleButtonGroup>
+                </Box>
+
+                {pageComponent}
+            </Container>
+        );
     },
 };
 
@@ -249,26 +251,24 @@ export default function SearchPage({ loaderData }: Route.ComponentProps) {
     };
 
     return (
-        <>
-            <NavbarComponent />
+        <AppLayout>
+            <Container>
+                <div className="mt-5 flex flex-col items-center">
+                    <SearchInput keyword={keyword} />
 
-            <Container className="mt-5">
-                <SearchInput keyword={keyword} />
+                    <Tabs value={tab} onChange={handleTabChange}>
+                        <Tab label="综合" value="all" className="mx-2" />
+                        <Tab label="作者" value="users" className="mx-2" />
+                        <Tab label="作品" value="projects" className="mx-2" />
+                    </Tabs>
+                </div>
+
+                <div className="mt-5 m-4">
+                    {tab === 'all' && <SearchTabs.AllTab keyword={keyword} />}
+                    {tab === 'users' && <SearchTabs.AuthorTab keyword={keyword} />}
+                    {tab === 'projects' && <SearchTabs.ProjectsTab keyword={keyword} />}
+                </div>
             </Container>
-
-            <Box className="mt-5 d-flex justify-content-center">
-                <Tabs value={tab} onChange={handleTabChange}>
-                    <Tab label="综合" value="all" className="mx-2" />
-                    <Tab label="作者" value="users" className="mx-2" />
-                    <Tab label="作品" value="projects" className="mx-2" />
-                </Tabs>
-            </Box>
-
-            <div className="mt-5 m-4">
-                {tab === 'all' && <SearchTabs.AllTab keyword={keyword} />}
-                {tab === 'users' && <SearchTabs.AuthorTab keyword={keyword} />}
-                {tab === 'projects' && <SearchTabs.ProjectsTab keyword={keyword} />}
-            </div>
-        </>
+        </AppLayout>
     );
 }

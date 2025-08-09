@@ -1,6 +1,6 @@
 import * as React from 'react';
 import WSTerminal from '@/components/WSTerminal';
-import '@/styles/app.scss';
+import '@/styles/app.css';
 
 import type { BasicResponse } from '@/interfaces/common';
 import type { PublishWorkInfo } from '@/interfaces/work';
