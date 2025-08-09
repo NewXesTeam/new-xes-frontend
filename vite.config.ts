@@ -14,13 +14,13 @@ export default defineConfig({
             '/api': {
                 target: 'https://code.xueersi.com',
                 changeOrigin: true,
-                cookieDomainRewrite: '127.0.0.1',
+                cookieDomainRewrite: '',
                 rewrite: (path) => path.replace(/^\/api/, '/api'),
             },
             '/passport/captcha': {
                 target: 'https://passport.100tal.com',
                 changeOrigin: true,
-                cookieDomainRewrite: '127.0.0.1',
+                cookieDomainRewrite: '',
                 headers: {
                     Referer: 'https://login.xueersi.com/',
                 },
@@ -29,7 +29,7 @@ export default defineConfig({
             '/passport/login': {
                 target: 'https://passport.100tal.com',
                 changeOrigin: true,
-                cookieDomainRewrite: '127.0.0.1',
+                cookieDomainRewrite: '',
                 headers: {
                     Referer: 'https://login.xueersi.com/',
                 },
@@ -38,7 +38,7 @@ export default defineConfig({
             '/passport/get_token': {
                 target: 'https://login.xueersi.com',
                 changeOrigin: true,
-                cookieDomainRewrite: '127.0.0.1',
+                cookieDomainRewrite: '',
                 headers: {
                     Referer: 'https://login.xueersi.com/',
                 },
@@ -47,7 +47,7 @@ export default defineConfig({
             '/passport/logout': {
                 target: 'https://login.xueersi.com',
                 changeOrigin: true,
-                cookieDomainRewrite: '127.0.0.1',
+                cookieDomainRewrite: '',
                 headers: {
                     Referer: 'https://login.xueersi.com/',
                 },
