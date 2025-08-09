@@ -1,5 +1,17 @@
 import * as React from 'react';
-import { AppBar, Avatar, Badge, Container, Menu, MenuItem, IconButton, Divider, Button, Toolbar, Box } from '@mui/material';
+import {
+    AppBar,
+    Avatar,
+    Badge,
+    Container,
+    Menu,
+    MenuItem,
+    IconButton,
+    Divider,
+    Button,
+    Toolbar,
+    Box,
+} from '@mui/material';
 import { NavLink } from 'react-router';
 import SearchInput from './SearchInput';
 import { checkLoggedIn } from '@/utils';
@@ -107,7 +119,7 @@ const CreateMenu = () => {
                 aria-expanded={openCreateMenu ? 'true' : undefined}
                 onClick={event => setAnchorEl(event.currentTarget)}
             >
-                <span style={{ color: "white" }}>创作</span>
+                <span style={{ color: 'white' }}>创作</span>
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -179,23 +191,20 @@ const NavbarComponent = () => {
                     </NavLink>
 
                     <Box className="me-auto d-flex">
-                        <Button
-                            sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/'}
-                        >
+                        <Button sx={{ my: 2, color: 'white', display: 'block' }} onClick={() => (location.href = '/')}>
                             首页
                         </Button>
 
                         <Button
                             sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/discover'}
+                            onClick={() => (location.href = '/discover')}
                         >
                             发现
                         </Button>
 
                         <Button
                             sx={{ my: 2, color: 'white', display: 'block' }}
-                            onClick={() => location.href = '/about'}
+                            onClick={() => (location.href = '/about')}
                         >
                             关于
                         </Button>
@@ -214,7 +223,7 @@ const NavbarComponent = () => {
                         ) : (
                             <Button
                                 sx={{ my: 2, color: 'white', display: 'block' }}
-                                onClick={() => location.href = '/login'}
+                                onClick={() => (location.href = '/login')}
                             >
                                 登录
                             </Button>

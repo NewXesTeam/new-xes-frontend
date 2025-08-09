@@ -40,7 +40,9 @@ const HorizontalUserCard = ({
                                 target="_blank"
                                 style={{ textDecoration: 'none' }}
                             >
-                                {user.user_id === undefined ? '666这入关注了undefined先生' : user.realname.replace(/<em>|<\/em>/g, '')}
+                                {user.user_id === undefined
+                                    ? '666这入关注了undefined先生'
+                                    : user.realname.replace(/<em>|<\/em>/g, '')}
                             </Typography>
                             <Typography variant="body2">
                                 关注：{user.follows} 粉丝：{user.fans}

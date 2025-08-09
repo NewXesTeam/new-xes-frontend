@@ -217,7 +217,13 @@ const WSTerminal = ({ code, lang, children }: { code: string; lang: string; chil
             {children ? (
                 <PanelGroup
                     direction="horizontal"
-                    style={{ height: '100%', minHeight: 400, borderRadius: 12, overflow: 'hidden', background: '#f8fafc' }}
+                    style={{
+                        height: '100%',
+                        minHeight: 400,
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        background: '#f8fafc',
+                    }}
                     onLayout={() => {
                         if (addons.length > 0) {
                             addons[0].fit();

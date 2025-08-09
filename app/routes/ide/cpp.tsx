@@ -31,13 +31,15 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
 
     if (!loaderData.isLoggedIn) {
         return (
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
-                minHeight: '100vh',
-                bgcolor: '#f5f7fa'
-            }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: '100vh',
+                    bgcolor: '#f5f7fa',
+                }}
+            >
                 <CircularProgress color="primary" />
             </Box>
         );
@@ -87,30 +89,30 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                 }),
             });
             const responseData: BasicResponse<PublishWorkInfo> = await response.json();
-            
+
             if (response.ok) {
                 setAlerts(prev => [
                     <AutoCloseAlert severity="success" closeTimeout={5000} key={Date.now()}>
                         保存成功！
                     </AutoCloseAlert>,
-                    ...prev.slice(0, 2)
+                    ...prev.slice(0, 2),
                 ]);
             } else {
                 setAlerts(prev => [
                     <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
                         保存失败，请重试
                     </AutoCloseAlert>,
-                    ...prev.slice(0, 2)
+                    ...prev.slice(0, 2),
                 ]);
             }
-            
+
             return responseData.data;
         } catch (error) {
             setAlerts(prev => [
                 <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
                     保存失败，请重试
                 </AutoCloseAlert>,
-                ...prev.slice(0, 2)
+                ...prev.slice(0, 2),
             ]);
             return null;
         } finally {
@@ -143,7 +145,7 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                     <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
                         加载失败，请刷新页面重试
                     </AutoCloseAlert>,
-                    ...prev.slice(0, 2)
+                    ...prev.slice(0, 2),
                 ]);
             } finally {
                 if (!ignore) {
@@ -168,14 +170,14 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                     <AutoCloseAlert severity="info" closeTimeout={5000} key={Date.now()}>
                         模板已刷新
                     </AutoCloseAlert>,
-                    ...prev.slice(0, 2)
+                    ...prev.slice(0, 2),
                 ]);
             } catch (error) {
                 setAlerts(prev => [
                     <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
                         刷新失败，请重试
                     </AutoCloseAlert>,
-                    ...prev.slice(0, 2)
+                    ...prev.slice(0, 2),
                 ]);
             } finally {
                 setIsLoading(false);
@@ -184,12 +186,14 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
     };
 
     return (
-        <Box sx={{ 
-            bgcolor: '#f0f2f5', 
-            minHeight: '100vh',
-            p: { xs: 1, md: 3 },
-        }}>
-            <div className='alert-list'>{alerts}</div>
+        <Box
+            sx={{
+                bgcolor: '#f0f2f5',
+                minHeight: '100vh',
+                p: { xs: 1, md: 3 },
+            }}
+        >
+            <div className="alert-list">{alerts}</div>
 
             <Paper
                 elevation={6}
@@ -201,13 +205,15 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 }}
             >
-                <Box sx={{
-                    bgcolor: '#ffffff', 
-                    p: 2, 
-                    borderBottom: 1, 
-                    borderColor: 'divider',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.03)'
-                }}>
+                <Box
+                    sx={{
+                        bgcolor: '#ffffff',
+                        p: 2,
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.03)',
+                    }}
+                >
                     <Stack
                         direction="row"
                         justifyContent="space-between"
@@ -224,17 +230,17 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                                 size="small"
                                 onChange={e => setWorkName(e.target.value)}
                             />
-                            
-                            <IconButton 
-                                size="small" 
+
+                            <IconButton
+                                size="small"
                                 color="default"
                                 onClick={handleRefreshTemplate}
                                 disabled={isLoading}
-                                sx={{ 
+                                sx={{
                                     display: { xs: 'none', sm: 'flex' },
                                     '&:hover': {
                                         bgcolor: '#f1f5f9',
-                                    }
+                                    },
                                 }}
                                 title="刷新模板"
                             >
@@ -255,15 +261,15 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                                     }
                                 }}
                                 disabled={isSaving || isLoading}
-                                sx={{ 
-                                    borderRadius: 1.5, 
+                                sx={{
+                                    borderRadius: 1.5,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                 }}
                             >
                                 {isSaving ? <CircularProgress size={16} color="inherit" /> : '保存'}
                             </Button>
-                            
+
                             <Button
                                 variant="contained"
                                 color="success"
@@ -284,8 +290,8 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                                     }
                                 }}
                                 disabled={isSaving || isLoading}
-                                sx={{ 
-                                    borderRadius: 1.5, 
+                                sx={{
+                                    borderRadius: 1.5,
                                     fontWeight: 600,
                                     transition: 'all 0.2s ease',
                                 }}
@@ -296,19 +302,23 @@ export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
                     </Stack>
                 </Box>
 
-                <Box sx={{
-                    minHeight: 400,
-                    position: 'relative',
-                    padding: 2,
-                }}>
+                <Box
+                    sx={{
+                        minHeight: 400,
+                        position: 'relative',
+                        padding: 2,
+                    }}
+                >
                     {isLoading ? (
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '100%',
-                            bgcolor: '#f8fafc'
-                        }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                                bgcolor: '#f8fafc',
+                            }}
+                        >
                             <CircularProgress color="primary" />
                         </Box>
                     ) : (

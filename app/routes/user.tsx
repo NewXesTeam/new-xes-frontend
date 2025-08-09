@@ -254,7 +254,7 @@ export default function UserPage() {
                                 <Pagination
                                     pageCount={Math.ceil(responseData.data.total / 20)}
                                     value={currentPage}
-                                    handlePageChange={(value) => setCurrentPage(value)}
+                                    handlePageChange={value => setCurrentPage(value)}
                                 />
                             </Box>
                         )}
