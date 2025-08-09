@@ -89,7 +89,7 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                 setIsShowSuggestions(false);
             }
         }, 500);
-    }
+    };
 
     return (
         <Box
@@ -109,7 +109,12 @@ const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
                 </SearchIconWrapper>
                 <StyledInputBase
                     placeholder="搜索..."
-                    inputProps={{ 'aria-label': 'search', type: 'search', name: 'keyword', defaultValue: keyword_input }}
+                    inputProps={{
+                        'aria-label': 'search',
+                        type: 'search',
+                        name: 'keyword',
+                        defaultValue: keyword_input,
+                    }}
                     onInput={handleInputChange}
                     onBlur={() => {
                         setTimeout(() => {

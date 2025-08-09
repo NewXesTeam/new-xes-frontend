@@ -33,9 +33,10 @@
         "dompurify": "^3.2.6",
         "isbot": "^5",
         "react": "^19.1.1",
-        "react-ace": "^14.0.1",
         "react-bootstrap": "^2.10.10",
+        "react-chatbot-kit": "^2.2.2",
         "react-dom": "^19.1.1",
+        "react-resizable-panels": "^3.0.4",
         "react-router": "^7.7.1",
         "uuid": "^11.1.0"
     },
