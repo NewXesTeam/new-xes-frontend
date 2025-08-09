@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { Button } from '@mui/material';
+import { PlayCircleOutline, StopCircleOutlined, Clear } from '@mui/icons-material';
 import { b64_to_utf8 } from '@/utils';
 import '@/styles/xterm.scss';
 
@@ -25,11 +27,11 @@ const xtermTheme = {
     brightWhite: '#FFFFFF',
 };
 
-const WSTerminal = ({ code, lang }: { code: string; lang: string }) => {
+const WSTerminal = ({ code, lang, children }: { code: string; lang: string; children?: React.ReactNode }) => {
     const [runningState, setRunningState] = React.useState<boolean>(false);
     const [terminal, setTerminal] = React.useState<any>(null);
     const [addons, setAddons] = React.useState<any[]>([]);
-    const websocket = React.useRef<WebSocket>(null);
+    const websocket = React.useRef<WebSocket | null>(null);
 
     const terminalRef = React.useRef<HTMLDivElement>(null);
 
@@ -177,16 +179,77 @@ const WSTerminal = ({ code, lang }: { code: string; lang: string }) => {
     }, [terminal, addons]);
 
     return (
-        <div style={{ height: '100%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button color="primary" variant="contained" onClick={() => onClickRun()}>
+        <div style={{ height: '100%', width: '100%' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Button
+                    color={runningState ? 'secondary' : 'primary'}
+                    variant="contained"
+                    startIcon={runningState ? <StopCircleOutlined /> : <PlayCircleOutline />}
+                    sx={{
+                        borderRadius: 2,
+                        fontWeight: 600,
+                        boxShadow: runningState ? 2 : 1,
+                        minWidth: 90,
+                    }}
+                    onClick={() => onClickRun()}
+                >
                     {runningState ? '运行中' : '运行'}
                 </Button>
-                <Button color="primary" variant="contained" onClick={() => terminal && terminal.reset()}>
+                <Button
+                    color="info"
+                    variant="outlined"
+                    startIcon={<Clear />}
+                    sx={{
+                        borderRadius: 2,
+                        fontWeight: 600,
+                        minWidth: 90,
+                    }}
+                    onClick={() => terminal && terminal.reset()}
+                >
                     清除终端
                 </Button>
             </div>
-            <div ref={terminalRef} />
+            {children ? (
+                <PanelGroup
+                    direction="horizontal"
+                    style={{ height: '100%', minHeight: 400, borderRadius: 12, overflow: 'hidden', background: '#f8fafc' }}
+                    onLayout={() => {
+                        if (addons.length > 0) {
+                            addons[0].fit();
+                        }
+                    }}
+                >
+                    <Panel defaultSize={55} minSize={20} maxSize={80}>
+                        <div style={{ height: '100%', padding: 8 }}>{children}</div>
+                    </Panel>
+                    <PanelResizeHandle className="custom-resize-handle">
+                        <div className="resize-lines">
+                            <div />
+                            <div />
+                            <div />
+                        </div>
+                    </PanelResizeHandle>
+                    <Panel defaultSize={45} minSize={20} maxSize={80}>
+                        <div
+                            ref={terminalRef}
+                            style={{
+                                height: '100%',
+                                background: '#222',
+                                borderRadius: 10,
+                                margin: 8,
+                                boxShadow: '0 2px 12px #0001',
+                            }}
+                        />
+                    </Panel>
+                </PanelGroup>
+            ) : (
+                <div ref={terminalRef} />
+            )}
         </div>
     );
 };

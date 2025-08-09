@@ -49,8 +49,8 @@ export function b64_to_utf8(text: string): string {
     return new TextDecoder().decode(Uint8Array.from(atob(text), c => c.charCodeAt(0)));
 }
 
-export async function getTemplate(lang: string) {
-    const response = await fetch('https://v1.hitokoto.cn/');
+export async function getTemplate(lang: 'python' | 'webpy' | 'offlinepy' | 'cpp') {
+    const response = await fetch('https://v1.hitokoto.cn/?c=d&c=k');
     const responseData = await response.json();
     const templates = {
         python: `print("${responseData.hitokoto} —— 「${responseData.from}」")`,
@@ -64,6 +64,5 @@ int main() {
     return 0;
 }`,
     };
-    // @ts-ignore  // TODO: fix this type error
     return templates[lang];
 }

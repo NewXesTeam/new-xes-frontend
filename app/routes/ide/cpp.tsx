@@ -1,236 +1,340 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
-import AceEditor from 'react-ace';
-import xterm from '@xterm/xterm';
-import { FitAddon } from '@xterm/addon-fit/src/FitAddon';
-import { checkLoggedIn, b64_to_utf8, getTemplate } from '@/utils';
+import { Box, Button, TextField, Paper, Stack, CircularProgress, IconButton } from '@mui/material';
+import { Save, Publish, Refresh } from '@mui/icons-material';
+import AceEditor from '@/components/AceEditor';
+import WSTerminal from '@/components/WSTerminal';
+import ProjectPublishModal from '@/components/ProjectPublishModal';
+import AutoCloseAlert from '@/components/AutoCloseAlert';
+import { getTemplate } from '@/utils';
 import '@/styles/app.scss';
-import '@/styles/xterm.scss';
-import '@xterm/xterm/css/xterm.css';
-import 'ace-builds/src-noconflict/mode-c_cpp';
-import 'ace-builds/src-noconflict/theme-textmate';
-import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/snippets/c_cpp';
-import 'ace-builds/src-noconflict/ext-settings_menu';
 
-const { Terminal } = xterm;
+import type { BasicResponse } from '@/interfaces/common';
+import type { PublishWorkInfo } from '@/interfaces/work';
+import type { Route } from './+types/cpp';
 
-export default function IdeCppPage() {
-    if (!checkLoggedIn()) {
-        location.href = '/login.html';
-        return null;
+export async function loader({ request }: Route.LoaderArgs) {
+    return {
+        isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
+        userId: request.headers.get('Cookie')?.includes('stu_id=')
+            ? request.headers.get('Cookie')?.split('stu_id=')[1].split(';')[0]
+            : '1',
+        id: new URL(request.url).searchParams.get('id') || '1',
+    };
+}
+
+export default function IdeCppPage({ loaderData }: Route.ComponentProps) {
+    React.useEffect(() => {
+        if (!loaderData.isLoggedIn) {
+            location.href = '/login.html';
+        }
+    }, [loaderData.isLoggedIn]);
+
+    if (!loaderData.isLoggedIn) {
+        return (
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                minHeight: '100vh',
+                bgcolor: '#f5f7fa'
+            }}>
+                <CircularProgress color="primary" />
+            </Box>
+        );
     }
 
-    const param: URLSearchParams = new URLSearchParams(location.search);
-    const id: string = param.get('id');
-
-    const [runningState, setRunningState] = React.useState<boolean>(false);
+    const { id } = loaderData;
     const [code, setCode] = React.useState<string>('');
+    const [workName, setWorkName] = React.useState<string>('新作品');
+    const [isShowPublishModal, setIsShowPublishModal] = React.useState<boolean>(false);
+    const [workInfo, setWorkInfo] = React.useState<PublishWorkInfo>();
+    const [alerts, setAlerts] = React.useState<React.JSX.Element[]>([]);
+    const [isLoading, setIsLoading] = React.useState<boolean>(true);
+    const [isSaving, setIsSaving] = React.useState<boolean>(false);
+
     const changeCode = (value: string) => {
         setCode(value);
     };
 
-    const xtermTheme = {
-        foreground: '#F8F8F8',
-        background: '#2D2E2C',
-        selection: '#5DA5D533',
-        black: '#1E1E1D',
-        brightBlack: '#262625',
-        red: '#CE5C5C',
-        brightRed: '#FF7272',
-        green: '#5BCC5B',
-        brightGreen: '#72FF72',
-        yellow: '#CCCC5B',
-        brightYellow: '#FFFF72',
-        blue: '#5D5DD3',
-        brightBlue: '#7279FF',
-        magenta: '#BC5ED1',
-        brightMagenta: '#E572FF',
-        cyan: '#5DA5D5',
-        brightCyan: '#72F0FF',
-        white: '#F8F8F8',
-        brightWhite: '#FFFFFF',
-    };
-
-    const terminalRef = React.useRef<HTMLDivElement>(null);
-    const fitAddonRef = React.useRef(new FitAddon());
-    const terminal = React.useRef(
-        new Terminal({
-            fontSize: 20,
-            fontFamily: 'monospace',
-            theme: xtermTheme,
-            cursorBlink: true,
-            allowProposedApi: true,
-            allowTransparency: true,
-            cursorStyle: 'bar',
-        }),
-    );
-
-    let ws: WebSocket | null = null;
-
-    const onClickRun = async () => {
-        const term = terminal.current;
-        ws = new WebSocket(`wss://codedynamic.xueersi.com/api/compileapi/ws/run`);
-
-        const heartbeat = setInterval(() => {
-            ws.send('2');
-        }, 10000);
-
-        ws.onopen = () => {
-            setRunningState(true);
-            ws.send('{}');
-            ws.send(
-                '7' +
-                    JSON.stringify({
-                        xml: code,
-                        type: 'run',
-                        lang: 'cpp',
-                        original_id: 1,
-                    }),
-            );
-
-            term.reset();
-            term.onData(data => null);
-            let text: string = '';
-            // term.clear();
-            term.onData(data => {
-                const flag: boolean = ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING;
-                // console.log(e);
-                if (data === '\r' && !flag) {
-                    // console.log(text);
-                    text = '';
-                    ws.send('1\n');
-                } else if (data === '\x7F' && !flag) {
-                    // term.write('\b \b');
-                    if (text.length > 0) {
-                        // let char_width = wcswidth(text[text.length - 1]);
-                        text = text.slice(0, -1);
-                        ws.send('1' + data);
-                        // term.write("\b \b".repeat(char_width));
-                    }
-                } else if (!flag) {
-                    text += data;
-                    ws.send('1' + data);
-                }
+    const onClickSave = async () => {
+        setIsSaving(true);
+        try {
+            const response = await fetch(`/api/compilers/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: workName,
+                    xml: code,
+                    id: id === '1' ? null : Number(id),
+                    lang: 'cpp',
+                    type: '',
+                    version: 'cpp',
+                    user_id: id === '1' ? 8510061 : Number(loaderData.userId),
+                    code_complete: 1,
+                    original_id: 1,
+                    planid: null,
+                    problemid: null,
+                    projectid: id === '1' ? null : Number(id),
+                    removed: 0,
+                    assets: {
+                        assets: [],
+                        cdns: ['https://static0.xesimg.com', 'https://livefile.xesimg.com'],
+                        cursorsMap: {},
+                        hide_filelist: false,
+                    },
+                }),
             });
-        };
-        ws.onmessage = event => {
-            const data: string = event.data;
-            const ans: string = data.slice(1);
-            // console.log(data.slice(1));
-            switch (data[0]) {
-                case '1':
-                    term.write(b64_to_utf8(ans));
-                    return;
-                case '7':
-                    const d = JSON.parse(b64_to_utf8(ans));
-                    if (d.Type === 'compileSuccess') term.write('\x1b[32m' + d.Info + '\x1b[0m');
-                    else if (d.Type === 'runInfo') {
-                        term.write(`\r\n\r\n\x1b[33m` + d.Info.replace('\r\n\r\n', '') + `\x1b[1m`);
-                        ws.close();
-                    } else if (d.Type === 'compile') {
-                        let outraw: string = d.OutRaw;
-                        outraw = outraw.replace(/\b(\w+)\.cpp\b/g, '\x1b[34m$1.cpp\x1b[0m');
-                        outraw = outraw.replace(/error:/g, '\x1b[31merror:\x1b[0m');
-                        term.write(outraw);
-                    } else if (d.Type === 'compileFail') {
-                        term.write('\x1b[31m编译错误\x1b[0m\r\n\r\n');
-                        term.write('\x1b[31m' + d.Info + '\x1b[0m');
-                        ws.close();
-                    }
-                    return;
-                case '3':
-                    return;
-                case '2':
-                    return;
-                default:
-                    term.write('\x1b[31m~出错了~\x1b[0m');
-                    return;
+            const responseData: BasicResponse<PublishWorkInfo> = await response.json();
+            
+            if (response.ok) {
+                setAlerts(prev => [
+                    <AutoCloseAlert severity="success" closeTimeout={5000} key={Date.now()}>
+                        保存成功！
+                    </AutoCloseAlert>,
+                    ...prev.slice(0, 2)
+                ]);
+            } else {
+                setAlerts(prev => [
+                    <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
+                        保存失败，请重试
+                    </AutoCloseAlert>,
+                    ...prev.slice(0, 2)
+                ]);
             }
-        };
-        ws.onclose = () => {
-            clearInterval(heartbeat);
-            setRunningState(false);
-            term.onData(data => null);
-        };
+            
+            return responseData.data;
+        } catch (error) {
+            setAlerts(prev => [
+                <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
+                    保存失败，请重试
+                </AutoCloseAlert>,
+                ...prev.slice(0, 2)
+            ]);
+            return null;
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     React.useEffect(() => {
         let ignore = false;
 
-        const func = async () => {
-            if (terminalRef.current) {
-                const term = terminal.current;
-                term.loadAddon(fitAddonRef.current);
-                term.open(terminalRef.current);
-                fitAddonRef.current.fit(); // 初始化时调整大小以适应容器
-            }
-            if (id) {
-                if (id !== '1') {
+        const loadProject = async () => {
+            setIsLoading(true);
+            try {
+                if (id && id !== '1') {
                     const response = await fetch(`/api/compilers/v2/${id}?id=${id}`);
-                    const responseData = await response.json();
-                    setCode(responseData.data.xml);
+                    const responseData: BasicResponse<PublishWorkInfo> = await response.json();
+                    if (!ignore) {
+                        setCode(responseData.data.xml);
+                        setWorkName(responseData.data.name);
+                        setWorkInfo(responseData.data);
+                    }
                 } else {
-                    let template = await getTemplate('cpp');
-                    setCode(template);
+                    const template = await getTemplate('cpp');
+                    if (!ignore) {
+                        setCode(template);
+                    }
+                }
+            } catch (error) {
+                setAlerts(prev => [
+                    <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
+                        加载失败，请刷新页面重试
+                    </AutoCloseAlert>,
+                    ...prev.slice(0, 2)
+                ]);
+            } finally {
+                if (!ignore) {
+                    setIsLoading(false);
                 }
             }
         };
 
-        if (!ignore) func();
+        loadProject();
         return () => {
             ignore = true;
         };
-    }, []);
+    }, [id]);
+
+    const handleRefreshTemplate = async () => {
+        if (window.confirm('确定要刷新模板吗？当前未保存的更改将会丢失！')) {
+            setIsLoading(true);
+            try {
+                const template = await getTemplate('cpp');
+                setCode(template);
+                setAlerts(prev => [
+                    <AutoCloseAlert severity="info" closeTimeout={5000} key={Date.now()}>
+                        模板已刷新
+                    </AutoCloseAlert>,
+                    ...prev.slice(0, 2)
+                ]);
+            } catch (error) {
+                setAlerts(prev => [
+                    <AutoCloseAlert severity="error" closeTimeout={5000} key={Date.now()}>
+                        刷新失败，请重试
+                    </AutoCloseAlert>,
+                    ...prev.slice(0, 2)
+                ]);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
 
     return (
-        <>
-            <Button style={{ position: 'absolute', left: '0px' }} variant="primary" onClick={() => onClickRun()}>
-                运行
-            </Button>
-            <Button
-                style={{ position: 'absolute', right: '0px' }}
-                variant="primary"
-                onClick={() => {
-                    terminal.current.reset();
+        <Box sx={{ 
+            bgcolor: '#f0f2f5', 
+            minHeight: '100vh',
+            p: { xs: 1, md: 3 },
+        }}>
+            <div className='alert-list'>{alerts}</div>
+
+            <Paper
+                elevation={6}
+                sx={{
+                    width: '100%',
+                    maxWidth: '1600px',
+                    margin: '0 auto',
+                    borderRadius: 2,
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                 }}
             >
-                清除终端
-            </Button>
-            <AceEditor
-                value={code}
-                style={{ position: 'absolute', top: '40px' }}
-                mode="c_cpp"
-                theme="textmate"
-                onChange={changeCode}
-                name="cpp"
-                width={window.innerWidth * 0.5 + 'px'}
-                height={window.innerHeight - 50 + 'px'}
-                fontSize={18}
-                highlightActiveLine={false}
-                setOptions={{
-                    useWorker: false,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: true,
-                    showLineNumbers: true,
-                    enableBasicAutocompletion: true,
-                    wrap: false,
-                    tabSize: 4,
-                    showGutter: true,
-                }}
-            />
-            <div
-                ref={terminalRef}
-                style={{
-                    width: window.innerWidth * 0.5 + 'px',
-                    height: window.innerHeight - 50 + 'px',
-                    borderRadius: '15px',
-                    border: '10px solid #2D2E2C',
-                    position: 'absolute',
-                    top: '40px',
-                    left: window.innerWidth * 0.5 + 'px',
-                }}
-            />
-        </>
+                <Box sx={{
+                    bgcolor: '#ffffff', 
+                    p: 2, 
+                    borderBottom: 1, 
+                    borderColor: 'divider',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.03)'
+                }}>
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={{ xs: 2, md: 3 }}
+                        flexWrap="wrap"
+                    >
+                        <Stack direction="row" alignItems="center" spacing={2} flexGrow={1}>
+                            <TextField
+                                id="work-name"
+                                label="作品名称"
+                                variant="outlined"
+                                value={workName}
+                                size="small"
+                                onChange={e => setWorkName(e.target.value)}
+                            />
+                            
+                            <IconButton 
+                                size="small" 
+                                color="default"
+                                onClick={handleRefreshTemplate}
+                                disabled={isLoading}
+                                sx={{ 
+                                    display: { xs: 'none', sm: 'flex' },
+                                    '&:hover': {
+                                        bgcolor: '#f1f5f9',
+                                    }
+                                }}
+                                title="刷新模板"
+                            >
+                                <Refresh fontSize="small" />
+                            </IconButton>
+                        </Stack>
+
+                        <Stack direction="row" spacing={2}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                startIcon={<Save fontSize="small" />}
+                                onClick={async () => {
+                                    const data = await onClickSave();
+                                    if (data && String(data.id) !== id) {
+                                        location.href = `/ide/cpp?id=${data.id}`;
+                                    }
+                                }}
+                                disabled={isSaving || isLoading}
+                                sx={{ 
+                                    borderRadius: 1.5, 
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                }}
+                            >
+                                {isSaving ? <CircularProgress size={16} color="inherit" /> : '保存'}
+                            </Button>
+                            
+                            <Button
+                                variant="contained"
+                                color="success"
+                                size="small"
+                                startIcon={<Publish fontSize="small" />}
+                                onClick={async () => {
+                                    if (id === '1') {
+                                        const data = await onClickSave();
+                                        if (data) {
+                                            location.href = `/ide/cpp?id=${data.id}`;
+                                        }
+                                    } else {
+                                        const data = await onClickSave();
+                                        if (data) {
+                                            setWorkInfo(data);
+                                            setIsShowPublishModal(true);
+                                        }
+                                    }
+                                }}
+                                disabled={isSaving || isLoading}
+                                sx={{ 
+                                    borderRadius: 1.5, 
+                                    fontWeight: 600,
+                                    transition: 'all 0.2s ease',
+                                }}
+                            >
+                                发布
+                            </Button>
+                        </Stack>
+                    </Stack>
+                </Box>
+
+                <Box sx={{
+                    minHeight: 400,
+                    position: 'relative',
+                    padding: 2,
+                }}>
+                    {isLoading ? (
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                            bgcolor: '#f8fafc'
+                        }}>
+                            <CircularProgress color="primary" />
+                        </Box>
+                    ) : (
+                        <WSTerminal code={code} lang="cpp">
+                            <AceEditor
+                                value={code}
+                                mode="c_cpp"
+                                theme={'textmate'}
+                                onChange={changeCode}
+                                width="100%"
+                                height="100%"
+                                fontSize={16}
+                                tabSize={4}
+                            />
+                        </WSTerminal>
+                    )}
+                </Box>
+            </Paper>
+
+            {id !== '1' && workInfo && (
+                <ProjectPublishModal
+                    isShow={isShowPublishModal}
+                    setIsShow={setIsShowPublishModal}
+                    workInfo={workInfo}
+                />
+            )}
+        </Box>
     );
 }
