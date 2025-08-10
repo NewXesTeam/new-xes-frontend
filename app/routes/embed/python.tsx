@@ -1,15 +1,15 @@
 import * as React from 'react';
-import WSTerminal from '@/components/WSTerminal';
+import { Terminal } from '~/XesCodingIDE';
 import '@/styles/app.css';
 
 import type { BasicResponse } from '@/interfaces/common';
 import type { PublishWorkInfo } from '@/interfaces/work';
 import type { Route } from './+types/python';
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request, params }: Route.LoaderArgs) {
     return {
         isLoggedIn: request.headers.get('Cookie')?.includes('is_login=1;') || false,
-        id: new URL(request.url).searchParams.get('id'),
+        id: params.workId,
     };
 }
 
@@ -37,5 +37,5 @@ export default function EmbedPythonPage({ loaderData }: Route.ComponentProps) {
         };
     }, []);
 
-    return <WSTerminal lang={'python'} code={code} />;
+    return <Terminal className="w-full h-full" lang="python" code={code} />;
 }

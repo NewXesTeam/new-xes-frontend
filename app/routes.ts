@@ -17,9 +17,12 @@ export default [
 
     // TODO: 干掉xterm破webpack！！！！！！！！！！！！！！！！！！！！！！！！
     ...prefix('ide', [
-        route('cpp', 'routes/ide/cpp.tsx'),
+        route('cpp/:workId', 'routes/ide/cpp.tsx'),
         //     route('python', 'routes/ide/python.tsx'),
     ]),
 
-    ...prefix('embed', [route('cpp', 'routes/embed/cpp.tsx'), route('python', 'routes/embed/python.tsx')]),
+    ...prefix('embed', [
+        route('cpp/:workId', 'routes/embed/cpp.tsx'),
+        route('python/:workId', 'routes/embed/python.tsx'),
+    ]),
 ] satisfies RouteConfig;

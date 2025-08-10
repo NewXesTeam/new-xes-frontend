@@ -26,7 +26,7 @@ import UnpublishIcon from '@mui/icons-material/Unpublished';
 
 import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
-import ProjectPublishModal from '@/components/ProjectPublishModal';
+import ProjectPublishModal from '~/XesCodingIDE/components/ProjectPublishModal';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import { getWorkLink, getEditWorkLink } from '@/utils';
 import { v4 as uuidV4 } from 'uuid';

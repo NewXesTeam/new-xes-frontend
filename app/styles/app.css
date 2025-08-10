@@ -16,10 +16,6 @@
 /*    box-shadow: rgba(142, 142, 142, 0.19) 0 6px 15px 0;*/
 /*}*/
 
-body {
-    overflow-y: scroll;
-}
-
 html,
 body,
 #app {
