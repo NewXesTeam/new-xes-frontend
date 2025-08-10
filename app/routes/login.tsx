@@ -14,7 +14,7 @@ import {
 import { checkLoggedIn } from '@/utils';
 
 import type { CaptchaPacket, LoginPacket } from '@/interfaces/login';
-import '@/styles/login.scss';
+import '@/styles/login.css';
 
 export default function LoginPage() {
     const [symbolValue, setSymbolValue] = React.useState('');
@@ -171,10 +171,12 @@ export default function LoginPage() {
                             disabled={passportReadOnly}
                             value={symbolValue}
                             onChange={event => setSymbolValue(event.target.value)}
-                            inputProps={{
-                                type: 'number',
-                                placeholder: '13333333333',
-                                title: '手机号',
+                            slotProps={{
+                                htmlInput: {
+                                    type: 'text',
+                                    placeholder: '13333333333',
+                                    title: '手机号',
+                                },
                             }}
                         />
 
@@ -190,9 +192,11 @@ export default function LoginPage() {
                             disabled={passportReadOnly}
                             value={passwordValue}
                             onChange={event => setPasswordValue(event.target.value)}
-                            inputProps={{
-                                placeholder: '123456',
-                                title: '密码',
+                            slotProps={{
+                                htmlInput: {
+                                    placeholder: '123456',
+                                    title: '密码',
+                                },
                             }}
                         />
 
@@ -259,16 +263,16 @@ export default function LoginPage() {
                                 name="captcha"
                                 value={captchaAnswer}
                                 onChange={event => setCaptchaAnswer(event.target.value)}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <img src={captchaBase64} alt="验证码" style={{ height: '40px' }} />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                inputProps={{
-                                    placeholder: 'abcd',
-                                    title: '验证码',
+                                slotProps={{
+                                    htmlInput: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <img src={captchaBase64} alt="验证码" style={{ height: '40px' }} />
+                                            </InputAdornment>
+                                        ),
+                                        placeholder: 'abcd',
+                                        title: '验证码',
+                                    },
                                 }}
                             />
                         )}

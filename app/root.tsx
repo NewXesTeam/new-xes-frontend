@@ -2,7 +2,7 @@ import React from 'react';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 
 import type { Route } from './+types/root';
-import '@/styles/app.scss';
+import '@/styles/app.css';
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (

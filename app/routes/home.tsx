@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
 import { Typography } from '@mui/material';
 
@@ -31,9 +31,8 @@ export default function IndexPage({ loaderData }: Route.ComponentProps) {
     }, []);
 
     return (
-        <>
-            <NavbarComponent />
-            <div className="mt-5 mb-5">
+        <AppLayout>
+            <div className="container mx-auto">
                 {!loaderData.isLoggedIn && (
                     <Typography variant="h4" component="h1" className="text-center">
                         欢迎来到NewXesFrontend
@@ -46,6 +45,6 @@ export default function IndexPage({ loaderData }: Route.ComponentProps) {
                 )}
                 <WorkList works={works} className="m-4" />
             </div>
-        </>
+        </AppLayout>
     );
 }

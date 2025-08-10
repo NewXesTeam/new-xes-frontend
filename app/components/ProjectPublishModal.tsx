@@ -22,7 +22,6 @@ import CryptoJS from 'crypto-js';
 
 import type { PublishWorkInfo } from '@/interfaces/work';
 import '@yaireo/tagify/dist/tagify.css';
-import './ProjectPublishModal.scss';
 
 const ProjectPublishModal = ({
     workInfo,

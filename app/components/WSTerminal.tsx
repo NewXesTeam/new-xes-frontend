@@ -3,7 +3,7 @@ import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { Button } from '@mui/material';
 import { PlayCircleOutline, StopCircleOutlined, Clear } from '@mui/icons-material';
 import { b64_to_utf8 } from '@/utils';
-import '@/styles/xterm.scss';
+import '@/styles/xterm.css';
 
 const xtermTheme = {
     foreground: '#F8F8F8',

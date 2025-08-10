@@ -19,8 +19,8 @@
 
 @font-face {
     font-family: 'Maple Mono';
-    // src: url("https://livefile.xesimg.com/programme/python_assets/2fe890fea4f82a3585612f4237cceee5.ttf");
-    src: url('/fonts/MapleMono.ttf');
+    /* src: url("https://livefile.xesimg.com/programme/python_assets/2fe890fea4f82a3585612f4237cceee5.ttf"); */
+    src: url('@/static/fonts/MapleMono.ttf');
 }
 
 .ace_editor {

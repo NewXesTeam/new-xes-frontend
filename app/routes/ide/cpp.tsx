@@ -6,7 +6,7 @@ import WSTerminal from '@/components/WSTerminal';
 import ProjectPublishModal from '@/components/ProjectPublishModal';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
 import { getTemplate } from '@/utils';
-import '@/styles/app.scss';
+import '@/styles/app.css';
 
 import type { BasicResponse } from '@/interfaces/common';
 import type { PublishWorkInfo } from '@/interfaces/work';

@@ -18,7 +18,7 @@ import {
     TextField,
 } from '@mui/material';
 import AutoCloseAlert from '@/components/AutoCloseAlert';
-import NavbarComponent from '@/components/Navbar';
+import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
 import { SmallWorkCard } from '@/components/WorkCard';
 import { UserVerticalList, UserHorizontalList } from '@/components/UserList';
@@ -29,13 +29,13 @@ import type { ErrorResponse } from '@/interfaces/common';
 import type { UserInfo } from '@/interfaces/user';
 import type { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
 import type { Route } from './+types/space';
-import '@/styles/app.scss';
+import '@/styles/app.css';
 
 const SpaceTabs = {
     HomeTab: ({ userId }: { userId: string }) => {
         const OverviewItemCard = ({ title, value }: { title: string; value: number }) => {
             return (
-                <Card variant="outlined" className="m-auto" sx={{ width: 175, my: 2, padding: 1 }}>
+                <Card variant="outlined" className="w-fit h-fit p-2 pr-6">
                     {title}：
                     <br />
                     <span style={{ fontSize: '24px' }}>{value}</span>
@@ -57,7 +57,7 @@ const SpaceTabs = {
                         <Card variant="outlined" sx={{ my: 2 }}>
                             <CardHeader title="Ta 的成就" />
                             <CardContent>
-                                <Stack direction="row" spacing={2} justifyContent="space-between">
+                                <div className="flex gap-4 mx-auto w-fit">
                                     <OverviewItemCard title="作品总数" value={responseData.data.overview.works} />
                                     <OverviewItemCard title="被点赞总数" value={responseData.data.overview.likes} />
                                     <OverviewItemCard title="被浏览总数" value={responseData.data.overview.views} />
@@ -75,7 +75,7 @@ const SpaceTabs = {
                                             '暂无代表作'
                                         )}
                                     </Card>
-                                </Stack>
+                                </div>
                             </CardContent>
                         </Card>
 
@@ -342,13 +342,12 @@ clientLoader.hydrate = true as const;
 
 export function HydrateFallback() {
     return (
-        <>
-            <NavbarComponent />
-            <Container className="mt-2">
+        <AppLayout>
+            <Container className="flex items-center gap-2">
                 <CircularProgress />
                 <span style={{ fontSize: '30px' }}>Loading...</span>
             </Container>
-        </>
+        </AppLayout>
     );
 }
 
@@ -416,149 +415,119 @@ export default function SpacePage({ loaderData }: Route.ComponentProps) {
 
     return (
         <>
-            <NavbarComponent />
-
             <div className="alert-list">{alerts}</div>
-
-            <Container>
-                <Stack className="mt-5 mx-auto text-center" spacing={2} direction="column">
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{ maxWidth: 1 }}
-                        className="text-center"
-                        justifyContent="space-between"
-                    >
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar
-                                sx={{ width: 128, height: 128 }}
-                                alt={spaceProfileData.data.realname}
-                                src={spaceProfileData.data.avatar_path}
-                            />
-                            <div style={{ textAlign: 'left' }}>
-                                <Typography variant="h5" component="div">
-                                    {spaceProfileData.data.realname}
-                                    <Typography variant="body1" component="span" color="text.secondary">
-                                        ({userId})
-                                    </Typography>
-                                </Typography>
-                                {isChangingSignature ? (
-                                    <TextField
-                                        variant="outlined"
-                                        size="small"
-                                        value={signatureInputValue}
-                                        onChange={event => setSignatureInputValue(event.target.value)}
-                                        onKeyDown={event => {
-                                            if (event.key === 'Enter') {
-                                                handleChangeSignature();
-                                            } else if (event.key === 'Escape') {
-                                                setIsChangingSignature(false);
-                                                setSignatureInputValue('');
-                                            }
-                                        }}
-                                        onBlur={() => {
-                                            handleChangeSignature();
-                                        }}
-                                        inputRef={signatureInputRef}
-                                        sx={{ mt: 1, width: '100%' }}
-                                    />
-                                ) : (
-                                    <div>
-                                        <Typography variant="body1" component="span">
-                                            {userSignature}
+            <AppLayout>
+                <Container>
+                    <Stack className="mt-5 mx-auto text-center" spacing={2} direction="column">
+                        <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                            sx={{ maxWidth: 1 }}
+                            className="text-center"
+                            justifyContent="space-between"
+                        >
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                                <Avatar
+                                    sx={{ width: 128, height: 128 }}
+                                    alt={spaceProfileData.data.realname}
+                                    src={spaceProfileData.data.avatar_path}
+                                />
+                                <div style={{ textAlign: 'left' }}>
+                                    <Typography variant="h5" component="div">
+                                        {spaceProfileData.data.realname}
+                                        <Typography variant="body1" component="span" color="text.secondary">
+                                            ({userId})
                                         </Typography>
-                                        {spaceProfileData.data.is_my && (
-                                            <Button
-                                                size="small"
-                                                variant="outlined"
-                                                color="primary"
-                                                onClick={() => {
-                                                    setSignatureInputValue(userSignature);
-                                                    setIsChangingSignature(true);
-                                                    signatureInputRef.current?.focus();
-                                                    signatureInputRef.current?.select();
-                                                }}
-                                                sx={{ ml: 1 }}
-                                            >
-                                                修改签名
-                                            </Button>
-                                        )}
-                                    </div>
-                                )}
-                                <Typography variant="body1" component="span" sx={{ mt: 1 }}>
-                                    关注：{spaceProfileData.data.follows} &nbsp; 粉丝：{spaceProfileData.data.fans}
-                                </Typography>
-                            </div>
+                                    </Typography>
+                                    {isChangingSignature ? (
+                                        <TextField
+                                            variant="outlined"
+                                            size="small"
+                                            value={signatureInputValue}
+                                            onChange={event => setSignatureInputValue(event.target.value)}
+                                            onKeyDown={event => {
+                                                if (event.key === 'Enter') {
+                                                    handleChangeSignature();
+                                                } else if (event.key === 'Escape') {
+                                                    setIsChangingSignature(false);
+                                                    setSignatureInputValue('');
+                                                }
+                                            }}
+                                            onBlur={() => {
+                                                handleChangeSignature();
+                                            }}
+                                            inputRef={signatureInputRef}
+                                            sx={{ mt: 1, width: '100%' }}
+                                        />
+                                    ) : (
+                                        <div>
+                                            <Typography variant="body1" component="span">
+                                                {userSignature}
+                                            </Typography>
+                                            {spaceProfileData.data.is_my && (
+                                                <Button
+                                                    size="small"
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        setSignatureInputValue(userSignature);
+                                                        setIsChangingSignature(true);
+                                                        signatureInputRef.current?.focus();
+                                                        signatureInputRef.current?.select();
+                                                    }}
+                                                    sx={{ ml: 1 }}
+                                                >
+                                                    修改签名
+                                                </Button>
+                                            )}
+                                        </div>
+                                    )}
+                                    <Typography variant="body1" component="span" sx={{ mt: 1 }}>
+                                        关注：{spaceProfileData.data.follows} &nbsp; 粉丝：{spaceProfileData.data.fans}
+                                    </Typography>
+                                </div>
+                            </Stack>
+                            {!spaceProfileData.data.is_my && (
+                                <Button
+                                    variant={userFollowed ? 'outlined' : 'contained'}
+                                    color={userFollowed ? 'secondary' : 'primary'}
+                                    onClick={() => onClickFollow()}
+                                    sx={{ mt: 2, textAlign: 'right', width: 124 }}
+                                >
+                                    {userFollowed ? '已关注' : '关注'}
+                                </Button>
+                            )}
                         </Stack>
-                        {!spaceProfileData.data.is_my && (
-                            <Button
-                                variant={userFollowed ? 'outlined' : 'contained'}
-                                color={userFollowed ? 'secondary' : 'primary'}
-                                onClick={() => onClickFollow()}
-                                sx={{ mt: 2, textAlign: 'right', width: 124 }}
-                            >
-                                {userFollowed ? '已关注' : '关注'}
-                            </Button>
-                        )}
                     </Stack>
-                </Stack>
-            </Container>
+                </Container>
 
-            <Box className="mt-5 d-flex justify-content-center">
-                <Tabs
-                    value={tab}
-                    onChange={(event, value) => {
-                        if (value) {
-                            history.pushState({ tab: value }, '', `/space/${userId}/${value}`);
-                            setTab(value);
-                        }
-                    }}
-                >
-                    <Tab value="home" label="主页" />
-                    <Tab value="cover" label="封面" />
-                    <Tab value="projects" label="作品" />
-                    <Tab value="favorites" label="收藏" />
-                    <Tab value="social" label="社交" />
-                </Tabs>
-            </Box>
+                <Box className="mt-5 flex justify-center">
+                    <Tabs
+                        value={tab}
+                        onChange={(event, value) => {
+                            if (value) {
+                                history.pushState({ tab: value }, '', `/space/${userId}/${value}`);
+                                setTab(value);
+                            }
+                        }}
+                    >
+                        <Tab value="home" label="主页" />
+                        <Tab value="cover" label="封面" />
+                        <Tab value="projects" label="作品" />
+                        <Tab value="favorites" label="收藏" />
+                        <Tab value="social" label="社交" />
+                    </Tabs>
+                </Box>
 
-            <div className="mt-5 m-4">
-                {tab === 'home' && <SpaceTabs.HomeTab userId={userId} />}
-                {tab === 'cover' && <SpaceTabs.CoverTab userId={userId} />}
-                {tab === 'projects' && <SpaceTabs.ProjectsTab userId={userId} />}
-                {tab === 'favorites' && <SpaceTabs.FavoritesTab userId={userId} />}
-                {tab === 'social' && <SpaceTabs.SocialTab userId={userId} />}
-            </div>
-
-            {/* <Tabs
-                className="mt-5 justify-content-center"
-                transition={false}
-                activeKey={tab}
-                onSelect={(eventKey: string | null) => {
-                    if (eventKey) {
-                        // location.href = `/space/${userId}/${eventKey}`;
-                        history.pushState({ tab: eventKey }, '', `/space/${userId}/${eventKey}`);
-                        setTab(eventKey);
-                    }
-                }}
-            >
-                <Tab eventKey="home" title="主页" mountOnEnter unmountOnExit>
-                    <SpaceTabs.HomeTab userId={userId} />
-                </Tab>
-                <Tab eventKey="cover" title="封面" mountOnEnter unmountOnExit>
-                    <SpaceTabs.CoverTab userId={userId} />
-                </Tab>
-                <Tab eventKey="projects" title="作品" mountOnEnter unmountOnExit>
-                    <SpaceTabs.ProjectsTab userId={userId} />
-                </Tab>
-                <Tab eventKey="favorites" title="收藏" mountOnEnter unmountOnExit>
-                    <SpaceTabs.FavoritesTab userId={userId} />
-                </Tab>
-                <Tab eventKey="social" title="社交" mountOnEnter unmountOnExit>
-                    <SpaceTabs.SocialTab userId={userId} />
-                </Tab>
-            </Tabs> */}
+                <div className="mt-5 m-4">
+                    {tab === 'home' && <SpaceTabs.HomeTab userId={userId} />}
+                    {tab === 'cover' && <SpaceTabs.CoverTab userId={userId} />}
+                    {tab === 'projects' && <SpaceTabs.ProjectsTab userId={userId} />}
+                    {tab === 'favorites' && <SpaceTabs.FavoritesTab userId={userId} />}
+                    {tab === 'social' && <SpaceTabs.SocialTab userId={userId} />}
+                </div>
+            </AppLayout>
         </>
     );
 }
