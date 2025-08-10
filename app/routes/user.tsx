@@ -52,10 +52,10 @@ const FixedWorkCard = (
         }
 
         const statusColors = {
-            '未发布': 'default',
-            '已发布': 'success',
-            '审核中': 'info',
-            '已下架': 'error',
+            未发布: 'default',
+            已发布: 'success',
+            审核中: 'info',
+            已下架: 'error',
         };
 
         return (
@@ -78,11 +78,13 @@ const FixedWorkCard = (
                             }
                         />
 
-                        <CardContent>
-                            <Typography className="text-neutral-600" sx={{ fontSize: 20 }}>
-                                {work.name.replace(/<em>|<\/em>/g, '')}
-                            </Typography>
-                        </CardContent>
+                        <Tooltip placement="bottom" title={work.name.replace(/<em>|<\/em>/g, '')}>
+                            <CardContent>
+                                <div className="text-neutral-600 truncate" style={{ fontSize: 20 }}>
+                                    {work.name.replace(/<em>|<\/em>/g, '')}
+                                </div>
+                            </CardContent>
+                        </Tooltip>
                     </CardActionArea>
                 </Tooltip>
 

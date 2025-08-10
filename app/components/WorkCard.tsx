@@ -41,11 +41,13 @@ const WorkCard = ({ work }: { work: Work }) => {
                         }
                     />
 
-                    <CardContent>
-                        <Typography className="text-neutral-600" sx={{ fontSize: 20 }}>
-                            {work.name.replace(/<em>|<\/em>/g, '')}
-                        </Typography>
-                    </CardContent>
+                    <Tooltip placement="bottom" title={work.name.replace(/<em>|<\/em>/g, '')}>
+                        <CardContent>
+                            <div className="text-neutral-600 truncate" style={{ fontSize: 20 }}>
+                                {work.name.replace(/<em>|<\/em>/g, '')}
+                            </div>
+                        </CardContent>
+                    </Tooltip>
                 </CardActionArea>
             </Tooltip>
 
@@ -94,7 +96,9 @@ const SmallWorkCard = ({ work }: { work: Work }) => {
                         <img className="mx-auto" src={work.thumbnail} alt={work.name} style={{ maxHeight: 138 }} />
                     </CardMedia>
                     <CardContent>
-                        <Typography sx={{ fontSize: 16 }}>{work.name}</Typography>
+                        <div className="text-neutral-600 truncate" style={{ fontSize: 16 }}>
+                            {work.name.replace(/<em>|<\/em>/g, '')}
+                        </div>
                     </CardContent>
                 </CardActionArea>
             </Card>

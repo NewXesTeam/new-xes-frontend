@@ -1,16 +1,5 @@
 import * as React from 'react';
-import {
-    AppBar,
-    Avatar,
-    Badge,
-    Menu,
-    MenuItem,
-    IconButton,
-    Divider,
-    Button,
-    Toolbar,
-    Box,
-} from '@mui/material';
+import { AppBar, Avatar, Badge, Menu, MenuItem, IconButton, Divider, Button, Toolbar, Box } from '@mui/material';
 import { NavLink } from 'react-router';
 import SearchInput from '@/components/SearchInput';
 import { checkLoggedIn } from '@/utils';

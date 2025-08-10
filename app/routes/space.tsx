@@ -79,28 +79,38 @@ const SpaceTabs = {
                             </CardContent>
                         </Card>
 
-                        <Stack spacing={2} my={2}>
-                            <Typography variant="h5">
-                                TA 的作品 <span style={{ fontSize: '16px' }}>({responseData.data.works.total})</span>
-                            </Typography>
-                            <WorkList works={responseData.data.works.data} />
+                        <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-2">
+                                <Typography variant="h5">
+                                    TA 的作品{' '}
+                                    <span style={{ fontSize: '16px' }}>({responseData.data.works.total})</span>
+                                </Typography>
+                                <WorkList works={responseData.data.works.data} />
+                            </div>
 
-                            <Typography variant="h5">
-                                TA 的收藏{' '}
-                                <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span>
-                            </Typography>
-                            <WorkList works={responseData.data.favorites.data} />
+                            <div className="flex flex-col gap-2">
+                                <Typography variant="h5">
+                                    TA 的收藏{' '}
+                                    <span style={{ fontSize: '16px' }}>({responseData.data.favorites.total})</span>
+                                </Typography>
+                                <WorkList works={responseData.data.favorites.data} />
+                            </div>
 
-                            <Typography variant="h5">
-                                TA 的粉丝 <span style={{ fontSize: '16px' }}>({responseData.data.fans.total})</span>
-                            </Typography>
-                            <UserHorizontalList users={responseData.data.fans.data} />
+                            <div className="flex flex-col gap-2">
+                                <Typography variant="h5">
+                                    TA 的粉丝 <span style={{ fontSize: '16px' }}>({responseData.data.fans.total})</span>
+                                </Typography>
+                                <UserHorizontalList users={responseData.data.fans.data} />
+                            </div>
 
-                            <Typography variant="h5">
-                                TA 的关注 <span style={{ fontSize: '16px' }}>({responseData.data.follows.total})</span>
-                            </Typography>
-                            <UserHorizontalList users={responseData.data.follows.data} />
-                        </Stack>
+                            <div className="flex flex-col gap-2">
+                                <Typography variant="h5">
+                                    TA 的关注{' '}
+                                    <span style={{ fontSize: '16px' }}>({responseData.data.follows.total})</span>
+                                </Typography>
+                                <UserHorizontalList users={responseData.data.follows.data} />
+                            </div>
+                        </div>
                     </>,
                 );
             };
@@ -158,31 +168,16 @@ const SpaceTabs = {
 
                 setPageComponent(
                     <>
-                        <ToggleButtonGroup
-                            className="mb-2 right-padding"
-                            exclusive
-                            value={orderType}
-                            onChange={(event, newType) => {
-                                if (newType !== null) {
-                                    setOrderType(newType);
-                                    setCurrentPage(1);
-                                }
-                            }}
-                        >
-                            <ToggleButton value="time">最新发布</ToggleButton>
-                            <ToggleButton value="likes">点赞最多</ToggleButton>
-                            <ToggleButton value="comments">评论最多</ToggleButton>
-                        </ToggleButtonGroup>
                         <WorkList works={responseData.data.data} />
                         {responseData.data.total > 20 && (
-                            <div style={{ width: '100%' }}>
+                            <div className="w-full mt-2">
                                 <Pagination
                                     pageCount={Math.ceil(responseData.data.total / 20)}
                                     value={currentPage}
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="m-auto width-fit-content"
+                                    className="mx-auto w-fit"
                                 />
                             </div>
                         )}
@@ -196,7 +191,26 @@ const SpaceTabs = {
             };
         }, [currentPage, orderType]);
 
-        return <Container className="mt-2">{pageComponent}</Container>;
+        return (
+            <Container>
+                <ToggleButtonGroup
+                    className="mb-2 right-padding"
+                    exclusive
+                    value={orderType}
+                    onChange={(event, newType) => {
+                        if (newType !== null) {
+                            setOrderType(newType);
+                            setCurrentPage(1);
+                        }
+                    }}
+                >
+                    <ToggleButton value="time">最新发布</ToggleButton>
+                    <ToggleButton value="likes">点赞最多</ToggleButton>
+                    <ToggleButton value="comments">评论最多</ToggleButton>
+                </ToggleButtonGroup>
+                {pageComponent}
+            </Container>
+        );
     },
     FavoritesTab: ({ userId }: { userId: string }) => {
         const [pageComponent, setPageComponent] = React.useState<React.JSX.Element>(<h2>加载中...</h2>);
@@ -219,14 +233,14 @@ const SpaceTabs = {
                     <>
                         <WorkList works={responseData.data.data} />
                         {responseData.data.total > 20 && (
-                            <div style={{ width: '100%' }}>
+                            <div className="w-full mt-2">
                                 <Pagination
                                     pageCount={Math.ceil(responseData.data.total / 20)}
                                     value={currentPage}
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="m-auto width-fit-content"
+                                    className="mx-auto w-fit"
                                 />
                             </div>
                         )}
@@ -264,14 +278,14 @@ const SpaceTabs = {
                     <>
                         <UserVerticalList users={responseData.data.data} />
                         {responseData.data.total > 10 && (
-                            <div style={{ width: '100%' }}>
+                            <div className="w-full mt-2">
                                 <Pagination
                                     pageCount={Math.ceil(responseData.data.total / 10)}
                                     value={currentPage}
                                     handlePageChange={page => {
                                         setCurrentPage(page);
                                     }}
-                                    className="mt-2 mx-auto width-fit-content"
+                                    className="mx-auto w-fit"
                                 />
                             </div>
                         )}
