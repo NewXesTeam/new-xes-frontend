@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+import * as React from 'react';
 import {
     AppBar,
     Avatar,
@@ -12,7 +12,7 @@ import {
     Box,
 } from '@mui/material';
 import { NavLink } from 'react-router';
-import SearchInput from '../components/SearchInput';
+import SearchInput from '@/components/SearchInput';
 import { checkLoggedIn } from '@/utils';
 
 import type { UserInfo } from '@/interfaces/user';

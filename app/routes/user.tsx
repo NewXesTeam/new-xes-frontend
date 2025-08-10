@@ -9,13 +9,13 @@ import {
     Button,
     Badge,
     Tooltip,
-    Pagination,
     Tabs,
     Tab,
     Chip,
     CardActionArea,
     CardActions,
 } from '@mui/material';
+import { Pagination } from '@/components/Pagination';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -240,10 +240,9 @@ export default function UserPage() {
                         {responseData.data.total > 20 && (
                             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
                                 <Pagination
-                                    count={Math.ceil(responseData.data.total / 20)}
-                                    page={currentPage}
-                                    onChange={(_, value) => setCurrentPage(value)}
-                                    color="primary"
+                                    pageCount={Math.ceil(responseData.data.total / 20)}
+                                    value={currentPage}
+                                    handlePageChange={value => setCurrentPage(value)}
                                 />
                             </Box>
                         )}
