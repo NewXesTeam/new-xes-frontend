@@ -30,6 +30,7 @@ import type { UserInfo } from '@/interfaces/user';
 import type { SpaceProfile, SpaceIndex, SpaceCover, SpaceWorks, SpaceSocial } from '@/interfaces/space';
 import type { Route } from './+types/space';
 import '@/styles/app.css';
+import { useState } from 'react';
 
 const SpaceTabs = {
     HomeTab: ({ userId }: { userId: string }) => {
@@ -52,6 +53,7 @@ const SpaceTabs = {
                 const response = await fetch(`/api/space/index?user_id=${userId}`);
                 const responseData: SpaceIndex = await response.json();
 
+                if (ignore) return;
                 setPageComponent(
                     <>
                         <Card variant="outlined" sx={{ my: 2 }}>
@@ -119,7 +121,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, []);
+        }, [userId]);
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
@@ -133,6 +135,7 @@ const SpaceTabs = {
                 const response = await fetch(`/api/space/web_cover?user_id=${userId}`);
                 const responseData: SpaceCover = await response.json();
 
+                if (ignore) return;
                 if (responseData.data.is_show_web_tab) {
                     setPageComponent(<iframe src={responseData.data.index_url} width="100%" height={600} />);
                 } else {
@@ -144,7 +147,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, []);
+        }, [userId]);
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
@@ -162,6 +165,7 @@ const SpaceTabs = {
                 );
                 const responseData: SpaceWorks = await response.json();
 
+                if (ignore) return;
                 if (responseData.data.total === 0) {
                     setPageComponent(<h2>暂无作品</h2>);
                 }
@@ -189,7 +193,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, [currentPage, orderType]);
+        }, [userId, currentPage, orderType]);
 
         return (
             <Container>
@@ -225,6 +229,7 @@ const SpaceTabs = {
                 );
                 const responseData: SpaceWorks = await response.json();
 
+                if (ignore) return;
                 if (responseData.data.total === 0) {
                     setPageComponent(<h2>暂无作品</h2>);
                 }
@@ -252,7 +257,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, [currentPage]);
+        }, [userId, currentPage]);
 
         return <Container className="mt-2">{pageComponent}</Container>;
     },
@@ -270,6 +275,7 @@ const SpaceTabs = {
                 );
                 const responseData: SpaceSocial = await response.json();
 
+                if (ignore) return;
                 if (responseData.data.total === 0) {
                     setPageComponent(<h2>暂无数据</h2>);
                 }
@@ -297,7 +303,7 @@ const SpaceTabs = {
             return () => {
                 ignore = true;
             };
-        }, [currentTab, currentPage]);
+        }, [userId, currentTab, currentPage]);
 
         return (
             <Container className="mt-2">
@@ -366,8 +372,8 @@ export function HydrateFallback() {
 }
 
 export default function SpacePage({ loaderData }: Route.ComponentProps) {
-    const userId = loaderData.userId;
     const spaceProfileData = loaderData.spaceProfileData;
+    const userId = loaderData.userId;
 
     if (loaderData.navigation) {
         location.href = `/space/${userId}/${loaderData.tabName}`;
