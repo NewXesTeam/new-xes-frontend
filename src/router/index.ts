@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from "@/pages/HomePage.vue";
+import HomePage from '@/pages/HomePage.vue';
 import AboutPage from '@/pages/AboutPage.vue';
 
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
             component: HomePage,
             meta: {
                 useLayout: true,
-            }
+            },
         },
         // {
         //     path: '/discover',
@@ -24,7 +24,7 @@ const router = createRouter({
             component: AboutPage,
             meta: {
                 useLayout: true,
-            }
+            },
         },
     ],
 });

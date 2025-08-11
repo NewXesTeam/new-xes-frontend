@@ -11,7 +11,7 @@ const router = useRouter();
 const inputKeyword = ref('');
 const suggestions = ref<AssociateWord[]>([]);
 const autocompleteSelects = computed(() => {
-    return suggestions.value.map(item => item.word.replaceAll("<em>", "").replaceAll("</em>", "").trim());
+    return suggestions.value.map(item => item.word.replaceAll('<em>', '').replaceAll('</em>', '').trim());
 });
 const selectedSuggestion = ref('');
 const isLoading = ref(false);
@@ -25,7 +25,7 @@ const onChangeSearch = debounce((query: string) => {
         })
         .catch(error => {
             suggestions.value = [];
-            console.error("拉取建议词时出错：", error)
+            console.error('拉取建议词时出错：', error);
         })
         .finally(() => {
             isLoading.value = false;
@@ -39,9 +39,9 @@ watch(inputKeyword, () => {
 watch(selectedSuggestion, () => {
     if (!selectedSuggestion.value) return;
     inputKeyword.value = '';
-    console.log("Go Search > ", selectedSuggestion.value);
+    console.log('Go Search > ', selectedSuggestion.value);
     // router.push(`/search?keyword=${encodeURIComponent(selectedSuggestion.value)}`)
-})
+});
 </script>
 
 <template>

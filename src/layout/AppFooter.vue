@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { VIconBtn } from 'vuetify/labs/VIconBtn'
+import { VIconBtn } from 'vuetify/labs/VIconBtn';
 
 interface Link {
     name: string;
@@ -9,13 +9,13 @@ interface Link {
 
 const links: Link[] = [
     {
-        name: "GitHub",
+        name: 'GitHub',
         link: 'https://github.com/NewXesTeam/new-xes-frontend',
-        icon: 'mdi-github'
-    }
-]
+        icon: 'mdi-github',
+    },
+];
 
-const openLink = (link: string) => (window.open(link, '_blank'));
+const openLink = (link: string) => window.open(link, '_blank');
 </script>
 
 <template>

@@ -12,5 +12,5 @@ export const useAppStore = defineStore('app', {
             isLoggedIn: false,
             userInfo: null,
         };
-    }
+    },
 });

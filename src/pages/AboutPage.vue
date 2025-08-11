@@ -1,35 +1,35 @@
 ﻿<script setup lang="ts">
 const infos = [
     {
-        'type': '框架',
-        'lib': 'Vue'
+        type: '框架',
+        lib: 'Vue',
     },
     {
-        'type': '路由库',
-        'lib': 'Vue Router'
+        type: '路由库',
+        lib: 'Vue Router',
     },
     {
-        'type': '原子库',
-        'lib': 'Tailwind CSS'
+        type: '原子库',
+        lib: 'Tailwind CSS',
     },
     {
-        'type': 'UI 库',
-        'lib': 'Vuetify'
+        type: 'UI 库',
+        lib: 'Vuetify',
     },
     {
-        'type': '工具集',
-        'lib': 'Lodash & Pinia'
+        type: '工具集',
+        lib: 'Lodash & Pinia',
     },
     {
-        'type': '打包工具',
-        'lib': 'Rolldown-Vite'
+        type: '打包工具',
+        lib: 'Rolldown-Vite',
     },
-]
+];
 </script>
 
 <template>
     <v-container>
-        <h1 style="font-size: 36px;">关于 NewXesFrontend</h1>
+        <h1 style="font-size: 36px">关于 NewXesFrontend</h1>
         <p>没什么好关于的，就是一个《简单》的前端项目。</p>
         <p>
             代码仓库：

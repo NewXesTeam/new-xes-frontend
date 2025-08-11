@@ -18,23 +18,23 @@ onMounted(() => {
                 store.userInfo = data.data;
             })
             .catch(error => {
-                console.error("fetch user info error: ", error)
+                console.error('fetch user info error: ', error);
             });
     }
-})
+});
 
 router.beforeEach((to, from, next) => {
-    console.log("导航开始。")
+    console.log('导航开始。');
     isLoading.value = true;
     next();
-})
+});
 
 router.afterEach((to, from) => {
-    console.log("导航结束。")
+    console.log('导航结束。');
     setTimeout(() => {
         isLoading.value = false;
-    }, 500)
-})
+    }, 500);
+});
 </script>
 
 <template>

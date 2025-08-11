@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import TailwindCSS from '@tailwindcss/vite';
-import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 // https://vite.dev/config/
 export default defineConfig({

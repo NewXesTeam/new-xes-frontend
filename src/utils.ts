@@ -28,23 +28,26 @@ export function useFetchState<T>(initialize: T | null = null) {
     const completedRef = ref(false);
     const dataRef = ref<T | null>(initialize);
     const errorRef = ref(false);
-    const errorMessageRef = ref("");
+    const errorMessageRef = ref('');
 
-    return computed(() => ({
-        data: dataRef.value as T | null,
-        completed: completedRef.value,
-        error: errorRef.value,
-        errorMessage: errorMessageRef.value,
-        resolve(info: T) {
-            completedRef.value = true;
-            dataRef.value = info;
-        },
-        reject(message: string) {
-            completedRef.value = true;
-            errorRef.value = true;
-            errorMessageRef.value = message;
-        },
-    } as FetchState<T>));
+    return computed(
+        () =>
+            ({
+                data: dataRef.value as T | null,
+                completed: completedRef.value,
+                error: errorRef.value,
+                errorMessage: errorMessageRef.value,
+                resolve(info: T) {
+                    completedRef.value = true;
+                    dataRef.value = info;
+                },
+                reject(message: string) {
+                    completedRef.value = true;
+                    errorRef.value = true;
+                    errorMessageRef.value = message;
+                },
+            }) as FetchState<T>,
+    );
 }
 
 export function fetchData<T>(url: string, options?: RequestInit, initialize: T | null = null) {
@@ -52,12 +55,12 @@ export function fetchData<T>(url: string, options?: RequestInit, initialize: T |
     onMounted(() => {
         commonFetch<T>(url, options)
             .then(data => {
-                state.value.resolve(data.data)
+                state.value.resolve(data.data);
             })
             .catch(error => {
-                state.value.reject(error.toString())
+                state.value.reject(error.toString());
             });
-    })
+    });
     return state;
 }
 
