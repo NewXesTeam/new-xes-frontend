@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 import { getWorkLink } from '@/utils.ts';
-import type { Work } from '@/types/work.js';
+import type { Work } from '@/types/work.ts';
 import { computed } from 'vue';
 
 const { work } = defineProps<{ work: Work }>();

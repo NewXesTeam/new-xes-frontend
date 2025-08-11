@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import WorkList from '@/components/WorkList.vue';
+import WorkList from '@/components/work/WorkList.vue';
 
 import { useAppStore } from '@/stores/app.js';
 import { fetchData } from '@/utils.js';

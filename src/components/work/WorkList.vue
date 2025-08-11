@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 import type { Work } from '@/types/work.ts';
-import WorkCard from '@/components/WorkCard.vue';
+import WorkCard from '@/components/work/WorkCard.vue';
 
 interface Props {
     className?: string;
