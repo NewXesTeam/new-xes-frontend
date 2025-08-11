@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@mdi/font": "7.4.47",
+        "@yaireo/tagify": "^4.35.3",
         "lodash": "^4.17.21",
         "pinia": "^3.0.3",
         "tailwindcss": "^4.1.11",
