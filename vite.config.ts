@@ -1,16 +1,30 @@
-import { reactRouter } from '@react-router/dev/vite';
-import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath, URL } from 'node:url';
 
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import vueDevTools from 'vite-plugin-vue-devtools';
+import TailwindCSS from '@tailwindcss/vite';
+import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
+// https://vite.dev/config/
 export default defineConfig({
-    plugins: [reactRouter(), tsconfigPaths(), tailwindcss()],
-    optimizeDeps: {
-        esbuildOptions: {
-            tsconfig: 'tsconfig.json',
+    plugins: [
+        vue({
+            template: { transformAssetUrls },
+        }),
+        vueJsx(),
+        vueDevTools(),
+        TailwindCSS(),
+        Vuetify(),
+    ],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
         },
     },
     server: {
+        port: 3000,
         proxy: {
             '/api': {
                 target: 'https://code.xueersi.com',
