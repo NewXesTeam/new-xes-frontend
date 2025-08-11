@@ -32,9 +32,11 @@ const messageTotal = computed(() => {
                     发现
                 </v-btn>
 
-                <v-btn>
-                    关于
-                </v-btn>
+                <router-link v-slot="{ navigate, isActive }" to="/about" custom>
+                    <v-btn :active="isActive" @click="navigate">
+                        关于
+                    </v-btn>
+                </router-link>
             </div>
 
             <div class="ms-auto flex gap-2 items-center">
