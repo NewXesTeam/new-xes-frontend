@@ -1,6 +1,4 @@
 ﻿<script setup lang="ts">
-import AppLayout from '@/layout/AppLayout.vue';
-
 const infos = [
     {
         'type': '框架',

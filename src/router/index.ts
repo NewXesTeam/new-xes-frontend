@@ -9,6 +9,9 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomePage,
+            meta: {
+                useLayout: true,
+            }
         },
         // {
         //     path: '/discover',
@@ -19,6 +22,9 @@ const router = createRouter({
             path: '/about',
             name: 'about',
             component: AboutPage,
+            meta: {
+                useLayout: true,
+            }
         },
     ],
 });

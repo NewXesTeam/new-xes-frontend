@@ -1,5 +1,4 @@
 ﻿<script setup lang="ts">
-import AppLayout from '@/layout/AppLayout.vue';
 import WorkList from '@/components/WorkList.vue';
 
 import { useAppStore } from '@/stores/app.js';
