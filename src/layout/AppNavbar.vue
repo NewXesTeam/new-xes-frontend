@@ -1,16 +1,24 @@
 ﻿<script setup lang="ts">
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
 import { useFetchData } from '@/utils/index.ts';
-import type { MessageData } from '@/types/message.ts';
-import { computed } from 'vue';
 import SearchInput from '@/components/SearchInput.vue';
+import type { MessageData } from '@/types/message.ts';
 
 const store = useAppStore();
+const router = useRouter();
+
 const messageData = useFetchData<MessageData[]>('/api/messages/overview');
 const messageTotal = computed(() => {
     if (messageData.value.error) return 0;
     return messageData.value.data?.reduce((acc, cur: MessageData) => acc + cur.count, 0);
 });
+
+const onClickLogout = async () => {
+    await fetch('/passport/logout');
+    location.reload();
+}
 </script>
 
 <template>
@@ -88,9 +96,13 @@ const messageTotal = computed(() => {
                             </v-list-item>
                         </router-link>
                         <v-divider />
-                        <v-list-item value="logout"> 登出 </v-list-item>
+                        <v-list-item value="logout" @click="onClickLogout"> 登出 </v-list-item>
                     </v-list>
                 </v-menu>
+
+                <router-link v-slot="{ navigate, isActive }" to="/login" custom v-if="!store.isLoggedIn">
+                    <v-btn :active="isActive" @click="navigate"> 登录 </v-btn>
+                </router-link>
 
                 <v-menu open-on-hover>
                     <template v-slot:activator="{ props }">
