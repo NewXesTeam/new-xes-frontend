@@ -2,35 +2,27 @@ import type { Work, WorkList } from './work';
 import type { UserList } from './user';
 
 export interface SpaceProfile {
-    /** 数据 */
-    data: {
-        /** 用户 ID */
-        id: string | number;
-        /** 用户 ID */
-        user_id: string | number;
+    /** 用户 ID */
+    id: string | number;
+    /** 用户 ID */
+    user_id: string | number;
 
-        /** 是否自己 */
-        is_my: boolean;
-        /** 是否关注 */
-        is_follow: boolean;
+    /** 是否自己 */
+    is_my: boolean;
+    /** 是否关注 */
+    is_follow: boolean;
 
-        /** 真名 */
-        realname: string;
-        /** 头像 URL */
-        avatar_path: string;
-        /** 个人签名 */
-        signature: string;
+    /** 真名 */
+    realname: string;
+    /** 头像 URL */
+    avatar_path: string;
+    /** 个人签名 */
+    signature: string;
 
-        /** 粉丝数量 */
-        fans: number;
-        /** 关注数量 */
-        follows: number;
-    };
-
-    /** 状态码 */
-    status: number;
-    /** 状态信息 */
-    msg: string;
+    /** 粉丝数量 */
+    fans: number;
+    /** 关注数量 */
+    follows: number;
 }
 
 export interface SpaceIndex {

@@ -82,7 +82,11 @@ const messageTotal = computed(() => {
                         <v-list-item value="space"> 个人空间 </v-list-item>
                         <v-list-item value="user"> 作品管理 </v-list-item>
                         <v-divider />
-                        <v-list-item value="info"> 个人信息 </v-list-item>
+                        <router-link v-slot="{ navigate, isActive }" to="/userInfo" custom>
+                            <v-list-item value="info" :active="isActive" @click="_ => navigate()">
+                                个人信息
+                            </v-list-item>
+                        </router-link>
                         <v-divider />
                         <v-list-item value="logout"> 登出 </v-list-item>
                     </v-list>
