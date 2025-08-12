@@ -11,7 +11,7 @@ const {
 </script>
 
 <template>
-    <Transition name="slide-up" mode="out-in">
+    <Transition name="slide-left" mode="out-in">
         <div v-if="!error" class="flex w-fit gap-2 items-center">
             <v-progress-circular :size="40" :width="7" indeterminate />
             <h4 style="font-size: 24px">{{ loadingMessage }}</h4>
@@ -24,17 +24,17 @@ const {
 </template>
 
 <style scoped>
-.slide-up-enter-active,
-.slide-up-leave-active {
+.slide-left-enter-active,
+.slide-left-leave-active {
     transition: all 0.25s ease-out;
 }
 
-.slide-up-enter-from {
+.slide-left-enter-from {
     opacity: 0;
     transform: translateX(30px);
 }
 
-.slide-up-leave-to {
+.slide-left-leave-to {
     opacity: 0;
     transform: translateX(-30px);
 }
