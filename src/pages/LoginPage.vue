@@ -23,6 +23,8 @@ const captchaBase64 = ref("");
 const successMessage = ref("");
 const errorMessage = ref("");
 
+const isRedirecting = ref(false);
+
 const phoneRule = (value: string) => {
     if (value.trim().length === 11 && !isNaN(parseInt(value)))
         return true;
@@ -67,6 +69,8 @@ const processCaptcha = async () => {
         successMessage.value = '登录成功！正在跳转到主页...';
         errorMessage.value = "";
 
+        isRedirecting.value = true;
+
         await fetch('/passport/get_token', {
             method: 'POST',
             headers: {
@@ -104,9 +108,11 @@ const getCaptcha = async () => {
 }
 
 watch(() => store.loaded, () => {
-    if (!store.isLoggedIn)
+    if (!store.isLoggedIn || isRedirecting.value)
         return;
     successMessage.value = "您已登录！正在跳转到主页...";
+    isRedirecting.value = true;
+
     setTimeout(() => {
         router.push("/");
     }, 500);
