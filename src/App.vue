@@ -45,14 +45,16 @@ router.afterEach((to, from) => {
 <template>
     <v-app>
         <router-view v-slot="{ Component, route }">
-            <AppLayout v-if="route.meta.useLayout">
-                <transition name="fade" mode="out-in">
+            <transition name="fade" mode="out-in">
+                <AppLayout v-if="route.meta.useLayout">
+                    <transition name="fade" mode="out-in">
+                        <component :is="Component" />
+                    </transition>
+                </AppLayout>
+
+                <transition v-else name="fade" mode="out-in">
                     <component :is="Component" />
                 </transition>
-            </AppLayout>
-
-            <transition v-else name="fade" mode="out-in">
-                <component :is="Component" />
             </transition>
         </router-view>
         <v-progress-circular indeterminate :size="30" class="loading-tip" v-if="isLoading" />

@@ -5,6 +5,7 @@ import HomePage from '@/pages/HomePage.vue';
 
 import UserInfoPage from '@/pages/UserInfoPage.vue';
 import AboutPage from '@/pages/AboutPage.vue';
+import EulaPage from '@/pages/EulaPage.vue';
 
 import NotFoundPage from '@/pages/errors/NotFoundPage.vue';
 
@@ -82,14 +83,14 @@ const router = createRouter({
                 useLayout: true,
             },
         },
-        // {
-        //     path: '/eula',
-        //     name: 'eula',
-        //     component: EulaPage,
-        //     meta: {
-        //         useLayout: false,
-        //     },
-        // },
+        {
+            path: '/eula',
+            name: 'eula',
+            component: EulaPage,
+            meta: {
+                useLayout: false,
+            },
+        },
 
         {
             path: '/404',
