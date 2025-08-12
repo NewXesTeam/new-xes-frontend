@@ -44,13 +44,13 @@ export function useFetchState<T>(initialize: T | null = null) {
                 error: errorRef.value,
                 errorMessage: errorMessageRef.value,
                 resolve(info: T) {
-                    completedRef.value = true;
                     dataRef.value = info;
+                    completedRef.value = true;
                 },
                 reject(message: string) {
-                    completedRef.value = true;
-                    errorRef.value = true;
                     errorMessageRef.value = message;
+                    errorRef.value = true;
+                    completedRef.value = true;
                 },
             }) as FetchState<T>,
     );
