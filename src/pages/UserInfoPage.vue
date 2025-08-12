@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import Loading from '@/components/common/Loading.vue';
 import { commonFetch, useFetchState } from '@/utils/index.ts';
 import type { SpaceProfile } from '@/types/space.ts';
+import type { BasicResponse } from '@/types/common.ts';
 
 const store = useAppStore();
 const router = useRouter();
@@ -21,7 +22,7 @@ watch(
             return;
         }
 
-        commonFetch<SpaceProfile>(`/api/space/profile?user_id=${store.userInfo?.user_id}`)
+        commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${store.userInfo?.user_id}`)
             .then(data => {
                 spaceData.value.resolve(data.data);
             })

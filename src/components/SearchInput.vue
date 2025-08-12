@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
-import type { AssociateWord } from '@/types/common.ts';
+import type { AssociateWord, BasicResponse } from '@/types/common.ts';
 import { debounce } from 'lodash';
 import { commonFetch } from '@/utils/index.ts';
 
@@ -19,7 +19,7 @@ const isLoading = ref(false);
 const onChangeSearch = debounce((query: string) => {
     if (!query) return;
     isLoading.value = true;
-    commonFetch<AssociateWord[]>(`/api/search/associate_words?keyword=${inputKeyword.value}`)
+    commonFetch<BasicResponse<AssociateWord[]>>(`/api/search/associate_words?keyword=${inputKeyword.value}`)
         .then(data => {
             suggestions.value = data.data;
         })

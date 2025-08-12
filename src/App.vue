@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
 import { commonFetch } from '@/utils/index.ts';
+import type { BasicResponse } from '@/types/common.ts';
 import type { UserInfo } from '@/types/user.ts';
-import { useRouter } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 
 const store = useAppStore();
@@ -14,7 +15,7 @@ onMounted(() => {
     store.loaded = false;
     store.isLoggedIn = document.cookie.includes('is_login=1;');
     if (store.isLoggedIn) {
-        commonFetch<UserInfo>('/api/user/info')
+        commonFetch<BasicResponse<UserInfo>>('/api/user/info')
             .then(data => {
                 store.userInfo = data.data;
             })

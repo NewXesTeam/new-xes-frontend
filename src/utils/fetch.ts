@@ -1,5 +1,6 @@
 ﻿import { computed, onMounted, ref } from 'vue';
 import { commonFetch } from './common.ts';
+import type { BasicResponse } from '@/types/common.ts';
 
 interface BaseFetchState<T> {
     resolve(info: T): void;
@@ -58,7 +59,7 @@ export function useFetchState<T>(initialize: T | null = null) {
 export function useFetchData<T>(url: string, options?: RequestInit, initialize: T | null = null) {
     const state = useFetchState<T>(initialize);
     onMounted(() => {
-        commonFetch<T>(url, options)
+        commonFetch<BasicResponse<T>>(url, options)
             .then(data => {
                 state.value.resolve(data.data);
             })

@@ -1,9 +1,9 @@
-﻿import type { BasicResponse, ErrorResponse } from '@/types/common';
+﻿import type { ErrorResponse } from '@/types/common';
 
 export async function commonFetch<T>(url: string, options?: RequestInit) {
     const response = await fetch(url, options);
     if (response.ok) {
-        const data: BasicResponse<T> = await response.json();
+        const data: T = await response.json();
         return data;
     } else {
         const errorData: ErrorResponse = await response.json();
