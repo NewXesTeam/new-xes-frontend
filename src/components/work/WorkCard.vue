@@ -8,6 +8,10 @@ const thumbnail = computed(
     () => work.thumbnail || 'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png',
 );
 const name = computed(() => work.name.replace(/<em>|<\/em>/g, ''));
+
+const onOpenAuthorHome = () => {
+    window.open(`/space/${work.user_id}/home`, '_blank')
+}
 </script>
 
 <template>
@@ -23,7 +27,7 @@ const name = computed(() => work.name.replace(/<em>|<\/em>/g, ''));
         </a>
 
         <v-card-actions class="flex justify-between">
-            <v-btn>
+            <v-btn @click="onOpenAuthorHome">
                 {{ work.username }}
             </v-btn>
             <div class="flex gap-2 pr-2" style="zoom: 0.75">
