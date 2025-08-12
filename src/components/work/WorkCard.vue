@@ -13,7 +13,7 @@ const name = computed(() => work.name.replace(/<em>|<\/em>/g, ''));
 <template>
     <v-card v-tooltip:top="work.created_at">
         <a class="flex flex-col card-action-area" v-ripple :href="getWorkLink(work)" rel="noopener" target="_blank">
-            <v-img class="mx-auto" style="width: 224px; height: 168px;" draggable="false" :src="thumbnail" />
+            <v-img class="mx-auto" style="width: 224px; height: 168px" draggable="false" :src="thumbnail" />
 
             <v-card-title v-tooltip:bottom="name">
                 {{ name }}
@@ -83,7 +83,7 @@ const name = computed(() => work.name.replace(/<em>|<\/em>/g, ''));
 }
 
 .card-action-area::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;

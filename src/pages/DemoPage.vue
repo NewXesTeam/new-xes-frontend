@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { VVideo } from 'vuetify/labs/VVideo'
+import { VVideo } from 'vuetify/labs/VVideo';
 // @ts-ignore
 import Tagify from '@/components/common/Tagify.vue';
 import { ref } from 'vue';
@@ -7,7 +7,7 @@ import { ref } from 'vue';
 const tagText = ref();
 
 const handleTagsChange = (event: any) => {
-    console.log(event)
+    console.log(event);
     const tags: { value: string }[] = event.detail.tagify.getCleanValue();
     let tag_str = '';
     tags.forEach(tag => {
@@ -43,15 +43,16 @@ const handleTagsChange = (event: any) => {
 
             <h2 style="font-size: 24px">tags 标签选择器 (tagify)</h2>
             <span>Result: {{ tagText }}</span>
-            <Tagify :settings="{
-                whitelist: ['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他'],
-                placeholder: '添加标签',
-                dropdown: { enabled: 0 }
-            }" @change="handleTagsChange"  />
+            <Tagify
+                :settings="{
+                    whitelist: ['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他'],
+                    placeholder: '添加标签',
+                    dropdown: { enabled: 0 },
+                }"
+                @change="handleTagsChange"
+            />
         </div>
     </v-container>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
