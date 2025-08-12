@@ -11,6 +11,7 @@ const router = useRouter();
 const isLoading = ref(false);
 
 onMounted(() => {
+    store.loaded = false;
     store.isLoggedIn = document.cookie.includes('is_login=1;');
     if (store.isLoggedIn) {
         commonFetch<UserInfo>('/api/user/info')
@@ -19,6 +20,9 @@ onMounted(() => {
             })
             .catch(error => {
                 console.error('fetch user info error: ', error);
+            })
+            .finally(() => {
+                store.loaded = true;
             });
     }
 });
