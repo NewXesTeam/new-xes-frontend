@@ -1,7 +1,7 @@
 ﻿<script setup lang="ts">
 import { computed } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
-import { useFetchData } from '@/utils/index.ts';
+import { useFetchData } from '@/utils';
 import SearchInput from '@/components/SearchInput.vue';
 import type { MessageData } from '@/types/message.ts';
 import { refreshInfo } from '@/utils/passport.ts';
@@ -18,6 +18,8 @@ const onClickLogout = async () => {
     await fetch('/passport/logout');
     await refreshInfo();
 };
+
+const mySpaceLink = computed(() => (`/space/${store.userInfo?.user_id}/home`));
 </script>
 
 <template>
@@ -86,7 +88,11 @@ const onClickLogout = async () => {
                     </template>
 
                     <v-list>
-                        <v-list-item value="space"> 个人空间 </v-list-item>
+                        <router-link v-slot="{ navigate, isActive }" :to="mySpaceLink" custom>
+                            <v-list-item value="space" :active="isActive" @click="_ => navigate()">
+                                个人空间
+                            </v-list-item>
+                        </router-link>
                         <v-list-item value="user"> 作品管理 </v-list-item>
                         <v-divider />
                         <router-link v-slot="{ navigate, isActive }" to="/userInfo" custom>

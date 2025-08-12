@@ -9,6 +9,8 @@ import AboutPage from '@/pages/AboutPage.vue';
 import EulaPage from '@/pages/EulaPage.vue';
 
 import NotFoundPage from '@/pages/errors/NotFoundPage.vue';
+import SpaceHomePage from '@/pages/space/SpaceHomePage.vue';
+import SpaceLayout from '@/layouts/SpaceLayout.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,7 +66,24 @@ const router = createRouter({
         //     },
         // },
 
-        // space
+        {
+            path: '/space/:userId',
+            redirect: to => {
+                return {
+                    name: 'space.home',
+                    params: to.params,
+                };
+            },
+        },
+        {
+            path: '/space/:userId/home',
+            name: 'space.home',
+            component: SpaceHomePage,
+            meta: {
+                useLayout: true,
+                innerLayout: SpaceLayout,
+            },
+        },
 
         // message
 

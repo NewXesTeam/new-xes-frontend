@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import AppLayout from '@/layout/AppLayout.vue';
+import AppLayout from '@/layouts/app/AppLayout.vue';
 import { refreshInfo } from '@/utils/passport.ts';
 
 const router = useRouter();
@@ -11,7 +11,7 @@ onMounted(() => {
     refreshInfo();
 });
 
-router.beforeEach((_, _, next) => {
+router.beforeEach((from, to, next) => {
     console.log('导航开始。');
     isLoading.value = true;
     next();
@@ -29,17 +29,28 @@ router.afterEach(() => {
     <v-app>
         <router-view v-slot="{ Component, route }">
             <transition name="fade" mode="out-in">
+                <!-- 基础 Layout -->
                 <AppLayout v-if="route.meta.useLayout">
                     <transition name="fade" mode="out-in">
-                        <component :is="Component" />
+                        <!-- 叠加 Layout -->
+                        <component v-if="route.meta.innerLayout" :is="route.meta.innerLayout">
+                            <transition name="fade" mode="out-in">
+                                <component :is="Component" />
+                            </transition>
+                        </component>
+
+                        <component v-else :is="Component" />
                     </transition>
                 </AppLayout>
 
+                <!-- 无 Layout -->
                 <transition v-else name="fade" mode="out-in">
                     <component :is="Component" />
                 </transition>
             </transition>
         </router-view>
+
+        <!-- 加载中提示 -->
         <v-progress-circular indeterminate :size="30" class="loading-tip" v-if="isLoading" />
     </v-app>
 </template>
