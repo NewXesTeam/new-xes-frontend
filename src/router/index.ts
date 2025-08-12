@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import DemoPage from '@/pages/DemoPage.vue';
 import HomePage from '@/pages/HomePage.vue';
-import AboutPage from '@/pages/AboutPage.vue';
+
 import UserInfoPage from '@/pages/UserInfoPage.vue';
+import AboutPage from '@/pages/AboutPage.vue';
+
+import NotFoundPage from '@/pages/errors/NotFoundPage.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +90,19 @@ const router = createRouter({
         //         useLayout: false,
         //     },
         // },
+
+        {
+            path: '/404',
+            name: 'errors.not-found',
+            component: NotFoundPage,
+            meta: {
+                useLayout: true,
+            },
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            redirect: '/404',
+        },
     ],
 });
 
