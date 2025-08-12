@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import DemoPage from '@/pages/DemoPage.vue';
 import HomePage from '@/pages/HomePage.vue';
+import LoginPage from '@/pages/LoginPage.vue';
 
 import UserInfoPage from '@/pages/UserInfoPage.vue';
 import AboutPage from '@/pages/AboutPage.vue';
@@ -28,14 +29,14 @@ const router = createRouter({
                 useLayout: true,
             },
         },
-        // {
-        //     path: '/login',
-        //     name: 'login',
-        //     component: LoginPage,
-        //     meta: {
-        //         useLayout: false,
-        //     },
-        // },
+        {
+            path: '/login',
+            name: 'login',
+            component: LoginPage,
+            meta: {
+                useLayout: false,
+            },
+        },
 
         // {
         //     path: '/discover',
