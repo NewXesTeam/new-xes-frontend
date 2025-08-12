@@ -43,7 +43,7 @@ const infos = [
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="info in infos">
+                <tr v-for="info in infos" :key="info.type">
                     <th>{{ info.type }}</th>
                     <th>{{ info.lib }}</th>
                 </tr>

@@ -26,9 +26,10 @@ const openLink = (link: string) => window.open(link, '_blank');
         <div class="flex items-center">
             <v-icon-btn
                 v-for="link of links"
-                @click="openLink(link.link)"
                 :icon="link.icon"
                 :title="link.name"
+                :key="link.name"
+                @click="openLink(link.link)"
                 v-ripple
             />
         </div>

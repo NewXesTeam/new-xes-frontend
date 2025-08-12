@@ -1,12 +1,12 @@
 ﻿<script setup lang="ts">
 import { VVideo } from 'vuetify/labs/VVideo';
-// @ts-ignore
+// @ts-expect-error because Tagify 支持太差了
 import Tagify from '@/components/common/Tagify.vue';
 import { ref } from 'vue';
 
 const tagText = ref();
 
-const handleTagsChange = (event: any) => {
+const handleTagsChange = (event: CustomEvent) => {
     console.log(event);
     const tags: { value: string }[] = event.detail.tagify.getCleanValue();
     let tag_str = '';

@@ -3,12 +3,12 @@
     <input v-else />
 </template>
 
-<script>
+<script lang="ts">
 import Tagify from '@yaireo/tagify/dist/tagify.esm.js';
 import '@yaireo/tagify/dist/tagify.css';
 
 export default {
-    name: 'Tags',
+    name: 'Tagify',
     emits: ['change'],
     props: {
         mode: String,

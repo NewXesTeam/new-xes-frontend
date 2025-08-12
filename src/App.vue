@@ -11,13 +11,13 @@ onMounted(() => {
     refreshInfo();
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((_, _, next) => {
     console.log('导航开始。');
     isLoading.value = true;
     next();
 });
 
-router.afterEach((to, from) => {
+router.afterEach(() => {
     console.log('导航结束。');
     setTimeout(() => {
         isLoading.value = false;

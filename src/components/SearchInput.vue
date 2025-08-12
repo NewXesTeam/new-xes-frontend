@@ -1,13 +1,13 @@
 ﻿<!-- SearchInput bug: 按下按键不放会明显卡顿，不管了 -->
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
 import type { AssociateWord, BasicResponse } from '@/types/common.ts';
 import { debounce } from 'lodash';
 import { commonFetch } from '@/utils/index.ts';
 
-const router = useRouter();
+// const router = useRouter();
 const inputKeyword = ref('');
 const suggestions = ref<AssociateWord[]>([]);
 const autocompleteSelects = computed(() => {
@@ -40,7 +40,12 @@ watch(selectedSuggestion, () => {
     if (!selectedSuggestion.value) return;
     inputKeyword.value = '';
     console.log('Go Search > ', selectedSuggestion.value);
-    // router.push(`/search?keyword=${encodeURIComponent(selectedSuggestion.value)}`)
+    // router.push({
+    //     name: "search",
+    //     query: {
+    //         keyword: selectedSuggestion.value,
+    //     }
+    // })
 });
 </script>
 

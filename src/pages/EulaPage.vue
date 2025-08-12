@@ -1,6 +1,4 @@
 ﻿<script setup lang="ts">
-import { split } from 'lodash';
-
 const eula = `我们感谢您选择使用 NewXesFrontend 平台！
 我们与您一样，也不想面对巨长的用户协议。
 
@@ -21,7 +19,7 @@ NewXesFrontend 平台为用户提供 学而思编程社区 第三方的网页端
 <template>
     <v-container>
         <h1 style="font-size: 24px">NewXesFrontend 最终用户协议</h1>
-        <p v-for="line of eula.split('\n')" style="font-size: 16px">{{ line }}</p>
+        <p v-for="(line, index) in eula.split('\n')" :key="index" style="font-size: 16px">{{ line }}</p>
     </v-container>
 </template>
 

@@ -36,7 +36,7 @@ const captchaRule = (value: string) => {
 };
 
 const requiredRule = (message: string) => {
-    return (value: any) => {
+    return (value: string) => {
         if (value) return true;
         return message;
     };
@@ -122,10 +122,9 @@ watch([symbol, password], () => {
     captchaAnswer.value = '';
 });
 
-const onSubmit = (event: SubmitEvent) => {
+const onSubmit = () => {
     if (!formRef.value?.isValid) return;
 
-    // console.log(symbol.value, password.value, isAgreedPrivacy.value, isAgreedEula.value, captchaAnswer.value)
     if (!isCaptchaVisible.value) {
         getCaptcha();
     } else {
