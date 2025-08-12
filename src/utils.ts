@@ -50,7 +50,7 @@ export function useFetchState<T>(initialize: T | null = null) {
     );
 }
 
-export function fetchData<T>(url: string, options?: RequestInit, initialize: T | null = null) {
+export function useFetchData<T>(url: string, options?: RequestInit, initialize: T | null = null) {
     const state = useFetchState<T>(initialize);
     onMounted(() => {
         commonFetch<T>(url, options)

@@ -1,12 +1,12 @@
 ﻿<script setup lang="ts">
 import { useAppStore } from '@/stores/app.ts';
-import { fetchData } from '@/utils.ts';
+import { useFetchData } from '@/utils.ts';
 import type { MessageData } from '@/types/message.ts';
 import { computed } from 'vue';
 import SearchInput from '@/components/SearchInput.vue';
 
 const store = useAppStore();
-const messageData = fetchData<MessageData[]>('/api/messages/overview');
+const messageData = useFetchData<MessageData[]>('/api/messages/overview');
 const messageTotal = computed(() => {
     if (messageData.value.error) return 0;
     return messageData.value.data?.reduce((acc, cur: MessageData) => acc + cur.count, 0);

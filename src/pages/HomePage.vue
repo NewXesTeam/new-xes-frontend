@@ -2,11 +2,11 @@
 import WorkList from '@/components/work/WorkList.vue';
 
 import { useAppStore } from '@/stores/app.js';
-import { fetchData } from '@/utils.js';
+import { useFetchData } from '@/utils.js';
 import type { Work } from '@/types/work.js';
 
 const store = useAppStore();
-const followsWorkData = fetchData<Work[]>('/api/index/works/follows', {}, []);
+const followsWorkData = useFetchData<Work[]>('/api/index/works/follows', {}, []);
 </script>
 
 <template>
