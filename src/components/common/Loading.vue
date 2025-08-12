@@ -2,7 +2,7 @@
 const {
     error = false,
     loadingMessage = 'Loading...',
-    errorMessage = 'Failed to load data!',
+    errorMessage = '哦豁，出错了！',
 } = defineProps<{
     error?: boolean;
     loadingMessage?: string;
