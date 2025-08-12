@@ -1,13 +1,12 @@
 ﻿<script setup lang="ts">
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
 import { useFetchData } from '@/utils/index.ts';
 import SearchInput from '@/components/SearchInput.vue';
 import type { MessageData } from '@/types/message.ts';
+import { refreshInfo } from '@/utils/passport.ts';
 
 const store = useAppStore();
-const router = useRouter();
 
 const messageData = useFetchData<MessageData[]>('/api/messages/overview');
 const messageTotal = computed(() => {
@@ -17,7 +16,7 @@ const messageTotal = computed(() => {
 
 const onClickLogout = async () => {
     await fetch('/passport/logout');
-    location.reload();
+    await refreshInfo();
 }
 </script>
 

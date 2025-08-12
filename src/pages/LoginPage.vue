@@ -2,6 +2,7 @@
 import { ref, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
+import { refreshInfo } from '@/utils/passport.ts';
 import type { LoginPacket } from '@/types/login.ts';
 import type { CaptchaPacket } from '@/types/login.ts';
 
@@ -76,6 +77,8 @@ const processCaptcha = async () => {
             },
             body: `code=${tokenCodeResult.data.code}`,
         });
+
+        await refreshInfo();
 
         setTimeout(() => {
             router.push("/");

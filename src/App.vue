@@ -1,31 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '@/stores/app.ts';
-import { commonFetch } from '@/utils/index.ts';
-import type { BasicResponse } from '@/types/common.ts';
-import type { UserInfo } from '@/types/user.ts';
 import AppLayout from '@/layout/AppLayout.vue';
+import { refreshInfo } from '@/utils/passport.ts';
 
-const store = useAppStore();
 const router = useRouter();
 const isLoading = ref(false);
 
 onMounted(() => {
-    store.loaded = false;
-    store.isLoggedIn = document.cookie.includes('is_login=1;');
-    if (store.isLoggedIn) {
-        commonFetch<BasicResponse<UserInfo>>('/api/user/info')
-            .then(data => {
-                store.userInfo = data.data;
-            })
-            .catch(error => {
-                console.error('fetch user info error: ', error);
-            })
-            .finally(() => {
-                store.loaded = true;
-            });
-    }
+    refreshInfo();
 });
 
 router.beforeEach((to, from, next) => {
