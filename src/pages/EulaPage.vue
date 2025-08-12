@@ -20,8 +20,8 @@ NewXesFrontend 平台为用户提供 学而思编程社区 第三方的网页端
 
 <template>
     <v-container>
-        <h1 style="font-size: 24px;">NewXesFrontend 最终用户协议</h1>
-        <p v-for="line of eula.split('\n')" style="font-size: 16px;">{{ line }}</p>
+        <h1 style="font-size: 24px">NewXesFrontend 最终用户协议</h1>
+        <p v-for="line of eula.split('\n')" style="font-size: 16px">{{ line }}</p>
     </v-container>
 </template>
 

@@ -9,41 +9,38 @@ import type { CaptchaPacket } from '@/types/login.ts';
 const store = useAppStore();
 const router = useRouter();
 
-const formRef = useTemplateRef("form");
+const formRef = useTemplateRef('form');
 
-const symbol = ref("");
-const password = ref("");
+const symbol = ref('');
+const password = ref('');
 const isAgreedPrivacy = ref(false);
 const isAgreedEula = ref(false);
-const captchaAnswer = ref("");
+const captchaAnswer = ref('');
 
 const isCaptchaVisible = ref(false);
-const captchaBase64 = ref("");
+const captchaBase64 = ref('');
 
-const successMessage = ref("");
-const errorMessage = ref("");
+const successMessage = ref('');
+const errorMessage = ref('');
 
 const isRedirecting = ref(false);
 
 const phoneRule = (value: string) => {
-    if (value.trim().length === 11 && !isNaN(parseInt(value)))
-        return true;
-    return "不合法的手机号！";
-}
+    if (value.trim().length === 11 && !isNaN(parseInt(value))) return true;
+    return '不合法的手机号！';
+};
 
 const captchaRule = (value: string) => {
-    if (value.trim().length === 4)
-        return true;
-    return "不合法的验证码！";
-}
+    if (value.trim().length === 4) return true;
+    return '不合法的验证码！';
+};
 
 const requiredRule = (message: string) => {
     return (value: any) => {
-        if (value)
-            return true;
+        if (value) return true;
         return message;
-    }
-}
+    };
+};
 const processCaptcha = async () => {
     const tokenCodeRequest = await fetch('/passport/login', {
         method: 'POST',
@@ -63,11 +60,11 @@ const processCaptcha = async () => {
 
     if (tokenCodeResult.errcode !== 0) {
         errorMessage.value = tokenCodeResult.errmsg;
-        captchaAnswer.value = "";
+        captchaAnswer.value = '';
         isCaptchaVisible.value = false;
     } else {
         successMessage.value = '登录成功！正在跳转到主页...';
-        errorMessage.value = "";
+        errorMessage.value = '';
 
         isRedirecting.value = true;
 
@@ -85,10 +82,10 @@ const processCaptcha = async () => {
         await refreshInfo();
 
         setTimeout(() => {
-            router.push("/");
+            router.push('/');
         }, 500);
     }
-}
+};
 
 const getCaptcha = async () => {
     const captchaRequest = await fetch('/passport/captcha', {
@@ -105,27 +102,28 @@ const getCaptcha = async () => {
 
     isCaptchaVisible.value = true;
     captchaBase64.value = captchaResult.data.captcha;
-}
+};
 
-watch(() => store.loaded, () => {
-    if (!store.isLoggedIn || isRedirecting.value)
-        return;
-    successMessage.value = "您已登录！正在跳转到主页...";
-    isRedirecting.value = true;
+watch(
+    () => store.loaded,
+    () => {
+        if (!store.isLoggedIn || isRedirecting.value) return;
+        successMessage.value = '您已登录！正在跳转到主页...';
+        isRedirecting.value = true;
 
-    setTimeout(() => {
-        router.push("/");
-    }, 500);
-})
+        setTimeout(() => {
+            router.push('/');
+        }, 500);
+    },
+);
 
 watch([symbol, password], () => {
     isCaptchaVisible.value = false;
-    captchaAnswer.value = "";
-})
+    captchaAnswer.value = '';
+});
 
 const onSubmit = (event: SubmitEvent) => {
-    if (!formRef.value?.isValid)
-        return;
+    if (!formRef.value?.isValid) return;
 
     // console.log(symbol.value, password.value, isAgreedPrivacy.value, isAgreedEula.value, captchaAnswer.value)
     if (!isCaptchaVisible.value) {
@@ -133,16 +131,14 @@ const onSubmit = (event: SubmitEvent) => {
     } else {
         processCaptcha();
     }
-}
+};
 </script>
 
 <template>
     <div class="flex w-full h-full justify-center items-center">
         <v-card class="min-w-sm max-h-fit mx-auto" elevation="8">
             <v-card-title>
-                <h2 class="w-full text-center" style="font-size: 24px;">
-                    欢迎登录 NewXesFrontend
-                </h2>
+                <h2 class="w-full text-center" style="font-size: 24px">欢迎登录 NewXesFrontend</h2>
             </v-card-title>
 
             <v-divider />
@@ -192,12 +188,12 @@ const onSubmit = (event: SubmitEvent) => {
                         <template v-slot:label>
                             <div>
                                 我已阅读并同意以下条款：
-                                <div class="flex flex-col" style="font-size: 12px;">
+                                <div class="flex flex-col" style="font-size: 12px">
                                     <a
                                         href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/agreement"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style="margin: 0 4px; color: #1976d2;"
+                                        style="margin: 0 4px; color: #1976d2"
                                     >
                                         《学而思网校用户协议》、
                                     </a>
@@ -205,7 +201,7 @@ const onSubmit = (event: SubmitEvent) => {
                                         href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/privacy"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style="margin: 0 4px; color: #1976d2;"
+                                        style="margin: 0 4px; color: #1976d2"
                                     >
                                         《用户个人信息保护政策》、
                                     </a>
@@ -213,7 +209,7 @@ const onSubmit = (event: SubmitEvent) => {
                                         href="https://app.xueersi.com/xueersi-mall-hm-xbjtoxes/childpolicy"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        style="margin: 0 4px; color: #1976d2;"
+                                        style="margin: 0 4px; color: #1976d2"
                                     >
                                         《儿童个人信息保护规则》
                                     </a>
@@ -229,12 +225,12 @@ const onSubmit = (event: SubmitEvent) => {
                     >
                         <template v-slot:label>
                             <div>
-                                我已阅读并同意 <br>
+                                我已阅读并同意 <br />
                                 <a
                                     href="/eula"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    style="margin: 0 4px; color: #1976d2; font-size: 12px;"
+                                    style="margin: 0 4px; color: #1976d2; font-size: 12px"
                                 >
                                     《NewXesFrontend 最终用户协议》
                                 </a>
@@ -249,6 +245,4 @@ const onSubmit = (event: SubmitEvent) => {
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

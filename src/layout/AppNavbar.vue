@@ -17,7 +17,7 @@ const messageTotal = computed(() => {
 const onClickLogout = async () => {
     await fetch('/passport/logout');
     await refreshInfo();
-}
+};
 </script>
 
 <template>
