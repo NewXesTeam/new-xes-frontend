@@ -3,7 +3,7 @@ import { computed, watch } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useRouter } from 'vue-router';
 import Loading from '@/components/common/Loading.vue';
-import { commonFetch, useFetchState } from '@/utils.ts';
+import { commonFetch, useFetchState } from '@/utils/index.ts';
 import type { SpaceProfile } from '@/types/space.ts';
 
 const store = useAppStore();

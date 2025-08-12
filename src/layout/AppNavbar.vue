@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 import { useAppStore } from '@/stores/app.ts';
-import { useFetchData } from '@/utils.ts';
+import { useFetchData } from '@/utils/index.ts';
 import type { MessageData } from '@/types/message.ts';
 import { computed } from 'vue';
 import SearchInput from '@/components/SearchInput.vue';

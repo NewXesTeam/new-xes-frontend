@@ -1,19 +1,5 @@
-import { computed, onMounted, ref } from 'vue';
-import type { BasicResponse, ErrorResponse } from '@/types/common';
-import type { Work } from '@/types/work.ts';
-
-export async function commonFetch<T>(url: string, options?: RequestInit) {
-    const response = await fetch(url, options);
-    if (response.ok) {
-        const data: BasicResponse<T> = await response.json();
-        return data;
-    } else {
-        const errorData: ErrorResponse = await response.json();
-        console.error('commonFetch error', response.status, errorData);
-        // 在这里理论上搞 Today Eat Sentry 也不是不行，只是没必要
-        throw new Error(errorData.message);
-    }
-}
+﻿import { computed, onMounted, ref } from 'vue';
+import { commonFetch } from './common.ts';
 
 interface FetchState<T> {
     data: T | null;
@@ -62,11 +48,4 @@ export function useFetchData<T>(url: string, options?: RequestInit, initialize: 
             });
     });
     return state;
-}
-
-export function getWorkLink(work: Work) {
-    let lang = work.project_type;
-    if (lang === 'compiler') lang = 'code';
-
-    return `https://code.xueersi.com/home/project/detail?lang=${lang}&pid=${work.id}&version=${work.version}&langType=${work.lang}`;
 }

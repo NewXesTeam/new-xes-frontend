@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
 import type { AssociateWord } from '@/types/common.ts';
 import { debounce } from 'lodash';
-import { commonFetch } from '@/utils.ts';
+import { commonFetch } from '@/utils/index.ts';
 
 const router = useRouter();
 const inputKeyword = ref('');

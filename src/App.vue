@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
-import { commonFetch } from '@/utils.ts';
+import { commonFetch } from '@/utils/index.ts';
 import type { UserInfo } from '@/types/user.ts';
 import { useRouter } from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';

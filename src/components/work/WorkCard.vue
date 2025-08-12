@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { getWorkLink } from '@/utils.ts';
+import { getWorkLink } from '@/utils/index.ts';
 import type { Work } from '@/types/work.ts';
 import { computed } from 'vue';
 
