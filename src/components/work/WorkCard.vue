@@ -27,7 +27,7 @@ const onOpenAuthorHome = () => {
         </a>
 
         <v-card-actions class="flex justify-between">
-            <v-btn @click="onOpenAuthorHome">
+            <v-btn @click="onOpenAuthorHome" color="primary">
                 {{ work.username }}
             </v-btn>
             <div class="flex gap-2 pr-2" style="zoom: 0.75">
