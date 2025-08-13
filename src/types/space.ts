@@ -64,15 +64,7 @@ export interface SpaceCover {
     remove_reason: string | null;
 }
 
-export interface SpaceWorks {
-    /** 数据 */
-    data: WorkList;
-
-    /** 状态码 */
-    status: number;
-    /** 状态信息 */
-    msg: string;
-}
+export type SpaceWorks = WorkList;
 
 export interface SpaceFavorites {
     /** 数据 */
