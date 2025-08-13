@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import AppLayout from '@/layouts/app/AppLayout.vue';
 import { refreshInfo } from '@/utils/passport.ts';
+import { useAlertsStore } from '@/stores/alerts.ts';
+import AppLayout from '@/layouts/app/AppLayout.vue';
+import Alerts from '@/components/common/Alerts.vue';
 
+const alertsStore = useAlertsStore();
 const router = useRouter();
 const isLoading = ref(false);
 
@@ -52,10 +55,20 @@ router.afterEach(() => {
 
         <!-- 加载中提示 -->
         <v-progress-circular indeterminate :size="30" class="loading-tip" v-if="isLoading" />
+
+        <!-- alerts 显示位置 -->
+        <Alerts class="alerts-list" :alerts="alertsStore.alerts" />
     </v-app>
 </template>
 
 <style scoped>
+.alerts-list {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 5000;
+}
+
 .loading-tip {
     position: fixed;
     top: 5px;

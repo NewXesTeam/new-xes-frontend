@@ -1,9 +1,11 @@
 ﻿<script setup lang="ts">
+import { useAlertsStore } from '@/stores/alerts.ts';
 import { VVideo } from 'vuetify/labs/VVideo';
-// @ts-expect-error because Tagify 支持太差了
+// @ts-ignore
 import Tagify from '@/components/common/Tagify.vue';
 import { ref } from 'vue';
 
+const alertsStore = useAlertsStore();
 const tagText = ref();
 
 const handleTagsChange = (event: CustomEvent) => {
@@ -15,10 +17,22 @@ const handleTagsChange = (event: CustomEvent) => {
     });
     tagText.value = tag_str;
 };
+
+const showAlert = () => {
+    alertsStore.addAlert({
+        text: 'test',
+        useAutoClose: true,
+    });
+};
 </script>
 
 <template>
     <v-container class="flex flex-col gap-4">
+        <h2 style="font-size: 24px">alert 显示</h2>
+        <v-btn @click="showAlert">点击显示</v-btn>
+
+        <v-divider />
+
         <h2 style="font-size: 24px">v-video 视频播放器 (lab)</h2>
         <v-video src="https://livefile.xesimg.com/programme/python_assets/bceab5f2e467497b410095ccedc7cbfe.mp4" />
 
