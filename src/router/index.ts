@@ -1,16 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import SpaceLayout from '@/layouts/SpaceLayout.vue';
 
 import DemoPage from '@/pages/DemoPage.vue';
 import HomePage from '@/pages/HomePage.vue';
 import LoginPage from '@/pages/LoginPage.vue';
+
+import SpaceHomePage from '@/pages/space/SpaceHomePage.vue';
+import SpaceCoverPage from '@/pages/space/SpaceCoverPage.vue';
+import SpaceProjectsPage from '@/pages/space/SpaceProjectsPage.vue';
+import SpaceFavoritesPage from '@/pages/space/SpaceFavoritesPage.vue';
+import SpaceSocialPage from '@/pages/space/SpaceSocialPage.vue';
 
 import UserInfoPage from '@/pages/UserInfoPage.vue';
 import AboutPage from '@/pages/AboutPage.vue';
 import EulaPage from '@/pages/EulaPage.vue';
 
 import NotFoundPage from '@/pages/errors/NotFoundPage.vue';
-import SpaceHomePage from '@/pages/space/SpaceHomePage.vue';
-import SpaceLayout from '@/layouts/SpaceLayout.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,6 +87,47 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
+                space: "home",
+            },
+        },
+        {
+            path: '/space/:userId/cover',
+            name: 'space.cover',
+            component: SpaceCoverPage,
+            meta: {
+                useLayout: true,
+                innerLayout: SpaceLayout,
+                space: "cover",
+            },
+        },
+        {
+            path: '/space/:userId/projects',
+            name: 'space.projects',
+            component: SpaceProjectsPage,
+            meta: {
+                useLayout: true,
+                innerLayout: SpaceLayout,
+                space: "projects",
+            },
+        },
+        {
+            path: '/space/:userId/favorites',
+            name: 'space.favorites',
+            component: SpaceFavoritesPage,
+            meta: {
+                useLayout: true,
+                innerLayout: SpaceLayout,
+                space: "favorites",
+            },
+        },
+        {
+            path: '/space/:userId/social',
+            name: 'space.social',
+            component: SpaceSocialPage,
+            meta: {
+                useLayout: true,
+                innerLayout: SpaceLayout,
+                space: "social",
             },
         },
 

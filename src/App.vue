@@ -34,7 +34,7 @@ router.afterEach(() => {
                     <transition name="fade" mode="out-in">
                         <!-- 叠加 Layout -->
                         <component v-if="route.meta.innerLayout" :is="route.meta.innerLayout">
-                            <transition name="fade" mode="out-in">
+                            <transition name="slide-left" mode="out-in">
                                 <component :is="Component" />
                             </transition>
                         </component>
@@ -76,5 +76,20 @@ router.afterEach(() => {
 .fade-enter-to,
 .fade-leave-from {
     opacity: 1;
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: all 0.25s ease-out;
+}
+
+.slide-left-enter-from {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
 }
 </style>
