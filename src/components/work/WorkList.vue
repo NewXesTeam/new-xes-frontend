@@ -1,6 +1,7 @@
 ﻿<script setup lang="ts">
 import type { Work } from '@/types/work.ts';
 import WorkCard from '@/components/work/WorkCard.vue';
+import RemovedWorkCard from '@/components/work/RemovedWorkCard.vue';
 
 interface Props {
     className?: string;
@@ -13,7 +14,12 @@ const { className = 'm-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-
 
 <template>
     <div :class="className">
-        <WorkCard v-for="work of works" :work="work" :key="work.id" />
+        <component
+            v-for="work of works"
+            :key="work.id"
+            :is="work.removed ? RemovedWorkCard : WorkCard"
+            :work="work"
+        />
     </div>
 </template>
 
