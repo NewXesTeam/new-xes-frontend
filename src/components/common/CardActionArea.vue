@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-const { href, rel, target } = defineProps<{ href: string; rel?: string; target?: string; }>();
+const { href, rel, target } = defineProps<{ href: string; rel?: string; target?: string }>();
 </script>
 
 <template>

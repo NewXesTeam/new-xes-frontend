@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useRouter } from 'vue-router';
 import Loading from '@/components/common/Loading.vue';
@@ -13,6 +13,16 @@ const router = useRouter();
 const spaceData = useFetchState<SpaceProfile>();
 const sexName = computed(() => ['男', '女', '未知'][Math.max(Number(store.userInfo?.sex) - 1, 0)]);
 
+const fetchData = () => {
+    commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${store.userInfo?.user_id}`)
+        .then(data => {
+            spaceData.value.resolve(data.data);
+        })
+        .catch(error => {
+            spaceData.value.reject(error);
+        });
+};
+
 watch(
     () => store.loaded,
     loaded => {
@@ -22,15 +32,14 @@ watch(
             return;
         }
 
-        commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${store.userInfo?.user_id}`)
-            .then(data => {
-                spaceData.value.resolve(data.data);
-            })
-            .catch(error => {
-                spaceData.value.reject(error);
-            });
+        fetchData();
     },
 );
+
+onMounted(() => {
+    if (!store.isLoggedIn) return;
+    fetchData();
+});
 </script>
 
 <template>
@@ -43,7 +52,7 @@ watch(
                 <v-avatar :size="128" :image="store.userInfo?.avatar_path" />
                 <div class="flex flex-col h-fit">
                     <h2 style="font-size: 24px">{{ store.userInfo?.realname }}</h2>
-                    <h3 class="text-rose-600">
+                    <h3 class="text-rose-600 dark:text-rose-400">
                         Dangerous: 消息中心的“点赞与收藏”部分的api有问题，会返回包括但不限于下面他人不可见的内容。
                     </h3>
                 </div>

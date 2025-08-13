@@ -1,25 +1,40 @@
 ﻿<script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useFetchData } from '@/utils';
 import SearchInput from '@/components/SearchInput.vue';
 import type { MessageData } from '@/types/message.ts';
 import { refreshInfo } from '@/utils/passport.ts';
 
+type Theme = 'light' | 'dark' | 'system';
+
 const store = useAppStore();
+const themeMode = ref<Theme>('system');
 
 const messageData = useFetchData<MessageData[]>('/api/messages/overview');
 const messageTotal = computed(() => {
     if (messageData.value.error) return 0;
     return messageData.value.data?.reduce((acc, cur: MessageData) => acc + cur.count, 0);
 });
+const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
 
 const onClickLogout = async () => {
     await fetch('/passport/logout');
     await refreshInfo();
 };
 
-const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
+const switchTheme = (theme: Theme) => {
+    themeMode.value = theme;
+    store.theme = theme;
+};
+
+watch(
+    () => store.loaded,
+    loaded => {
+        if (!loaded) return;
+        themeMode.value = store.theme;
+    },
+);
 </script>
 
 <template>
@@ -115,13 +130,32 @@ const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
                     </template>
 
                     <v-list>
-                        <v-list-item value="1"> TurboWarp </v-list-item>
+                        <v-list-item value="turbowarp"> TurboWarp </v-list-item>
                         <v-divider />
-                        <v-list-item value="5"> Python 基础 </v-list-item>
-                        <v-list-item value="5"> Python 海龟 </v-list-item>
-                        <v-list-item value="5"> Python 本地 </v-list-item>
+                        <v-list-item value="python"> Python 基础 </v-list-item>
+                        <v-list-item value="webpy"> Python 海龟 </v-list-item>
+                        <v-list-item value="offline"> Python 本地 </v-list-item>
                         <v-divider />
-                        <v-list-item value="5"> C++ </v-list-item>
+                        <v-list-item value="cpp"> C++ </v-list-item>
+                    </v-list>
+                </v-menu>
+
+                <v-menu open-on-hover>
+                    <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props"> 主题 </v-btn>
+                    </template>
+
+                    <v-list>
+                        <v-list-item value="system" :active="themeMode === 'system'" @click="switchTheme('system')">
+                            系统默认
+                        </v-list-item>
+                        <v-divider />
+                        <v-list-item value="light" :active="themeMode === 'light'" @click="switchTheme('light')">
+                            浅色
+                        </v-list-item>
+                        <v-list-item value="dark" :active="themeMode === 'dark'" @click="switchTheme('dark')">
+                            深色
+                        </v-list-item>
                     </v-list>
                 </v-menu>
             </div>

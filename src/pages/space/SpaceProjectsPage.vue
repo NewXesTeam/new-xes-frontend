@@ -16,7 +16,9 @@ const orderType = ref('time');
 
 const fetchData = () => {
     spaceWorksData.value.reset();
-    commonFetch<BasicResponse<SpaceWorks>>(`/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`)
+    commonFetch<BasicResponse<SpaceWorks>>(
+        `/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`,
+    )
         .then(data => {
             spaceWorksData.value.resolve(data.data);
             totalPages.value = Math.ceil((spaceWorksData.value.data?.total || 1) / 20);
@@ -63,7 +65,12 @@ onMounted(() => {
                 <Loading v-if="!spaceWorksData.completed || spaceWorksData.error" :error="spaceWorksData.error" />
             </div>
 
-            <h2 v-if="spaceWorksData.completed && !spaceWorksData.error && spaceWorksData.data.total < 1" style="font-size: 24px;">暂无作品</h2>
+            <h2
+                v-if="spaceWorksData.completed && !spaceWorksData.error && spaceWorksData.data.total < 1"
+                style="font-size: 24px"
+            >
+                暂无作品
+            </h2>
             <WorkList v-else :works="spaceWorksData.data?.data || []" />
 
             <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />

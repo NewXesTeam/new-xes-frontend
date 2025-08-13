@@ -1,14 +1,28 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useTheme } from 'vuetify';
+import { useAppStore } from '@/stores/app.ts';
 import { refreshInfo } from '@/utils/passport.ts';
 import { useAlertsStore } from '@/stores/alerts.ts';
 import AppLayout from '@/layouts/app/AppLayout.vue';
 import Alerts from '@/components/common/Alerts.vue';
 
+const store = useAppStore();
 const alertsStore = useAlertsStore();
 const router = useRouter();
+const theme = useTheme();
+
 const isLoading = ref(false);
+
+watch(() => store.loaded, loaded => {
+    if (!loaded) return;
+    theme.change(store.theme);
+})
+
+watch(() => store.theme, newTheme => {
+    theme.change(newTheme);
+})
 
 onMounted(() => {
     refreshInfo();

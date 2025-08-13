@@ -115,7 +115,7 @@ onMounted(() => {
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2 items-baseline">
                     <span style="font-size: 24px">TA 的作品</span>
-                    <span class="text-neutral-700" style="font-size: 16px">
+                    <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
                         ({{ spaceIndexData.data?.works.total }})
                     </span>
                     <div class="flex-1" />
@@ -128,7 +128,7 @@ onMounted(() => {
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2 items-baseline">
                     <span style="font-size: 24px">TA 的收藏</span>
-                    <span class="text-neutral-700" style="font-size: 16px">
+                    <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
                         ({{ spaceIndexData.data?.favorites.total }})
                     </span>
                     <div class="flex-1" />
@@ -143,7 +143,7 @@ onMounted(() => {
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2 items-baseline">
                     <span style="font-size: 24px">TA 的粉丝</span>
-                    <span class="text-neutral-700" style="font-size: 16px">
+                    <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
                         ({{ spaceIndexData.data?.fans.total }})
                     </span>
                     <div class="flex-1" />
@@ -158,7 +158,7 @@ onMounted(() => {
             <div class="flex flex-col gap-2">
                 <div class="flex gap-2 items-baseline">
                     <span style="font-size: 24px">TA 的关注</span>
-                    <span class="text-neutral-700" style="font-size: 16px">
+                    <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
                         ({{ spaceIndexData.data?.follows.total }})
                     </span>
                     <div class="flex-1" />

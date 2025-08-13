@@ -28,7 +28,7 @@ const fetchData = () => {
         .then(data => {
             spaceData.value.resolve(data.data);
             isUserFollowed.value = spaceData.value.data?.is_follow || false;
-            currentSignature.value = spaceData.value.data?.signature || "";
+            currentSignature.value = spaceData.value.data?.signature || '';
         })
         .catch(error => {
             spaceData.value.reject(error.toString());
@@ -145,7 +145,9 @@ onMounted(() => {
                 <div class="flex flex-1 flex-col gap-1">
                     <div class="flex items-baseline">
                         <h2 style="font-size: 24px">{{ spaceData.data?.realname }}</h2>
-                        <span class="text-neutral-700" style="font-size: 16px"> ({{ spaceData.data?.user_id }}) </span>
+                        <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
+                            ({{ spaceData.data?.user_id }})
+                        </span>
                     </div>
 
                     <v-text-field

@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import PiniaPluginPersistedState from 'pinia-plugin-persistedstate';
 import router from '@/router';
 
 import { createVuetify } from 'vuetify';
@@ -15,7 +16,7 @@ const app = createApp(App);
 app.use(
     createVuetify({
         theme: {
-            defaultTheme: 'light',
+            defaultTheme: 'system',
         },
         icons: {
             defaultSet: 'mdi',
@@ -26,7 +27,11 @@ app.use(
         },
     }),
 );
-app.use(createPinia());
+
+const pinia = createPinia();
+pinia.use(PiniaPluginPersistedState);
+
+app.use(pinia);
 app.use(router);
 
 Reflect.set(window, 'app', app);

@@ -36,7 +36,7 @@ onMounted(() => {
 <template>
     <v-container class="flex-1 flex flex-col">
         <Loading v-if="!spaceCoverData.completed || spaceCoverData.error" :error="spaceCoverData.error" />
-        <h2 v-else-if="!spaceCoverData.data.is_show_web_tab" style="font-size: 24px;">未设置封面</h2>
+        <h2 v-else-if="!spaceCoverData.data.is_show_web_tab" style="font-size: 24px">未设置封面</h2>
         <iframe v-else :src="spaceCoverData.data.index_url" class="w-full flex-1" />
     </v-container>
 </template>

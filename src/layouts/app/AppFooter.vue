@@ -19,12 +19,14 @@ const openLink = (link: string) => window.open(link, '_blank');
 </script>
 
 <template>
-    <div class="flex justify-between bg-neutral-100 px-4 py-1 text-black">
-        <div class="flex items-center">
+    <div class="flex justify-between bg-neutral-800 px-4 py-1">
+        <div class="flex items-center text-white">
             <span>Copyright by NewXesTeam 2025</span>
         </div>
         <div class="flex items-center">
             <v-icon-btn
+                class="text-white"
+                theme="dark"
                 v-for="link of links"
                 :icon="link.icon"
                 :title="link.name"

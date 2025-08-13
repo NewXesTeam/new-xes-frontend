@@ -9,7 +9,7 @@ const alertsStore = useAlertsStore();
 const { user } = defineProps<{ user: SimpleUserInfo }>();
 const userLink = computed(() => `/space/${user.user_id}/`);
 const userName = computed(() => {
-    return user.user_id === undefined ? '666 这位是 undefined 先生' : user.realname.replace(/<em>|<\/em>/g, '')
+    return user.user_id === undefined ? '666 这位是 undefined 先生' : user.realname.replace(/<em>|<\/em>/g, '');
 });
 const isUserFollowed = ref(user.is_followed);
 
@@ -29,22 +29,22 @@ const onClickFollow = async () => {
 </script>
 
 <template>
-    <v-card style="display: flex;">
+    <v-card style="display: flex">
         <CardActionArea class="flex-1" :href="userLink" rel="noopener" target="_blank">
             <v-card-text class="flex gap-2">
                 <v-avatar :size="108" :image="user.avatar_path" />
                 <div class="flex flex-col gap-2">
                     <h6 style="font-size: 24px">{{ userName }}</h6>
-                    <div class="flex gap-4" style="font-size: 14px;">
+                    <div class="flex gap-4" style="font-size: 14px">
                         <span>关注：{{ user.follows }}</span>
                         <span>粉丝：{{ user.fans }}</span>
                         <span>UID：{{ user.id }}</span>
                     </div>
-                    <div style="font-size: 16px;">{{ user.signature }}</div>
+                    <div style="font-size: 16px">{{ user.signature }}</div>
                 </div>
             </v-card-text>
         </CardActionArea>
-        <div class="flex flex-col h-fit my-auto" style="padding: 4px;">
+        <div class="flex flex-col h-fit my-auto" style="padding: 8px">
             <v-btn
                 :variant="isUserFollowed ? 'outlined' : undefined"
                 :color="isUserFollowed ? 'secondary' : 'primary'"
@@ -56,6 +56,4 @@ const onClickFollow = async () => {
     </v-card>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
