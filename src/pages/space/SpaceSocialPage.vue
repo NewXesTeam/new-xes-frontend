@@ -1,13 +1,7 @@
-﻿<script setup lang="ts">
-
-</script>
+﻿<script setup lang="ts"></script>
 
 <template>
-    <v-container>
-        Test
-    </v-container>
+    <v-container> Test </v-container>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

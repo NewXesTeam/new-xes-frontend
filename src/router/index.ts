@@ -87,7 +87,7 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
-                space: "home",
+                space: 'home',
             },
         },
         {
@@ -97,7 +97,7 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
-                space: "cover",
+                space: 'cover',
             },
         },
         {
@@ -107,7 +107,7 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
-                space: "projects",
+                space: 'projects',
             },
         },
         {
@@ -117,7 +117,7 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
-                space: "favorites",
+                space: 'favorites',
             },
         },
         {
@@ -127,7 +127,7 @@ const router = createRouter({
             meta: {
                 useLayout: true,
                 innerLayout: SpaceLayout,
-                space: "social",
+                space: 'social',
             },
         },
 

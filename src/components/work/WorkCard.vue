@@ -10,8 +10,8 @@ const thumbnail = computed(
 const name = computed(() => work.name.replace(/<em>|<\/em>/g, ''));
 
 const onOpenAuthorHome = () => {
-    window.open(`/space/${work.user_id}/home`, '_blank')
-}
+    window.open(`/space/${work.user_id}/home`, '_blank');
+};
 </script>
 
 <template>

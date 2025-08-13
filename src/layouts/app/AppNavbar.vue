@@ -19,7 +19,7 @@ const onClickLogout = async () => {
     await refreshInfo();
 };
 
-const mySpaceLink = computed(() => (`/space/${store.userInfo?.user_id}/home`));
+const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
 </script>
 
 <template>
