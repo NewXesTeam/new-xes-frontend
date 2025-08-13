@@ -16,6 +16,7 @@ onMounted(() => {
 
 router.beforeEach((from, to, next) => {
     console.log('导航开始。');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     isLoading.value = true;
     next();
 });
