@@ -27,6 +27,8 @@ const fetchData = () => {
     commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${route.params.userId}`)
         .then(data => {
             spaceData.value.resolve(data.data);
+            isUserFollowed.value = spaceData.value.data?.is_follow || false;
+            currentSignature.value = spaceData.value.data?.signature || "";
         })
         .catch(error => {
             spaceData.value.reject(error.toString());
@@ -123,15 +125,6 @@ watch(
     () => {
         console.log('切换 space 页面');
         fetchData();
-    },
-);
-
-watch(
-    () => spaceData.value.completed,
-    () => {
-        if (!spaceData.value.completed || spaceData.value.error) return;
-        isUserFollowed.value = spaceData.value.data.is_follow;
-        currentSignature.value = spaceData.value.data.signature;
     },
 );
 
