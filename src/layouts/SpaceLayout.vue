@@ -1,46 +1,136 @@
 ﻿<script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
-import { useFetchData } from '@/utils';
+import { useAlertsStore } from '@/stores/alerts.ts';
+import { commonFetch, useFetchState } from '@/utils';
 import Loading from '@/components/common/Loading.vue';
 import type { SpaceProfile } from '@/types/space.ts';
+import type { ErrorResponse } from '../../react-ver/app/interfaces/common.ts';
+import type { BasicResponse } from '@/types/common.ts';
 
 const store = useAppStore();
+const alertsStore = useAlertsStore();
 const route = useRoute();
 const router = useRouter();
-const userId = route.params.userId as string;
-const spaceData = useFetchData<SpaceProfile>(`/api/space/profile?user_id=${userId}`);
-
 const spaceTab = ref(route.meta.space || 'home');
+
+const spaceData = useFetchState<SpaceProfile>();
+const currentSignature = ref('');
+
 const isUserFollowed = ref(false);
 const isChangingSignature = ref(false);
-const signatureInput = ref("");
+const signatureInput = ref('');
 
-watch(() => store.loaded, loaded => {
-    if (!loaded || !(userId === 'my'))
-        return;
+const fetchData = () => {
+    spaceData.value.reset();
+    commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${route.params.userId}`)
+        .then(data => {
+            spaceData.value.resolve(data.data);
+        })
+        .catch(error => {
+            spaceData.value.reject(error.toString());
+        });
+};
 
-    router.push({
-        name: route.name,
-        params: {
-            userId: store.userInfo?.user_id
-        }
-    })
-})
+const onClickFollow = async () => {
+    await fetch('/api/space/follow', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ followed_user_id: route.params.userId, state: !isUserFollowed.value }),
+    });
+    isUserFollowed.value = !isUserFollowed.value;
+    alertsStore.addAlert({
+        type: 'success',
+        text: isUserFollowed.value ? '关注成功' : '取消关注成功',
+        useAutoClose: true,
+    });
+};
 
-watch(() => spaceData.value.completed, completed => {
-    if (!spaceData.value.completed || spaceData.value.error)
-        return;
-    isUserFollowed.value = spaceData.value.data.is_follow;
-})
+const onClickChangeSignature = () => {
+    signatureInput.value = currentSignature.value;
+    isChangingSignature.value = true;
+};
+
+const onChangeSignature = async () => {
+    if (currentSignature.value === signatureInput.value) return;
+
+    isChangingSignature.value = false;
+    const response = await fetch('/api/space/edit_signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signature: signatureInput.value }),
+    });
+
+    if (response.ok) {
+        currentSignature.value = signatureInput.value;
+        alertsStore.addAlert({
+            type: 'success',
+            text: '更改签名成功',
+            useAutoClose: true,
+        });
+    } else {
+        const responseData: ErrorResponse = await response.json();
+        alertsStore.addAlert({
+            type: 'error',
+            text: responseData.message,
+            useAutoClose: true,
+        });
+    }
+
+    signatureInput.value = '';
+};
+
+const signatureInputKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+        onChangeSignature();
+    } else if (event.key === 'Escape') {
+        isChangingSignature.value = false;
+        signatureInput.value = '';
+    }
+};
+
+watch(
+    () => store.loaded,
+    loaded => {
+        if (!loaded || !(route.params.userId === 'my')) return;
+
+        router.push({
+            name: route.name,
+            params: {
+                userId: store.userInfo?.user_id,
+            },
+        });
+    },
+);
 
 watch(spaceTab, newTab => {
     router.push({
         name: `space.${newTab}`,
         params: route.params,
-    })
-})
+    });
+});
+
+watch(
+    () => route.params.userId,
+    () => {
+        console.log('切换 space 页面');
+        fetchData();
+    },
+);
+
+watch(
+    () => spaceData.value.completed,
+    () => {
+        if (!spaceData.value.completed || spaceData.value.error) return;
+        isUserFollowed.value = spaceData.value.data.is_follow;
+        currentSignature.value = spaceData.value.data.signature;
+    },
+);
+
+onMounted(() => {
+    fetchData();
+});
 </script>
 
 <template>
@@ -54,10 +144,8 @@ watch(spaceTab, newTab => {
                 <v-avatar :size="128" :image="spaceData.data?.avatar_path" />
                 <div class="flex flex-1 flex-col gap-1">
                     <div class="flex items-baseline">
-                        <h2 style="font-size: 24px;">{{ spaceData.data?.realname }}</h2>
-                        <span class="text-neutral-700" style="font-size: 16px">
-                        ({{ spaceData.data?.user_id }})
-                    </span>
+                        <h2 style="font-size: 24px">{{ spaceData.data?.realname }}</h2>
+                        <span class="text-neutral-700" style="font-size: 16px"> ({{ spaceData.data?.user_id }}) </span>
                     </div>
 
                     <v-text-field
@@ -65,33 +153,38 @@ watch(spaceTab, newTab => {
                         class="signature-input max-w-[500px]"
                         variant="outlined"
                         :hide-details="true"
+                        autofocus
                         v-model="signatureInput"
+                        @blur="onChangeSignature"
+                        @keydown="signatureInputKeyDown"
                     />
 
                     <div v-else class="flex items-center">
-                    <span style="font-size: 16px">
-                        {{ spaceData.data?.signature }}
-                    </span>
+                        <span style="font-size: 16px">
+                            {{ currentSignature }}
+                        </span>
 
                         <v-btn
                             v-if="spaceData.data?.is_my"
                             size="small"
                             variant="outlined"
                             color="primary"
+                            @click="onClickChangeSignature"
                         >
                             修改签名
                         </v-btn>
                     </div>
 
                     <span style="font-size: 16px">
-                    关注：{{ spaceData.data?.follows }} &nbsp; 粉丝：{{ spaceData.data?.fans }}
-                </span>
+                        关注：{{ spaceData.data?.follows }} &nbsp; 粉丝：{{ spaceData.data?.fans }}
+                    </span>
                 </div>
                 <div class="flex flex-col h-fit">
                     <v-btn
                         v-if="!spaceData.data?.is_my"
                         :variant="isUserFollowed ? 'outlined' : undefined"
                         :color="isUserFollowed ? 'secondary' : 'primary'"
+                        @click="onClickFollow"
                     >
                         {{ isUserFollowed ? '已关注' : '关注' }}
                     </v-btn>
@@ -108,7 +201,7 @@ watch(spaceTab, newTab => {
                 <v-tab value="social">社交</v-tab>
             </v-tabs>
 
-            <v-divider />
+            <v-divider class="w-full h-[1px]" />
         </div>
 
         <slot />
