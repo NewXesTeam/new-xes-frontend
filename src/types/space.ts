@@ -58,18 +58,10 @@ export interface SpaceIndex {
 }
 
 export interface SpaceCover {
-    /** 数据 */
-    data: {
-        index_url: string;
-        is_my: boolean;
-        is_show_web_tab: boolean;
-        remove_reason: string | null;
-    };
-
-    /** 状态码 */
-    status: number;
-    /** 状态信息 */
-    msg: string;
+    index_url: string;
+    is_my: boolean;
+    is_show_web_tab: boolean;
+    remove_reason: string | null;
 }
 
 export interface SpaceWorks {
