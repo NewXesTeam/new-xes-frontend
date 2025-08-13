@@ -145,7 +145,7 @@ onMounted(() => {
         <Loading :error="spaceData.error" />
     </v-container>
 
-    <div v-else class="flex flex-col gap-2">
+    <div v-else class="flex flex-col flex-1 gap-2">
         <v-container class="flex flex-col gap-2">
             <div class="flex gap-2 items-center">
                 <v-avatar :size="128" :image="spaceData.data?.avatar_path" />

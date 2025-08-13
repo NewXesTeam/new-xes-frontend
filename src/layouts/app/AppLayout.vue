@@ -6,7 +6,7 @@ import AppFooter from '@/layouts/app/AppFooter.vue';
 <template>
     <div class="flex flex-col min-h-full">
         <AppNavbar />
-        <div class="mt-5 mb-5 flex-1">
+        <div class="mt-5 mb-5 flex-1 flex flex-col">
             <slot />
         </div>
         <AppFooter />
