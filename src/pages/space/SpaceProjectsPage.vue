@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { commonFetch, useFetchState } from '@/utils';
 import type { BasicResponse } from '@/types/common.ts';
@@ -40,7 +40,6 @@ watch(orderType, () => {
 });
 
 watch(currentPage, () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
     if (spaceWorksData.value.completed) {
         fetchData();
     }
