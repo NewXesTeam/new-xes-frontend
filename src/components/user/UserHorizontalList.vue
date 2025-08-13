@@ -2,7 +2,7 @@
 import type { SimpleUserInfo } from '@/types/user.ts';
 import SmallUserCard from '@/components/user/SmallUserCard.vue';
 
-const { users } = defineProps<{ users: SimpleUserInfo[]; }>();
+const { users } = defineProps<{ users: SimpleUserInfo[] }>();
 </script>
 
 <template>

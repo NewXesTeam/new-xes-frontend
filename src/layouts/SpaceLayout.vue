@@ -111,9 +111,12 @@ watch(spaceTab, newTab => {
     });
 });
 
-watch(() => route.meta.space, newTab => {
-    spaceTab.value = (newTab || "home") as string;
-})
+watch(
+    () => route.meta.space,
+    newTab => {
+        spaceTab.value = (newTab || 'home') as string;
+    },
+);
 
 watch(
     () => route.params.userId,

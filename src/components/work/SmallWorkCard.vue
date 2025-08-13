@@ -16,7 +16,7 @@ const tooltip = `👀${work.views} 👍${work.likes} 👎${work.unlikes} 🗨️
     <v-card v-tooltip:top="work.created_at" :href="getWorkLink(work)">
         <v-img class="mx-auto" style="height: 138px" draggable="false" :src="thumbnail" />
 
-        <v-card-title v-tooltip:bottom="tooltip" style="font-size: 16px;">
+        <v-card-title v-tooltip:bottom="tooltip" style="font-size: 16px">
             {{ name }}
         </v-card-title>
     </v-card>

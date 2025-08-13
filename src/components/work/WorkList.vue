@@ -14,12 +14,7 @@ const { className = 'm-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-
 
 <template>
     <div :class="className">
-        <component
-            v-for="work of works"
-            :key="work.id"
-            :is="work.removed ? RemovedWorkCard : WorkCard"
-            :work="work"
-        />
+        <component v-for="work of works" :key="work.id" :is="work.removed ? RemovedWorkCard : WorkCard" :work="work" />
     </div>
 </template>
 

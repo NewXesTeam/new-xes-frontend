@@ -27,37 +27,37 @@ const fetchData = () => {
 
 const gotoSpaceWorksPage = () => {
     router.push({
-        name: "space.projects",
+        name: 'space.projects',
         params: route.params,
-    })
-}
+    });
+};
 
 const gotoSpaceFavoritesPage = () => {
     router.push({
-        name: "space.favorites",
+        name: 'space.favorites',
         params: route.params,
-    })
-}
+    });
+};
 
 const gotoSpaceSocialFansPage = () => {
     router.push({
-        name: "space.social",
+        name: 'space.social',
         params: route.params,
         query: {
-            type: "fans",
-        }
-    })
-}
+            type: 'fans',
+        },
+    });
+};
 
 const gotoSpaceSocialFollowsPage = () => {
     router.push({
-        name: "space.social",
+        name: 'space.social',
         params: route.params,
         query: {
-            type: "follows",
-        }
-    })
-}
+            type: 'follows',
+        },
+    });
+};
 
 watch(
     () => route.params.userId,
@@ -67,17 +67,19 @@ watch(
     },
 );
 
-watch(() => spaceIndexData.value.completed, () => {
-    if (!spaceIndexData.value.completed || spaceIndexData.value.error)
-        return;
-    overviewData.value = [
-        ["作品总数", spaceIndexData.value.data.overview.works],
-        ["被点赞总数", spaceIndexData.value.data.overview.likes],
-        ["被浏览总数", spaceIndexData.value.data.overview.views],
-        ["被改编总数", spaceIndexData.value.data.overview.source_code_views],
-        ["被收藏总数", spaceIndexData.value.data.overview.favorites],
-    ]
-})
+watch(
+    () => spaceIndexData.value.completed,
+    () => {
+        if (!spaceIndexData.value.completed || spaceIndexData.value.error) return;
+        overviewData.value = [
+            ['作品总数', spaceIndexData.value.data.overview.works],
+            ['被点赞总数', spaceIndexData.value.data.overview.likes],
+            ['被浏览总数', spaceIndexData.value.data.overview.views],
+            ['被改编总数', spaceIndexData.value.data.overview.source_code_views],
+            ['被收藏总数', spaceIndexData.value.data.overview.favorites],
+        ];
+    },
+);
 
 onMounted(() => {
     fetchData();
@@ -94,14 +96,16 @@ onMounted(() => {
                 <v-card-text class="flex gap-4 justify-center">
                     <v-card v-for="item in overviewData" variant="outlined" class="w-fit h-fit">
                         <v-card-text class="flex flex-col pr-8">
-                            <span style="font-size: 16px;">{{ item[0] }}</span>
-                            <span style="font-size: 24px;">{{ item[1] }}</span>
+                            <span style="font-size: 16px">{{ item[0] }}</span>
+                            <span style="font-size: 24px">{{ item[1] }}</span>
                         </v-card-text>
                     </v-card>
                     <v-card variant="outlined" class="w-fit h-fit">
                         <v-card-text class="flex flex-col">
-                            <span style="font-size: 16px;">代表作</span>
-                            <span v-if="!spaceIndexData.data.representative_work" style="font-size: 24px;">暂无代表作</span>
+                            <span style="font-size: 16px">代表作</span>
+                            <span v-if="!spaceIndexData.data.representative_work" style="font-size: 24px"
+                                >暂无代表作</span
+                            >
                             <SmallWorkCard v-else :work="spaceIndexData.data.representative_work" />
                         </v-card-text>
                     </v-card>
@@ -115,9 +119,7 @@ onMounted(() => {
                         ({{ spaceIndexData.data?.works.total }})
                     </span>
                     <div class="flex-1" />
-                    <v-btn variant="text" append-icon="mdi-arrow-right" @click="gotoSpaceWorksPage">
-                        查看全部
-                    </v-btn>
+                    <v-btn variant="text" append-icon="mdi-arrow-right" @click="gotoSpaceWorksPage"> 查看全部 </v-btn>
                 </div>
                 <v-divider />
                 <WorkList :works="spaceIndexData.data?.works.data" />
