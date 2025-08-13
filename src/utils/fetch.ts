@@ -5,6 +5,7 @@ import type { BasicResponse } from '@/types/common.ts';
 interface BaseFetchState<T> {
     resolve(info: T): void;
     reject(message: string): void;
+    reset(): void;
 }
 
 interface PendingFetchState<T> extends BaseFetchState<T> {
@@ -51,6 +52,12 @@ export function useFetchState<T>(initialize: T | null = null) {
                     errorMessageRef.value = message;
                     errorRef.value = true;
                     completedRef.value = true;
+                },
+                reset() {
+                    completedRef.value = false;
+                    dataRef.value = initialize;
+                    errorRef.value = false;
+                    errorMessageRef.value = null;
                 },
             }) as FetchState<T>,
     );
