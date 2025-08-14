@@ -1,71 +1,150 @@
-﻿import { computed, onMounted, ref } from 'vue';
-import { commonFetch } from './common.ts';
+﻿import { type ShallowRef, shallowRef } from 'vue';
+import { commonFetch } from '@/utils/common.ts';
 import type { BasicResponse } from '@/types/common.ts';
 
 interface BaseFetchState<T> {
-    resolve(info: T): void;
+    // 在继承者定义
+
+    // data: T | null;
+    // errorMessage: string | null;
+
+    // is: {
+    //     completed: boolean;
+    //     success: boolean;
+    //     error: boolean;
+    // };
+
+    on: {
+        completed(listener: () => void): void;
+        success(listener: (data: T) => void): void;
+        error(listener: (error: string) => void): void;
+    };
+
+    listeners: {
+        completed: (() => void)[];
+        success: ((data: T) => void)[];
+        error: ((error: string) => void)[];
+    };
+
+    resolve(data: T): void;
     reject(message: string): void;
-    reset(): void;
+
+    reset: {
+        (): void;
+        data(): void;
+        state(): void;
+    };
 }
 
 interface PendingFetchState<T> extends BaseFetchState<T> {
     data: T | null;
-    completed: false;
-    error: false;
     errorMessage: null;
+
+    completed: false;
+    success: false;
+    error: false;
 }
 
 interface SuccessFetchState<T> extends BaseFetchState<T> {
     data: T;
-    completed: true;
-    error: false;
     errorMessage: null;
+
+    completed: true;
+    success: true;
+    error: false;
 }
 
 interface ErrorFetchState<T> extends BaseFetchState<T> {
     data: T | null;
-    completed: true;
-    error: true;
     errorMessage: string;
+
+    completed: true;
+    success: false;
+    error: true;
 }
 
 type FetchState<T> = PendingFetchState<T> | SuccessFetchState<T> | ErrorFetchState<T>;
 
-export function useFetchState<T>(initialize: T | null = null) {
-    const completedRef = ref(false);
-    const dataRef = ref<T | null>(initialize);
-    const errorRef = ref(false);
-    const errorMessageRef = ref<string | null>(null);
+function invoke<T extends Array<unknown>>(functions: ((...args: T) => void)[], ...args: T) {
+    for (const func of functions) {
+        func(...args);
+    }
+}
 
-    return computed(
-        () =>
-            ({
-                data: dataRef.value as T | null,
-                completed: completedRef.value,
-                error: errorRef.value,
-                errorMessage: errorMessageRef.value,
-                resolve(info: T) {
-                    dataRef.value = info;
-                    completedRef.value = true;
+export function useFetchState<T>(initialize: T | null = null) {
+    const state = shallowRef({
+        data: initialize,
+        errorMessage: null,
+
+        completed: false,
+        success: false,
+        error: false,
+
+        on: {
+            completed(listener) {
+                state.value.listeners.completed.push(listener);
+            },
+            success(listener) {
+                state.value.listeners.success.push(listener);
+            },
+            error(listener) {
+                state.value.listeners.error.push(listener);
+            },
+        },
+
+        listeners: {
+            completed: [] as (() => void)[],
+            success: [] as ((data: T) => void)[],
+            error: [] as ((error: string) => void)[],
+        },
+
+        resolve(data) {
+            state.value.data = data;
+            state.value.errorMessage = null;
+
+            state.value.success = true;
+            state.value.completed = true;
+
+            invoke(state.value.listeners.completed);
+            invoke(state.value.listeners.success, data);
+        },
+        reject(message) {
+            state.value.data = null;
+            state.value.errorMessage = message;
+
+            state.value.error = true;
+            state.value.completed = true;
+
+            invoke(state.value.listeners.completed);
+            invoke(state.value.listeners.error, message);
+        },
+
+        reset: Object.assign(
+            () => {
+                state.value.reset.data();
+                state.value.reset.state();
+            },
+            {
+                data() {
+                    state.value.data = null;
+                    state.value.errorMessage = null;
                 },
-                reject(message: string) {
-                    errorMessageRef.value = message;
-                    errorRef.value = true;
-                    completedRef.value = true;
+                state() {
+                    state.value.success = false;
+                    state.value.error = false;
+                    state.value.completed = false;
                 },
-                reset() {
-                    completedRef.value = false;
-                    dataRef.value = initialize;
-                    errorRef.value = false;
-                    errorMessageRef.value = null;
-                },
-            }) as FetchState<T>,
-    );
+            },
+        ),
+    } as FetchState<T>);
+
+    return state;
 }
 
 export function useFetchData<T>(url: string, options?: RequestInit, initialize: T | null = null) {
     const state = useFetchState<T>(initialize);
-    onMounted(() => {
+    const load = () => {
+        state.value.reset();
         commonFetch<BasicResponse<T>>(url, options)
             .then(data => {
                 state.value.resolve(data.data);
@@ -73,6 +152,6 @@ export function useFetchData<T>(url: string, options?: RequestInit, initialize: 
             .catch(error => {
                 state.value.reject(error.toString());
             });
-    });
-    return state;
+    };
+    return [state, load] as [ShallowRef<FetchState<T>>, () => void];
 }
