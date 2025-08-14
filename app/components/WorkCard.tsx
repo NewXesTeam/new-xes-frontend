@@ -32,9 +32,7 @@ const WorkCard = ({ work }: { work: Work }) => {
                     <CardMedia
                         component="img"
                         alt={work.name.replace(/<em>|<\/em>/g, '')}
-                        width={224}
-                        height={168}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', width: 224, height: 168 }}
                         src={
                             work.thumbnail ||
                             'https://static0-test.xesimg.com/programme/assets/c16477eaab146fbc22a050e2203f91b8.png'

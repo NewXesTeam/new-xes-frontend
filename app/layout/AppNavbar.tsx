@@ -34,7 +34,7 @@ const UserMenu = ({
                 onClick={event => setMessageEl(event.currentTarget)}
             >
                 <Badge color="error" badgeContent={totalMessageCount}>
-                    <span style={{ color: 'white' }}>消息</span>
+                    <span>消息</span>
                 </Badge>
             </Button>
             <Menu
@@ -106,7 +106,7 @@ const CreateMenu = () => {
                 aria-expanded={openCreateMenu ? 'true' : undefined}
                 onClick={event => setAnchorEl(event.currentTarget)}
             >
-                <span style={{ color: 'white' }}>创作</span>
+                <span>创作</span>
             </Button>
             <Menu
                 anchorEl={anchorEl}
@@ -178,15 +178,15 @@ const AppNavbar = () => {
                     </NavLink>
 
                     <Box className="me-auto flex gap-2">
-                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/')}>
+                        <Button sx={{ display: 'block' }} onClick={() => (location.href = '/')}>
                             首页
                         </Button>
 
-                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/discover')}>
+                        <Button sx={{ display: 'block' }} onClick={() => (location.href = '/discover')}>
                             发现
                         </Button>
 
-                        <Button sx={{ color: 'white', display: 'block' }} onClick={() => (location.href = '/about')}>
+                        <Button sx={{ display: 'block' }} onClick={() => (location.href = '/about')}>
                             关于
                         </Button>
                     </Box>
@@ -202,10 +202,7 @@ const AppNavbar = () => {
                                 onLogout={logoutEvent}
                             />
                         ) : (
-                            <Button
-                                sx={{ color: 'white', display: 'block' }}
-                                onClick={() => (location.href = '/login')}
-                            >
+                            <Button sx={{ display: 'block' }} onClick={() => (location.href = '/login')}>
                                 登录
                             </Button>
                         )}

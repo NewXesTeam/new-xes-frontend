@@ -264,7 +264,7 @@ export default function LoginPage() {
                                 value={captchaAnswer}
                                 onChange={event => setCaptchaAnswer(event.target.value)}
                                 slotProps={{
-                                    htmlInput: {
+                                    input: {
                                         endAdornment: (
                                             <InputAdornment position="end">
                                                 <img src={captchaBase64} alt="验证码" style={{ height: '40px' }} />

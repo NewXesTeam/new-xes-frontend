@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, styled, InputBase, alpha } from '@mui/material';
+import { Box, styled, alpha, Autocomplete, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import type { Associate_words } from '@/interfaces/common';
 import '@/styles/search.css';
@@ -17,123 +17,75 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    width: '100%',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
-}));
-
 const SearchInput = ({ keyword = '' }: { keyword?: string }) => {
-    const timerRef = React.useRef<NodeJS.Timeout>(null);
-    const [keyword_input, setKeywordInput] = React.useState<string>(keyword);
-    const [is_show_suggestions, setIsShowSuggestions] = React.useState<boolean>(false);
-    const [suggestions, setSuggestions] = React.useState<React.JSX.Element[]>([]);
+    const [options, setOptions] = React.useState<string[]>([]);
+    const [inputValue, setInputValue] = React.useState(keyword);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // @ts-ignore  // TODO: fix this type error
-        clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(async () => {
-            const inputValue = event.target.value.toLowerCase();
-            setSuggestions([]);
+    const fetchSuggestions = React.useCallback(async (value: string) => {
+        if (!value) {
+            setOptions([]);
+            return;
+        }
+        const response = await fetch(`/api/search/associate_words?keyword=${value}`);
+        const responseData: Associate_words = await response.json();
+        setOptions(responseData.data.map(item => decodeURIComponent(item.word.replace(/<em>/g, '').replace(/<\/em>/g, ''))));
+    }, []);
 
-            let suggestionsList: string[] = [];
-
-            if (inputValue.length > 0) {
-                const response = await fetch(`/api/search/associate_words?keyword=${inputValue}`);
-                const responseData: Associate_words = await response.json();
-                for (let i = 0; i < responseData.data.length; ++i) {
-                    suggestionsList.push(decodeURIComponent(responseData.data[i].word));
-                }
-                setSuggestions(
-                    suggestionsList.map((word, index) => (
-                        <li
-                            key={index}
-                            onClick={() => {
-                                event.target.value = word.replace(/<em>/g, '').replace(/<\/em>/g, '');
-                                setKeywordInput(word.replace(/<em>/g, '').replace(/<\/em>/g, ''));
-                                setIsShowSuggestions(false);
-                            }}
-                            ref={element => {
-                                if (element) {
-                                    element.innerHTML = word;
-                                }
-                            }}
-                        />
-                    )),
-                );
-                setIsShowSuggestions(true);
-            } else {
-                setIsShowSuggestions(false);
-            }
-        }, 500);
-    };
+    React.useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchSuggestions(inputValue.toLowerCase());
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [inputValue, fetchSuggestions]);
 
     return (
         <Box
             component="form"
             role="search"
             action="/search"
-            className="relative"
-            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+            onSubmit={event => {
                 event.preventDefault();
-                window.location.href = `/search?keyword=${keyword_input}`;
+                window.location.href = `/search?keyword=${inputValue}`;
             }}
             style={{ display: 'flex', alignItems: 'center' }}
         >
             <Search>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                    placeholder="搜索..."
-                    inputProps={{
-                        'aria-label': 'search',
-                        type: 'search',
-                        name: 'keyword',
-                        defaultValue: keyword_input,
+                <Autocomplete
+                    freeSolo
+                    options={options}
+                    inputValue={inputValue}
+                    onInputChange={(_, value) => setInputValue(value)}
+                    onChange={(_, value) => {
+                        if (typeof value === 'string') setInputValue(value);
                     }}
-                    onInput={handleInputChange}
-                    onBlur={() => {
-                        setTimeout(() => {
-                            if (is_show_suggestions) {
-                                setIsShowSuggestions(false);
-                                // @ts-ignore  // TODO: fix this type error
-                                clearTimeout(timerRef.current);
-                            }
-                        }, 100);
-                    }}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setKeywordInput(event.target.value);
-                    }}
-                    autoComplete="off"
+                    sx={{ width: '100%' }}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            fullWidth
+                            placeholder="搜索..."
+                            variant="outlined"
+                            size="small"
+                            sx={{ 
+                                minWidth: 240,
+                                '& .MuiInputBase-root': { margin: 0 },
+                            }}
+                            InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon color="action" />
+                                    </InputAdornment>
+                                ),
+                                sx: {
+                                    borderRadius: 2,
+                                    background: 'rgba(255,255,255,0.8)',
+                                    height: 40,
+                                },
+                            }}
+                        />
+                    )}
                 />
-                <ul
-                    className="suggestions-list"
-                    style={{ display: is_show_suggestions ? 'block' : 'none', zIndex: 9999 }}
-                >
-                    {suggestions}
-                </ul>
             </Search>
         </Box>
     );

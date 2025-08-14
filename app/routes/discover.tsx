@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Container, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { redirect } from 'react-router';
 import AppLayout from '@/layout/AppLayout';
 import WorkList from '@/components/WorkList';
@@ -47,7 +47,7 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
                                 handlePageChange={page => {
                                     setCurrentPage(page);
                                 }}
-                                className="mx-auto w-fit"
+                                className="mx-auto w-fit mt-3"
                             />
                         </div>
                     )}
@@ -63,7 +63,7 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
 
     return (
         <AppLayout>
-            <div className="container mx-auto">
+            <Container>
                 <div className="flex justify-between mb-3">
                     <ToggleButtonGroup
                         value={orderLang}
@@ -98,7 +98,7 @@ export default function DiscoverPage({ loaderData }: Route.ComponentProps) {
                 </div>
 
                 {works}
-            </div>
+            </Container>
         </AppLayout>
     );
 }
