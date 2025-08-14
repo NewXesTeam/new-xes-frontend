@@ -15,14 +15,20 @@ const theme = useTheme();
 
 const isLoading = ref(false);
 
-watch(() => store.loaded, loaded => {
-    if (!loaded) return;
-    theme.change(store.theme);
-})
+watch(
+    () => store.loaded,
+    loaded => {
+        if (!loaded) return;
+        theme.change(store.theme);
+    },
+);
 
-watch(() => store.theme, newTheme => {
-    theme.change(newTheme);
-})
+watch(
+    () => store.theme,
+    newTheme => {
+        theme.change(newTheme);
+    },
+);
 
 onMounted(() => {
     refreshInfo();

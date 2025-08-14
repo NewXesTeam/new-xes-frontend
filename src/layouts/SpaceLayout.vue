@@ -3,11 +3,10 @@ import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '@/stores/app.ts';
 import { useAlertsStore } from '@/stores/alerts.ts';
-import { commonFetch, useFetchState } from '@/utils';
+import { useFetchData } from '@/utils';
 import Loading from '@/components/common/Loading.vue';
 import type { SpaceProfile } from '@/types/space.ts';
-import type { ErrorResponse } from '../../react-ver/app/interfaces/common.ts';
-import type { BasicResponse } from '@/types/common.ts';
+import type { ErrorResponse } from '@/types/common.ts';
 
 const store = useAppStore();
 const alertsStore = useAlertsStore();
@@ -15,25 +14,12 @@ const route = useRoute();
 const router = useRouter();
 const spaceTab = ref(route.meta.space || 'home');
 
-const spaceData = useFetchState<SpaceProfile>();
+const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(`/api/space/profile?user_id=${route.params.userId}`);
 const currentSignature = ref('');
 
 const isUserFollowed = ref(false);
 const isChangingSignature = ref(false);
 const signatureInput = ref('');
-
-const fetchData = () => {
-    spaceData.value.reset();
-    commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${route.params.userId}`)
-        .then(data => {
-            spaceData.value.resolve(data.data);
-            isUserFollowed.value = spaceData.value.data?.is_follow || false;
-            currentSignature.value = spaceData.value.data?.signature || '';
-        })
-        .catch(error => {
-            spaceData.value.reject(error.toString());
-        });
-};
 
 const onClickFollow = async () => {
     await fetch('/api/space/follow', {
@@ -124,12 +110,12 @@ watch(
     () => route.params.userId,
     () => {
         console.log('切换 space 页面');
-        fetchData();
+        loadSpaceData();
     },
 );
 
 onMounted(() => {
-    fetchData();
+    loadSpaceData();
 });
 </script>
 

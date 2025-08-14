@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useFetchData } from '@/utils';
 import SearchInput from '@/components/SearchInput.vue';
@@ -11,7 +11,7 @@ type Theme = 'light' | 'dark' | 'system';
 const store = useAppStore();
 const themeMode = ref<Theme>('system');
 
-const messageData = useFetchData<MessageData[]>('/api/messages/overview');
+const [messageData, loadMessageData] = useFetchData<MessageData[]>('/api/messages/overview');
 const messageTotal = computed(() => {
     if (messageData.value.error) return 0;
     return messageData.value.data?.reduce((acc, cur: MessageData) => acc + cur.count, 0);
@@ -35,6 +35,10 @@ watch(
         themeMode.value = store.theme;
     },
 );
+
+onMounted(() => {
+    loadMessageData();
+});
 </script>
 
 <template>

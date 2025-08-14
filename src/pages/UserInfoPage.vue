@@ -3,25 +3,14 @@ import { computed, onMounted, watch } from 'vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useRouter } from 'vue-router';
 import Loading from '@/components/common/Loading.vue';
-import { commonFetch, useFetchState } from '@/utils/index.ts';
+import { useFetchData } from '@/utils/index.ts';
 import type { SpaceProfile } from '@/types/space.ts';
-import type { BasicResponse } from '@/types/common.ts';
 
 const store = useAppStore();
 const router = useRouter();
 
-const spaceData = useFetchState<SpaceProfile>();
+const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(`/api/space/profile?user_id=${store.userInfo?.user_id}`);
 const sexName = computed(() => ['男', '女', '未知'][Math.max(Number(store.userInfo?.sex) - 1, 0)]);
-
-const fetchData = () => {
-    commonFetch<BasicResponse<SpaceProfile>>(`/api/space/profile?user_id=${store.userInfo?.user_id}`)
-        .then(data => {
-            spaceData.value.resolve(data.data);
-        })
-        .catch(error => {
-            spaceData.value.reject(error);
-        });
-};
 
 watch(
     () => store.loaded,
@@ -32,13 +21,13 @@ watch(
             return;
         }
 
-        fetchData();
+        loadSpaceData();
     },
 );
 
 onMounted(() => {
     if (!store.isLoggedIn) return;
-    fetchData();
+    loadSpaceData();
 });
 </script>
 

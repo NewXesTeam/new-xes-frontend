@@ -1,55 +1,38 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { commonFetch, useFetchState } from '@/utils';
-import type { BasicResponse } from '@/types/common.ts';
-import type { SpaceSocial, SpaceWorks } from '@/types/space.ts';
+import { useFetchData } from '@/utils';
+import type { SpaceSocial } from '@/types/space.ts';
 import Loading from '@/components/common/Loading.vue';
-import WorkList from '@/components/work/WorkList.vue';
 import UserVerticalList from '@/components/user/UserVerticalList.vue';
 
 const route = useRoute();
-const spaceSocialData = useFetchState<SpaceSocial>();
-
 const totalPages = ref(1);
 const currentPage = ref(1);
 const currentTab = ref('follows');
-
-const fetchData = () => {
-    spaceSocialData.value.reset();
-    commonFetch<BasicResponse<SpaceSocial>>(
-        `/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`,
-    )
-        .then(data => {
-            spaceSocialData.value.resolve(data.data);
-            totalPages.value = Math.ceil((spaceSocialData.value.data?.total || 1) / 10);
-        })
-        .catch(error => {
-            spaceSocialData.value.reject(error.toString());
-        });
-};
+const [spaceSocialData, loadSpaceSocialData] = useFetchData<SpaceSocial>(`/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`);
 
 watch(
     () => route.params.userId,
     () => {
         console.log('切换 space 页面');
-        fetchData();
+        loadSpaceSocialData();
     },
 );
 
 watch(currentTab, () => {
     currentPage.value = 1;
-    fetchData();
+    loadSpaceSocialData();
 });
 
 watch(currentPage, () => {
     if (spaceSocialData.value.completed) {
-        fetchData();
+        loadSpaceSocialData();
     }
 });
 
 onMounted(() => {
-    fetchData();
+    loadSpaceSocialData();
 });
 </script>
 

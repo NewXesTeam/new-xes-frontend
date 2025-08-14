@@ -7,7 +7,7 @@ const { users } = defineProps<{ users: SimpleUserInfo[] }>();
 
 <template>
     <div class="flex mx-auto w-fit gap-2">
-        <SmallUserCard v-for="user of users" :user="user" />
+        <SmallUserCard v-for="user of users" :key="user.user_id" :user="user" />
     </div>
 </template>
 

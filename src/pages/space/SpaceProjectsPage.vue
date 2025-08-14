@@ -1,54 +1,38 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { commonFetch, useFetchState } from '@/utils';
-import type { BasicResponse } from '@/types/common.ts';
+import { useFetchData } from '@/utils';
 import type { SpaceWorks } from '@/types/space.ts';
 import Loading from '@/components/common/Loading.vue';
 import WorkList from '@/components/work/WorkList.vue';
 
 const route = useRoute();
-const spaceWorksData = useFetchState<SpaceWorks>();
-
 const totalPages = ref(1);
 const currentPage = ref(1);
 const orderType = ref('time');
-
-const fetchData = () => {
-    spaceWorksData.value.reset();
-    commonFetch<BasicResponse<SpaceWorks>>(
-        `/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`,
-    )
-        .then(data => {
-            spaceWorksData.value.resolve(data.data);
-            totalPages.value = Math.ceil((spaceWorksData.value.data?.total || 1) / 20);
-        })
-        .catch(error => {
-            spaceWorksData.value.reject(error.toString());
-        });
-};
+const [spaceWorksData, loadSpaceWorksData] = useFetchData<SpaceWorks>(`/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`);
 
 watch(
     () => route.params.userId,
     () => {
         console.log('切换 space 页面');
-        fetchData();
+        loadSpaceWorksData();
     },
 );
 
 watch(orderType, () => {
     currentPage.value = 1;
-    fetchData();
+    loadSpaceWorksData();
 });
 
 watch(currentPage, () => {
     if (spaceWorksData.value.completed) {
-        fetchData();
+        loadSpaceWorksData();
     }
 });
 
 onMounted(() => {
-    fetchData();
+    loadSpaceWorksData();
 });
 </script>
 

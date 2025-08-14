@@ -4,9 +4,14 @@ import Loading from '@/components/common/Loading.vue';
 import { useAppStore } from '@/stores/app.ts';
 import { useFetchData } from '@/utils/index.ts';
 import type { Work } from '@/types/work.ts';
+import { onMounted } from 'vue';
 
 const store = useAppStore();
-const followsWorkData = useFetchData<Work[]>('/api/index/works/follows', {}, []);
+const [followsWorkData, loadFollowsWorkData] = useFetchData<Work[]>('/api/index/works/follows', {}, []);
+
+onMounted(() => {
+    loadFollowsWorkData();
+});
 </script>
 
 <template>

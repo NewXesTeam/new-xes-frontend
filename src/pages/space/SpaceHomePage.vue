@@ -1,9 +1,8 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { commonFetch, useFetchState } from '@/utils';
+import { useFetchData } from '@/utils';
 import type { SpaceIndex } from '@/types/space.ts';
-import type { BasicResponse } from '@/types/common.ts';
 import Loading from '@/components/common/Loading.vue';
 import SmallWorkCard from '@/components/work/SmallWorkCard.vue';
 import WorkList from '@/components/work/WorkList.vue';
@@ -11,19 +10,8 @@ import UserHorizontalList from '@/components/user/UserHorizontalList.vue';
 
 const route = useRoute();
 const router = useRouter();
-const spaceIndexData = useFetchState<SpaceIndex>();
+const [spaceIndexData, loadSpaceIndexData] = useFetchData<SpaceIndex>(`/api/space/index?user_id=${route.params.userId}`);
 const overviewData = ref<[string, number][]>([]);
-
-const fetchData = () => {
-    spaceIndexData.value.reset();
-    commonFetch<BasicResponse<SpaceIndex>>(`/api/space/index?user_id=${route.params.userId}`)
-        .then(data => {
-            spaceIndexData.value.resolve(data.data);
-        })
-        .catch(error => {
-            spaceIndexData.value.reject(error.toString());
-        });
-};
 
 const gotoSpaceWorksPage = () => {
     router.push({
@@ -63,7 +51,7 @@ watch(
     () => route.params.userId,
     () => {
         console.log('切换 space 页面');
-        fetchData();
+        loadSpaceIndexData();
     },
 );
 
@@ -82,7 +70,7 @@ watch(
 );
 
 onMounted(() => {
-    fetchData();
+    loadSpaceIndexData();
 });
 </script>
 
@@ -94,7 +82,7 @@ onMounted(() => {
                 <v-card-title>Ta 的成就</v-card-title>
                 <v-divider />
                 <v-card-text class="flex gap-4 justify-center">
-                    <v-card v-for="item in overviewData" variant="outlined" class="w-fit h-fit">
+                    <v-card v-for="item in overviewData" :key="item[0]" variant="outlined" class="w-fit h-fit">
                         <v-card-text class="flex flex-col pr-8">
                             <span style="font-size: 16px">{{ item[0] }}</span>
                             <span style="font-size: 24px">{{ item[1] }}</span>
