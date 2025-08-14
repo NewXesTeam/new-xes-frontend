@@ -192,7 +192,11 @@ onMounted(() => {
             <v-divider class="w-full h-[1px]" />
         </div>
 
-        <slot />
+        <router-view v-slot="{ Component }">
+            <transition name="slide-left" mode="out-in">
+                <component :is="Component" />
+            </transition>
+        </router-view>
     </div>
 </template>
 
@@ -209,5 +213,22 @@ onMounted(() => {
     --v-field-padding-start: var(--field-padding-y);
     --v-field-padding-end: var(--field-padding-y);
     --v-input-control-height: calc(24px + var(--v-input-padding-top) + var(--v-field-padding-bottom));
+}
+</style>
+
+<style scoped>
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: all 0.25s ease-out;
+}
+
+.slide-left-enter-from {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
 }
 </style>
