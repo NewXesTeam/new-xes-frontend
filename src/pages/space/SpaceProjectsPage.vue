@@ -46,11 +46,11 @@ onMounted(() => {
                     <v-btn value="comments">评论最多</v-btn>
                 </v-btn-toggle>
 
-                <Loading v-if="!spaceWorksData.completed || spaceWorksData.error" :error="spaceWorksData.error" />
+                <Loading v-if="!spaceWorksData.success" :error="spaceWorksData.error" />
             </div>
 
             <h2
-                v-if="spaceWorksData.completed && !spaceWorksData.error && spaceWorksData.data.total < 1"
+                v-if="spaceWorksData.success && spaceWorksData.data.total < 1"
                 style="font-size: 24px"
             >
                 暂无作品

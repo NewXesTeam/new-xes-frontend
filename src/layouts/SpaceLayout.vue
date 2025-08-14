@@ -120,7 +120,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <v-container v-if="!spaceData.completed || spaceData.error">
+    <v-container v-if="!spaceData.success">
         <Loading :error="spaceData.error" />
     </v-container>
 

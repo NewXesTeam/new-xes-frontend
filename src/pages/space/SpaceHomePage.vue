@@ -58,7 +58,7 @@ watch(
 watch(
     () => spaceIndexData.value.completed,
     () => {
-        if (!spaceIndexData.value.completed || spaceIndexData.value.error) return;
+        if (!spaceIndexData.value.success) return;
         overviewData.value = [
             ['作品总数', spaceIndexData.value.data.overview.works],
             ['被点赞总数', spaceIndexData.value.data.overview.likes],
@@ -76,7 +76,7 @@ onMounted(() => {
 
 <template>
     <v-container>
-        <Loading v-if="!spaceIndexData.completed || spaceIndexData.error" :error="spaceIndexData.error" />
+        <Loading v-if="!spaceIndexData.success" :error="spaceIndexData.error" />
         <div v-else class="flex flex-col gap-6">
             <v-card :elevation="3">
                 <v-card-title>Ta 的成就</v-card-title>

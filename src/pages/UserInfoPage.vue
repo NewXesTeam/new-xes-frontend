@@ -35,7 +35,7 @@ onMounted(() => {
     <v-container class="flex flex-col gap-2">
         <h1 style="font-size: 36px">个人信息展示页面</h1>
         <v-divider />
-        <Loading v-if="!spaceData.completed || spaceData.error" :error="spaceData.error" />
+        <Loading v-if="!spaceData.success" :error="spaceData.error" />
         <div v-else class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
                 <v-avatar :size="128" :image="store.userInfo?.avatar_path" />

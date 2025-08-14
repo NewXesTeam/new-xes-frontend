@@ -33,7 +33,7 @@ onMounted(() => {
 <template>
     <v-container class="flex-1 flex flex-col">
         <div class="flex flex-col gap-2">
-            <Loading v-if="!spaceFavoritesData.completed || spaceFavoritesData.error" :error="spaceFavoritesData.error" />
+            <Loading v-if="!spaceFavoritesData.success" :error="spaceFavoritesData.error" />
             <h2 v-else-if="spaceFavoritesData.data.total < 1" style="font-size: 24px">暂无作品</h2>
             <WorkList v-else :works="spaceFavoritesData.data?.data || []" />
 

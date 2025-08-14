@@ -45,11 +45,11 @@ onMounted(() => {
                     <v-btn value="fans">TA 的粉丝</v-btn>
                 </v-btn-toggle>
 
-                <Loading v-if="!spaceSocialData.completed || spaceSocialData.error" :error="spaceSocialData.error" />
+                <Loading v-if="!spaceSocialData.success" :error="spaceSocialData.error" />
             </div>
 
             <h2
-                v-if="spaceSocialData.completed && !spaceSocialData.error && spaceSocialData.data.total < 1"
+                v-if="spaceSocialData.success && spaceSocialData.data.total < 1"
                 style="font-size: 24px"
             >
                 暂无作品

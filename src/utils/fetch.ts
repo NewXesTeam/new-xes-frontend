@@ -1,19 +1,8 @@
-﻿import { type ShallowRef, shallowRef } from 'vue';
+﻿import { type Ref, ref, type UnwrapRef } from 'vue';
 import { commonFetch } from '@/utils/common.ts';
 import type { BasicResponse } from '@/types/common.ts';
 
 interface BaseFetchState<T> {
-    // 在继承者定义
-
-    // data: T | null;
-    // errorMessage: string | null;
-
-    // is: {
-    //     completed: boolean;
-    //     success: boolean;
-    //     error: boolean;
-    // };
-
     on: {
         completed(listener: () => void): void;
         success(listener: (data: T) => void): void;
@@ -72,7 +61,7 @@ function invoke<T extends Array<unknown>>(functions: ((...args: T) => void)[], .
 }
 
 export function useFetchState<T>(initialize: T | null = null) {
-    const state = shallowRef({
+    const state = ref({
         data: initialize,
         errorMessage: null,
 
@@ -99,7 +88,7 @@ export function useFetchState<T>(initialize: T | null = null) {
         },
 
         resolve(data) {
-            state.value.data = data;
+            state.value.data = data as UnwrapRef<T>;
             state.value.errorMessage = null;
 
             state.value.success = true;
@@ -153,5 +142,5 @@ export function useFetchData<T>(url: string, options?: RequestInit, initialize: 
                 state.value.reject(error.toString());
             });
     };
-    return [state, load] as [ShallowRef<FetchState<T>>, () => void];
+    return [state, load] as [Ref<FetchState<T>>, () => void];
 }

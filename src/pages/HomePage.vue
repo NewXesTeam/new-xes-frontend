@@ -20,7 +20,7 @@ onMounted(() => {
         <div class="flex flex-col gap-2" v-if="store.isLoggedIn">
             <h2 style="font-size: 24px">我的关注</h2>
             <v-divider />
-            <Loading v-if="!followsWorkData.completed || followsWorkData.error" :error="followsWorkData.error" />
+            <Loading v-if="!followsWorkData.success" :error="followsWorkData.error" />
             <WorkList v-else :works="followsWorkData.data || []" />
         </div>
     </v-container>
