@@ -5,6 +5,7 @@ import { useTheme } from 'vuetify';
 import { useAppStore } from '@/stores/app.ts';
 import { refreshInfo } from '@/utils/passport.ts';
 import { useAlertsStore } from '@/stores/alerts.ts';
+import AppLayout from '@/layouts/app/AppLayout.vue';
 import Alerts from '@/components/common/Alerts.vue';
 
 const store = useAppStore();
@@ -50,9 +51,26 @@ router.afterEach(() => {
 
 <template>
     <v-app>
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component, route }">
             <transition name="fade" mode="out-in">
-                <component :is="Component" />
+                <!-- 基础 Layout -->
+                <AppLayout v-if="route.meta.useLayout">
+                    <transition name="fade" mode="out-in">
+                        <!-- 叠加 Layout -->
+                        <component v-if="route.meta.innerLayout" :is="route.meta.innerLayout">
+                            <transition name="slide-left" mode="out-in">
+                                <component :is="Component" />
+                            </transition>
+                        </component>
+
+                        <component v-else :is="Component" />
+                    </transition>
+                </AppLayout>
+
+                <!-- 无 Layout -->
+                <transition v-else name="fade" mode="out-in">
+                    <component :is="Component" />
+                </transition>
             </transition>
         </router-view>
 
@@ -92,5 +110,20 @@ router.afterEach(() => {
 .fade-enter-to,
 .fade-leave-from {
     opacity: 1;
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: all 0.25s ease-out;
+}
+
+.slide-left-enter-from {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
 }
 </style>
