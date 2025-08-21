@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFetchData } from '@/utils';
 import type { SpaceWorks } from '@/types/space.ts';
@@ -7,11 +7,11 @@ import Loading from '@/components/common/Loading.vue';
 import WorkList from '@/components/work/WorkList.vue';
 
 const route = useRoute();
-const totalPages = ref(1);
 const currentPage = ref(1);
 const [spaceFavoritesData, loadSpaceFavoritesData] = useFetchData<SpaceWorks>(
     () => `/api/space/favorites?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20`,
 );
+const totalPages = computed(() => Math.max(Math.ceil((spaceFavoritesData.value.data?.total ?? 0) / 10), 1));
 
 watch(
     () => route.params.userId,
