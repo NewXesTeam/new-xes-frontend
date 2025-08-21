@@ -10,7 +10,9 @@ const route = useRoute();
 const totalPages = ref(1);
 const currentPage = ref(1);
 const currentTab = ref('follows');
-const [spaceSocialData, loadSpaceSocialData] = useFetchData<SpaceSocial>(() => `/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`);
+const [spaceSocialData, loadSpaceSocialData] = useFetchData<SpaceSocial>(
+    () => `/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`,
+);
 
 watch(
     () => route.params.userId,
@@ -48,12 +50,7 @@ onMounted(() => {
                 <Loading v-if="!spaceSocialData.success" :error="spaceSocialData.error" />
             </div>
 
-            <h2
-                v-if="spaceSocialData.success && spaceSocialData.data.total < 1"
-                style="font-size: 24px"
-            >
-                暂无作品
-            </h2>
+            <h2 v-if="spaceSocialData.success && spaceSocialData.data.total < 1" style="font-size: 24px">暂无作品</h2>
             <UserVerticalList v-else class="w-full" :users="spaceSocialData.data?.data || []" />
 
             <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />

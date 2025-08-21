@@ -10,7 +10,10 @@ const route = useRoute();
 const totalPages = ref(1);
 const currentPage = ref(1);
 const orderType = ref('time');
-const [spaceWorksData, loadSpaceWorksData] = useFetchData<SpaceWorks>(() => `/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`);
+const [spaceWorksData, loadSpaceWorksData] = useFetchData<SpaceWorks>(
+    () =>
+        `/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`,
+);
 
 watch(
     () => route.params.userId,
@@ -49,12 +52,7 @@ onMounted(() => {
                 <Loading v-if="!spaceWorksData.success" :error="spaceWorksData.error" />
             </div>
 
-            <h2
-                v-if="spaceWorksData.success && spaceWorksData.data.total < 1"
-                style="font-size: 24px"
-            >
-                暂无作品
-            </h2>
+            <h2 v-if="spaceWorksData.success && spaceWorksData.data.total < 1" style="font-size: 24px">暂无作品</h2>
             <WorkList v-else :works="spaceWorksData.data?.data || []" />
 
             <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />

@@ -135,7 +135,7 @@ export function useFetchData<T>(url: string | (() => string), options?: RequestI
     const load = () => {
         state.value.reset();
         setTimeout(() => {
-            commonFetch<BasicResponse<T>>(typeof url === "string" ? url : url(), options)
+            commonFetch<BasicResponse<T>>(typeof url === 'string' ? url : url(), options)
                 .then(data => {
                     state.value.resolve(data.data);
                 })

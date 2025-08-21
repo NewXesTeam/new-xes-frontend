@@ -10,7 +10,9 @@ import UserHorizontalList from '@/components/user/UserHorizontalList.vue';
 
 const route = useRoute();
 const router = useRouter();
-const [spaceIndexData, loadSpaceIndexData] = useFetchData<SpaceIndex>(() => `/api/space/index?user_id=${route.params.userId}`);
+const [spaceIndexData, loadSpaceIndexData] = useFetchData<SpaceIndex>(
+    () => `/api/space/index?user_id=${route.params.userId}`,
+);
 const overviewData = ref<[string, number][]>([]);
 
 const gotoSpaceWorksPage = () => {

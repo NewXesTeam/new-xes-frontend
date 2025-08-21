@@ -14,7 +14,9 @@ const route = useRoute();
 const router = useRouter();
 const spaceTab = ref(route.meta.space || 'home');
 
-const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(() => `/api/space/profile?user_id=${route.params.userId}`);
+const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(
+    () => `/api/space/profile?user_id=${route.params.userId}`,
+);
 const currentSignature = ref('');
 
 const isUserFollowed = ref(false);

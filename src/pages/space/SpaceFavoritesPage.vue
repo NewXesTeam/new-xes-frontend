@@ -9,7 +9,9 @@ import WorkList from '@/components/work/WorkList.vue';
 const route = useRoute();
 const totalPages = ref(1);
 const currentPage = ref(1);
-const [spaceFavoritesData, loadSpaceFavoritesData] = useFetchData<SpaceWorks>(() => `/api/space/favorites?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20`);
+const [spaceFavoritesData, loadSpaceFavoritesData] = useFetchData<SpaceWorks>(
+    () => `/api/space/favorites?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20`,
+);
 
 watch(
     () => route.params.userId,
