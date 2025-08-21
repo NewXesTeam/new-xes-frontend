@@ -10,7 +10,7 @@ const route = useRoute();
 const totalPages = ref(1);
 const currentPage = ref(1);
 const currentTab = ref('follows');
-const [spaceSocialData, loadSpaceSocialData] = useFetchData<SpaceSocial>(`/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`);
+const [spaceSocialData, loadSpaceSocialData] = useFetchData<SpaceSocial>(() => `/api/space/${currentTab.value}?user_id=${route.params.userId}&page=${currentPage.value}&per_page=10`);
 
 watch(
     () => route.params.userId,

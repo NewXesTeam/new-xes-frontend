@@ -7,7 +7,7 @@ import Loading from '@/components/common/Loading.vue';
 
 const route = useRoute();
 const [spaceCoverData, loadSpaceCoverData] = useFetchData<SpaceCover>(
-    `/api/space/web_cover?user_id=${route.params.userId}`,
+    () => `/api/space/web_cover?user_id=${route.params.userId}`,
 );
 
 watch(

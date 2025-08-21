@@ -9,7 +9,7 @@ import type { SpaceProfile } from '@/types/space.ts';
 const store = useAppStore();
 const router = useRouter();
 
-const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(`/api/space/profile?user_id=${store.userInfo?.user_id}`);
+const [spaceData, loadSpaceData] = useFetchData<SpaceProfile>(() => `/api/space/profile?user_id=${store.userInfo?.user_id}`);
 const sexName = computed(() => ['男', '女', '未知'][Math.max(Number(store.userInfo?.sex) - 1, 0)]);
 
 watch(

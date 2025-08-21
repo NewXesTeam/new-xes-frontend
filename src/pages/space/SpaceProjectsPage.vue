@@ -10,7 +10,7 @@ const route = useRoute();
 const totalPages = ref(1);
 const currentPage = ref(1);
 const orderType = ref('time');
-const [spaceWorksData, loadSpaceWorksData] = useFetchData<SpaceWorks>(`/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`);
+const [spaceWorksData, loadSpaceWorksData] = useFetchData<SpaceWorks>(() => `/api/space/works?user_id=${route.params.userId}&page=${currentPage.value}&per_page=20&order_type=${orderType.value}`);
 
 watch(
     () => route.params.userId,

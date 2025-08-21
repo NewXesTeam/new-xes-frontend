@@ -18,7 +18,7 @@ const onOpenAuthorHome = () => {
 <template>
     <v-card v-tooltip:top="work.created_at">
         <CardActionArea :href="getWorkLink(work)" rel="noopener" target="_blank">
-            <v-img class="mx-auto" style="width: 224px; height: 168px" draggable="false" :src="thumbnail" />
+            <v-img class="mx-auto" style="width: 224px; height: 168px" draggable="false" :src="thumbnail" :alt="work.name" />
 
             <v-card-title v-tooltip:bottom="name">
                 {{ name }}

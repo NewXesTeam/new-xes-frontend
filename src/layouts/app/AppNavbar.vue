@@ -101,7 +101,7 @@ onMounted(() => {
 
                 <v-menu open-on-hover v-if="store.isLoggedIn">
                     <template v-slot:activator="{ props }">
-                        <v-btn v-bind="props" icon>
+                        <v-btn v-bind="props" icon aria-label="用户">
                             <v-avatar :image="store.userInfo?.avatar_path" />
                         </v-btn>
                     </template>

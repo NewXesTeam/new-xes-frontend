@@ -57,6 +57,7 @@ watch(selectedSuggestion, () => {
         placeholder="搜索..."
         role="search"
         name="keyword"
+        label="搜索..."
         hide-details
         auto-select-first
         clearable
