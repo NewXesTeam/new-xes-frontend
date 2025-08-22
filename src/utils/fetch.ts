@@ -134,15 +134,13 @@ export function useFetchData<T>(url: string | (() => string), options?: RequestI
     const state = useFetchState<T>(initialize);
     const load = () => {
         state.value.reset();
-        setTimeout(() => {
-            commonFetch<BasicResponse<T>>(typeof url === 'string' ? url : url(), options)
-                .then(data => {
-                    state.value.resolve(data.data);
-                })
-                .catch(error => {
-                    state.value.reject(error.toString());
-                });
-        }, 50); // byd watch callback 后有几率 ref 没更新
+        commonFetch<BasicResponse<T>>(typeof url === 'string' ? url : url(), options)
+            .then(data => {
+                state.value.resolve(data.data);
+            })
+            .catch(error => {
+                state.value.reject(error.toString());
+            });
     };
     return [state, load] as [Ref<FetchState<T>>, () => void];
 }
