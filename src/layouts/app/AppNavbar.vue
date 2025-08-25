@@ -51,7 +51,9 @@ onMounted(() => {
                     <v-btn :active="isActive" @click="navigate"> 首页 </v-btn>
                 </router-link>
 
-                <v-btn> 发现 </v-btn>
+                <router-link v-slot="{ navigate, isActive }" to="/discover" custom>
+                    <v-btn :active="isActive" @click="navigate"> 发现 </v-btn>
+                </router-link>
 
                 <router-link v-slot="{ navigate, isActive }" to="/about" custom>
                     <v-btn :active="isActive" @click="navigate"> 关于 </v-btn>
