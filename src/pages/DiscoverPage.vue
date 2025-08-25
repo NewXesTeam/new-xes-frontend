@@ -1,24 +1,28 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch, computed } from 'vue';
-import { commonFetch } from '@/utils';
+import { useFetchState, commonFetch } from '@/utils';
 import type { WorkList as IWorkList } from '@/types/work';
 import WorkList from '@/components/work/WorkList.vue';
+import Loading from '@/components/common/Loading.vue';
 
 const currentPage = ref(1);
 const orderType = ref('latest');
 const orderLang = ref('');
 
-const discoverWorksData = ref<IWorkList | null>(null);
+const discoverWorksData = useFetchState<IWorkList | null>(null);
+
 const loadDiscoverWorksData = () => {
+    discoverWorksData.value.reset();
     commonFetch<IWorkList>(`/api/works/${orderType.value}?page=${currentPage.value}&lang=${orderLang.value}`)
         .then(data => {
-            discoverWorksData.value = data;
+            discoverWorksData.value.resolve(data);
         })
         .catch(err => {
-            console.error(err);
+            discoverWorksData.value.reject(err.toString());
         });
-}
-const totalPages = computed(() => Math.max(Math.ceil((discoverWorksData.value ? discoverWorksData.value.total : 0) / 10), 1));
+};
+
+const totalPages = computed(() => Math.max(Math.ceil((discoverWorksData.value.data ? discoverWorksData.value.data.total : 0) / 10), 1));
 
 watch(orderType, () => {
     currentPage.value = 1;
@@ -31,7 +35,7 @@ watch(orderLang, () => {
 });
 
 watch(currentPage, () => {
-    if (discoverWorksData.value) {
+    if (discoverWorksData.value.data) {
         loadDiscoverWorksData();
     }
 });
@@ -59,7 +63,8 @@ onMounted(() => {
                 </v-btn-toggle>
             </div>
             
-            <WorkList :works="discoverWorksData ? discoverWorksData.data : []" />
+            <Loading v-if="!discoverWorksData.success" :error="discoverWorksData.error" />
+            <WorkList v-else :works="discoverWorksData.data ? discoverWorksData.data.data : []" />
 
             <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />
         </div>
