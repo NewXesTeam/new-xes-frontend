@@ -15,6 +15,12 @@ const autocompleteSelects = computed(() => {
 const selectedSuggestion = ref(keyword);
 const isLoading = ref(false);
 
+const onEnter = () => {
+    if (inputKeyword.value) {
+        location.href = `/search?keyword=${inputKeyword.value}&tab=all`;
+    }
+}
+
 const onChangeSearch = debounce((query: string) => {
     if (!query) return;
     isLoading.value = true;
@@ -65,6 +71,7 @@ watch(selectedSuggestion, () => {
         density="comfortable"
         :items="autocompleteSelects"
         :loading="isLoading"
+        @keydown.enter="onEnter"
     >
         <template v-slot:no-data>
             <v-list-item>
