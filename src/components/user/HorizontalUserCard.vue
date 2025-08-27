@@ -29,30 +29,34 @@ const onClickFollow = async () => {
 </script>
 
 <template>
-    <v-card style="display: flex">
-        <CardActionArea class="flex-1" :href="userLink" rel="noopener" target="_blank">
-            <v-card-text class="flex gap-2">
-                <v-avatar :size="108" :image="user.avatar_path" />
-                <div class="flex flex-col gap-2">
-                    <h6 style="font-size: 24px">{{ userName }}</h6>
-                    <div class="flex gap-4" style="font-size: 14px">
-                        <span>关注：{{ user.follows }}</span>
-                        <span>粉丝：{{ user.fans }}</span>
-                        <span>UID：{{ user.id }}</span>
+    <v-card>
+        <div class="flex">
+            <CardActionArea class="flex-1" :href="userLink" rel="noopener" target="_blank">
+                <v-card-text class="flex gap-2">
+                    <v-avatar :size="108" :image="user.avatar_path" />
+                    <div class="flex flex-col gap-2">
+                        <h6 style="font-size: 24px">{{ userName }}</h6>
+                        <div class="flex gap-4" style="font-size: 14px">
+                            <span>关注：{{ user.follows }}</span>
+                            <span>粉丝：{{ user.fans }}</span>
+                            <span>UID：{{ user.id }}</span>
+                        </div>
+                        <div style="font-size: 16px">{{ user.signature }}</div>
                     </div>
-                    <div style="font-size: 16px">{{ user.signature }}</div>
-                </div>
-            </v-card-text>
-        </CardActionArea>
-        <div class="flex flex-col h-fit my-auto" style="padding: 8px">
-            <v-btn
-                :variant="isUserFollowed ? 'outlined' : undefined"
-                :color="isUserFollowed ? 'secondary' : 'primary'"
-                @click="onClickFollow"
-            >
-                {{ isUserFollowed ? '已关注' : '关注' }}
-            </v-btn>
+                </v-card-text>
+            </CardActionArea>
+            <div class="flex flex-col h-fit my-auto" style="padding: 8px">
+                <v-btn
+                    :variant="isUserFollowed ? 'outlined' : undefined"
+                    :color="isUserFollowed ? 'secondary' : 'primary'"
+                    @click="onClickFollow"
+                >
+                    {{ isUserFollowed ? '已关注' : '关注' }}
+                </v-btn>
+            </div>
         </div>
+        <v-divider />
+        <slot />
     </v-card>
 </template>
 
