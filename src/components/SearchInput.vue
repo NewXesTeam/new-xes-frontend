@@ -4,7 +4,7 @@
 // import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
 import type { AssociateWord, BasicResponse } from '@/types/common.ts';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { commonFetch } from '@/utils/index.ts';
 
 // const router = useRouter();
