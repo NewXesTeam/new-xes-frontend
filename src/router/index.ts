@@ -4,6 +4,7 @@ import SpaceLayout from '@/layouts/SpaceLayout.vue';
 import DemoPage from '@/pages/DemoPage.vue';
 import HomePage from '@/pages/HomePage.vue';
 import DiscoverPage from '@/pages/DiscoverPage.vue';
+import SearchPage from '@/pages/SearchPage.vue';
 import LoginPage from '@/pages/LoginPage.vue';
 
 import SpaceHomePage from '@/pages/space/SpaceHomePage.vue';
@@ -54,14 +55,14 @@ const router = createRouter({
                 useLayout: true,
             },
         },
-        // {
-        //     path: '/search',
-        //     name: 'search',
-        //     component: SearchPage,
-        //     meta: {
-        //         useLayout: true,
-        //     },
-        // },
+        {
+            path: '/search',
+            name: 'search',
+            component: SearchPage,
+            meta: {
+                useLayout: true,
+            },
+        },
 
         // {
         //     path: '/user',

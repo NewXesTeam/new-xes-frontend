@@ -1,4 +1,4 @@
-import type { WorkList } from './work';
+import type { Work, WorkList } from './work';
 
 /** 用户信息 */
 export interface UserInfo {
@@ -79,4 +79,25 @@ export interface UserWorkList {
     msg: string;
     /** 状态码 */
     status: number;
+}
+
+export interface UserAndWorkInfo {
+    user: SimpleUserInfo;
+    works: Work[];
+}
+
+export interface SearchUserList {
+    total: number;
+    page: number;
+    per_page: number;
+    data: UserAndWorkInfo[];
+}
+
+export interface SearchAllList {
+    total?: number;
+    page?: number;
+    per_page?: number;
+    data?: Work[];
+    users?: SearchUserList;
+    works?: WorkList;
 }

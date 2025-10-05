@@ -1,20 +1,25 @@
 ﻿<!-- SearchInput bug: 按下按键不放会明显卡顿，不管了 -->
 
 <script setup lang="ts">
-// import { useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
 import type { AssociateWord, BasicResponse } from '@/types/common.ts';
 import { debounce } from 'lodash-es';
 import { commonFetch } from '@/utils/index.ts';
 
-// const router = useRouter();
+const { keyword = '' } = defineProps<{ keyword?: string }>();
 const inputKeyword = ref('');
 const suggestions = ref<AssociateWord[]>([]);
 const autocompleteSelects = computed(() => {
     return suggestions.value.map(item => item.word.replaceAll('<em>', '').replaceAll('</em>', '').trim());
 });
-const selectedSuggestion = ref('');
+const selectedSuggestion = ref(keyword);
 const isLoading = ref(false);
+
+const onEnter = () => {
+    if (inputKeyword.value) {
+        location.href = `/search?keyword=${inputKeyword.value}&tab=all`;
+    }
+}
 
 const onChangeSearch = debounce((query: string) => {
     if (!query) return;
@@ -66,6 +71,7 @@ watch(selectedSuggestion, () => {
         density="comfortable"
         :items="autocompleteSelects"
         :loading="isLoading"
+        @keydown.enter="onEnter"
     >
         <template v-slot:no-data>
             <v-list-item>

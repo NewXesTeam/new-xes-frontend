@@ -22,7 +22,9 @@ const loadDiscoverWorksData = () => {
         });
 };
 
-const totalPages = computed(() => Math.max(Math.ceil((discoverWorksData.value.data ? discoverWorksData.value.data.total : 0) / 10), 1));
+const totalPages = computed(() =>
+    Math.max(Math.ceil((discoverWorksData.value.data ? discoverWorksData.value.data.total : 0) / 20), 1),
+);
 
 watch(orderType, () => {
     currentPage.value = 1;
@@ -62,7 +64,7 @@ onMounted(() => {
                     <v-btn value="courses">随堂练习</v-btn>
                 </v-btn-toggle>
             </div>
-            
+
             <Loading v-if="!discoverWorksData.success" :error="discoverWorksData.error" />
             <WorkList v-else :works="discoverWorksData.data ? discoverWorksData.data.data : []" />
 
