@@ -17,24 +17,26 @@ watch(searchTab, () => {
 </script>
 
 <template>
-    <div class="mt-5 flex flex-col items-center">
-        <h1 v-if="!keyword">关键字不存在</h1>
-        <SearchInput v-else :keyword="keyword" />
+    <div class="flex flex-col flex-1 gap-2">
+        <div class="mt-5 flex flex-col items-center">
+            <h1 v-if="!keyword">关键字不存在</h1>
+            <SearchInput v-else :keyword="keyword" />
 
-        <v-tabs v-model="searchTab" color="primary">
-            <v-tab value="all">综合</v-tab>
-            <v-tab value="users">作者</v-tab>
-            <v-tab value="projects">作品</v-tab>
-        </v-tabs>
+            <v-tabs v-model="searchTab" color="primary">
+                <v-tab value="all">综合</v-tab>
+                <v-tab value="users">作者</v-tab>
+                <v-tab value="projects">作品</v-tab>
+            </v-tabs>
 
-        <v-divider class="w-full h-[1px]" />
+            <v-divider class="w-full h-[1px]" />
+        </div>
+
+        <KeepAlive>
+            <SearchAllTab v-if="searchTab === 'all'" :keyword="keyword" />
+            <SearchUserTab v-else-if="searchTab === 'users'" :keyword="keyword" />
+            <SearchProjectsTab v-else-if="searchTab === 'projects'" :keyword="keyword" />
+        </KeepAlive>
     </div>
-
-    <KeepAlive>
-        <SearchAllTab v-if="searchTab === 'all'" :keyword="keyword" />
-        <SearchUserTab v-else-if="searchTab === 'users'" :keyword="keyword" />
-        <SearchProjectsTab v-else-if="searchTab === 'projects'" :keyword="keyword" />
-    </KeepAlive>
 </template>
 
 <style scoped></style>
