@@ -6,6 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueDevTools from 'vite-plugin-vue-devtools';
 import TailwindCSS from '@tailwindcss/vite';
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+import { analyzer } from 'vite-bundle-analyzer';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
         vueDevTools(),
         TailwindCSS(),
         Vuetify(),
+        analyzer(),
     ],
     resolve: {
         alias: {
@@ -70,4 +72,30 @@ export default defineConfig({
             },
         },
     },
+    build: {
+        rolldownOptions: {
+            output: {
+                advancedChunks: {
+                    groups: [
+                        {
+                            name: "vuetify",
+                            test: /node_modules.*vuetify/
+                        },
+                        {
+                            name: "vue",
+                            test: /node_modules.*(vue|pinia)/
+                        },
+                        {
+                            name: "mdi",
+                            test: /node_modules.*mdi/
+                        },
+                        {
+                            name: "libs",
+                            test: /node_modules/
+                        },
+                    ]
+                }
+            }
+        }
+    }
 });

@@ -46,6 +46,7 @@
         "sass-embedded": "^1.89.2",
         "typescript": "~5.8.0",
         "vite": "npm:rolldown-vite@latest",
+        "vite-bundle-analyzer": "^1.2.3",
         "vite-plugin-vue-devtools": "^8.0.0",
         "vite-plugin-vuetify": "^2.1.1",
         "vue-tsc": "^3.0.4"
