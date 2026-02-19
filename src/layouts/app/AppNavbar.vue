@@ -29,6 +29,10 @@ const switchTheme = (theme: Theme) => {
 };
 
 const navigate = (path: string) => {
+    if (path === '/login') {
+        location.href = `https://login.xueersi.com`;
+        return;
+    }
     location.href = `https://code.xueersi.com${path}`;
 };
 
