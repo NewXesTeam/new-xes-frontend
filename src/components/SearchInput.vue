@@ -19,7 +19,7 @@ const onEnter = () => {
     if (inputKeyword.value) {
         location.href = `/search?keyword=${inputKeyword.value}&tab=all`;
     }
-}
+};
 
 const onChangeSearch = debounce((query: string) => {
     if (!query) return;

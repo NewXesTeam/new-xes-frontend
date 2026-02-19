@@ -33,14 +33,14 @@ onMounted(() => {
 
 <template>
     <v-app>
-            <transition name="fade" mode="out-in">
-                <!-- 基础 Layout -->
-                <AppLayout>
-                    <transition name="fade" mode="out-in">
-                        <slot />
-                    </transition>
-                </AppLayout>
-            </transition>
+        <transition name="fade" mode="out-in">
+            <!-- 基础 Layout -->
+            <AppLayout>
+                <transition name="fade" mode="out-in">
+                    <slot />
+                </transition>
+            </AppLayout>
+        </transition>
 
         <!-- alerts 显示位置 -->
         <Alerts class="alerts-list" :alerts="alertsStore.alerts" />

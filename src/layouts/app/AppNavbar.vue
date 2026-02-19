@@ -30,7 +30,7 @@ const switchTheme = (theme: Theme) => {
 
 const navigate = (path: string) => {
     location.href = `https://code.xueersi.com${path}`;
-}
+};
 
 watch(
     () => store.loaded,
@@ -53,7 +53,7 @@ onMounted(() => {
             <div class="me-auto flex gap-2 items-center">
                 <v-btn @click="navigate('/')"> 首页 </v-btn>
 
-                <v-btn @click="navigate('/discover')"> 发现 </v-btn>
+                <v-btn @click="navigate('/search')"> 发现 </v-btn>
 
                 <v-btn @click="navigate('/about')"> 关于 </v-btn>
             </div>
@@ -107,14 +107,10 @@ onMounted(() => {
                     </template>
 
                     <v-list>
-                        <v-list-item value="space" @click="_ => navigate(mySpaceLink)">
-                            个人空间
-                        </v-list-item>
+                        <v-list-item value="space" @click="_ => navigate(mySpaceLink)"> 个人空间 </v-list-item>
                         <v-list-item value="user" @click="navigate('/user')"> 作品管理 </v-list-item>
                         <v-divider />
-                        <v-list-item value="info" @click="navigate('/userInfo')">
-                            个人信息
-                        </v-list-item>
+                        <v-list-item value="info" @click="navigate('/userInfo')"> 个人信息 </v-list-item>
                         <v-divider />
                         <v-list-item value="logout" @click="onClickLogout"> 登出 </v-list-item>
                     </v-list>
