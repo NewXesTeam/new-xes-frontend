@@ -19,7 +19,7 @@ const messageTotal = computed(() => {
 const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
 
 const onClickLogout = async () => {
-    await fetch('/passport/logout');
+    window.open('https://login.xueersi.com/newLogin/logout', '_blank');
     await refreshInfo();
 };
 

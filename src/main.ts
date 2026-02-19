@@ -42,7 +42,11 @@ async function mountApp(loader: () => Promise<any>) {
 }
 
 if (path === '/') {
-    mountApp(() => pageComponents[`./pages/App.vue`]());
+    if (host === 'code.xueersi.com') {
+        mountApp(() => pageComponents[`./pages/App.vue`]());
+    } else if (host === 'login.xueersi.com') {
+        mountApp(() => pageComponents[`./pages/Login.vue`]());
+    }
 } else if (pageComponents[`./pages/${host}${path}.vue`]) {
     mountApp(() => pageComponents[`./pages/${host}${path}.vue`]());
 }
