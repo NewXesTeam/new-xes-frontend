@@ -26,7 +26,7 @@ export default defineConfig({
             entry: 'src/main.ts',
             userscript: userscriptConfig,
             build: {
-                fileName: 'xes-chat.user.js',
+                fileName: 'new-xes-frontend.user.js',
                 externalGlobals: {
                     vue: cdn.jsdelivr('Vue', 'dist/vue.global.prod.js'),
                 },
