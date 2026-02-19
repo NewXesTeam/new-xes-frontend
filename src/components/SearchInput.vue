@@ -1,0 +1,84 @@
+<!-- SearchInput bug: 按下按键不放会明显卡顿，不管了 -->
+
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import type { AssociateWord, BasicResponse } from '../types/common.ts';
+import { debounce } from 'lodash-es';
+import { commonFetch } from '../utils/index.ts';
+
+const { keyword = '' } = defineProps<{ keyword?: string }>();
+const inputKeyword = ref('');
+const suggestions = ref<AssociateWord[]>([]);
+const autocompleteSelects = computed(() => {
+    return suggestions.value.map(item => item.word.replaceAll('<em>', '').replaceAll('</em>', '').trim());
+});
+const selectedSuggestion = ref(keyword);
+const isLoading = ref(false);
+
+const onEnter = () => {
+    if (inputKeyword.value) {
+        location.href = `/search?keyword=${inputKeyword.value}&tab=all`;
+    }
+}
+
+const onChangeSearch = debounce((query: string) => {
+    if (!query) return;
+    isLoading.value = true;
+    commonFetch<BasicResponse<AssociateWord[]>>(`/api/search/associate_words?keyword=${inputKeyword.value}`)
+        .then(data => {
+            suggestions.value = data.data;
+        })
+        .catch(error => {
+            suggestions.value = [];
+            console.error('拉取建议词时出错：', error);
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
+}, 300);
+
+watch(inputKeyword, () => {
+    onChangeSearch(inputKeyword.value.trim());
+});
+
+watch(selectedSuggestion, () => {
+    if (!selectedSuggestion.value) return;
+    inputKeyword.value = '';
+    console.log('Go Search > ', selectedSuggestion.value);
+    // router.push({
+    //     name: "search",
+    //     query: {
+    //         keyword: selectedSuggestion.value,
+    //     }
+    // })
+});
+</script>
+
+<template>
+    <v-autocomplete
+        v-model="selectedSuggestion"
+        v-model:search="inputKeyword"
+        class="w-64"
+        placeholder="搜索..."
+        role="search"
+        name="keyword"
+        label="搜索..."
+        hide-details
+        auto-select-first
+        clearable
+        prepend-inner-icon="mdi-magnify"
+        menu-icon=""
+        density="comfortable"
+        :items="autocompleteSelects"
+        :loading="isLoading"
+        @keydown.enter="onEnter"
+    >
+        <template v-slot:no-data>
+            <v-list-item>
+                <v-list-item-title>未找到相关结果</v-list-item-title>
+            </v-list-item>
+        </template>
+    </v-autocomplete>
+</template>
+
+<style scoped></style>

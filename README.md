@@ -1,80 +1,82 @@
-# NewXesFrontend
+# Vuetify (Default)
 
-> 学而思新的前端体验（第三方）
+This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
 
-> [!WARNING]
->
-> 此项目仅供交流学习，请勿他用！
+## ❗️ Important Links
 
-## 准备开发
+- 📄 [Docs](https://vuetifyjs.com/)
+- 🚨 [Issues](https://issues.vuetifyjs.com/)
+- 🏬 [Store](https://store.vuetifyjs.com/)
+- 🎮 [Playground](https://play.vuetifyjs.com/)
+- 💬 [Discord](https://community.vuetifyjs.com)
 
-1. 下载项目 `git clone https://github.com/NewXesTeam/new-xes-frontend`
-2. 切换到项目文件夹
-3. 安装依赖项 `npm install`
-4. 开发时最好开着开发服务器，让 React Router 初始化一下 Router 的 types
+## 💿 Install
 
-## npm 脚本
+Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
 
-- `npm run build` 构建项目（生产模式）
-- `npm run dev` 启动开发模式（注意没有配置 vite 的反向代理）
-- `npm run start` 启动已构建的代码
+| Package Manager                                           | Command        |
+| --------------------------------------------------------- | -------------- |
+| [yarn](https://yarnpkg.com/getting-started)               | `yarn install` |
+| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install) | `npm install`  |
+| [pnpm](https://pnpm.io/installation)                      | `pnpm install` |
+| [bun](https://bun.sh/#getting-started)                    | `bun install`  |
 
-- `npm run typecheck` 类型检查
-- `npm run format` 使用 Prettier 格式化代码
+After completing the installation, your environment is ready for Vuetify development.
 
-## 运行开发服务器
+## ✨ Features
 
-直接运行 `npm run dev` 即可
+- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) | [Vuetify 3](https://vuetifyjs.com/en/)
+- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/), the intuitive, modular state management solution for Vue.
+- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and vite-plugin-vue-layouts-next for organizing Vue file layouts. [Vue Router](https://router.vuejs.org/) | [vite-plugin-vue-layouts-next](https://github.com/loicduong/vite-plugin-vue-layouts-next)
+- 💻 **Enhanced Development Experience**: Benefit from TypeScript's static type checking and the ESLint plugin suite for Vue, ensuring code quality and consistency. [TypeScript](https://www.typescriptlang.org/) | [ESLint Plugin Vue](https://eslint.vuejs.org/)
+- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
+- 🧩 **Automated Component Importing**: Streamline your workflow with unplugin-vue-components, automatically importing components as you use them. [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
+- 🛠️ **Strongly-Typed Vue**: Use vue-tsc for type-checking your Vue components, and enjoy a robust development experience. [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/packages/vue-tsc)
 
-## 开发进度
+These features are curated to provide a seamless development experience from setup to deployment, ensuring that your Vuetify application is both powerful and maintainable.
 
-### 功能部分
+## 💡 Usage
 
-- [x] 主页 /
-- [x] 登录 /login
-- [x] 发现 /discover
-- [ ] 搜索 /search
-- [x] 我的作品 /user
-- [x] 用户信息展示 /userInfo
-- [ ] 最终用户协议（等待补充内容） /eula
-- [x] 关于 /about
+This section covers how to start the development server and build your project for production.
 
-- [x] 个人主页
-    - [x] 主页 /space/:userId/home
-    - [x] 封面 /space/:userId/cover
-    - [x] 作品 /space/:userId/projects
-    - [x] 收藏 /space/:userId/favourites
-    - [x] 社交 /space/:userId/social
+### Starting the Development Server
 
-- [ ] 消息中心
-    - [x] 评论与回复 /message/1
-    - [ ] 点赞与收藏
-    - [x] 关注 /message/5
-    - [ ] 反馈与审核
-    - [ ] 系统消息
+To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
 
-- [ ] 作品展示页面 /project
-    - [ ] 作品展示
-    - [ ] 评论
+```bash
+yarn dev
+```
 
-- [x] 作品发布组件 ProjectPublishModal.tsx
-    - [x] 基本信息填写
-    - [x] 标签选择
-    - [x] 封面上传
+(Repeat for npm, pnpm, and bun with respective commands.)
 
-### 作品部分
+> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that happen as part of the Vuetify import mapping. If you are on Node [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the warning, you can remove this from your package.json dev script.
 
-- [ ] 作品重定向页面 /ide /embed
-- [ ] TurboWarp /ide/turbowarp /embed/turbowarp
-- [ ] Python 基础 /ide/python /embed/python
-- [ ] Python 海龟 /ide/webpy /embed/webpy
-- [ ] Python 高阶 /ide/pygame /embed/pygame
-- [ ] C++ /ide/cpp /embed/cpp
+### Building for Production
 
-## 关于贡献
+To build your project for production, use:
 
-此仓库使用 GPL-3.0 许可证。
+```bash
+yarn build
+```
 
-请在贡献前阅读 [贡献指南](CONTRIBUTING.md)。
+(Repeat for npm, pnpm, and bun with respective commands.)
 
-若要报告安全漏洞，请阅读 [安全策略](SECURITY.md)。
+Once the build process is completed, your application will be ready for deployment in a production environment.
+
+## 💪 Support Vuetify Development
+
+This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:
+
+- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
+- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
+- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
+- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
+- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
+- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
+- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
+
+## 📑 License
+
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2016-present Vuetify, LLC
