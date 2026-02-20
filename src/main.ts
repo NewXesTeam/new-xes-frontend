@@ -77,7 +77,7 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
         instance.mount(element)
 
         import('@mdi/font/css/materialdesignicons.css');
-    import('vuetify/dist/vuetify.min.css');
+        import('vuetify/dist/vuetify.min.css');
     } catch(error) {
         console.error(`[NewXesFrontned] 加载错误: ${error}`)
         element.innerHTML = `<h1>页面加载错误，请稍后再试。报错内容: ${error}</h1>`
