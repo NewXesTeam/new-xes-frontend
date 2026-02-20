@@ -45,6 +45,11 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
     }
 
     // 清空页面Body
+    window.stop();
+    document.head.innerHTML = `
+        <meta charset="UTF-8">
+        <title>NewXesFrontend</title>
+    `;
     document.body.innerHTML = '';
     const element = document.createElement('div');
     document.body.appendChild(element); // JS添加div元素
