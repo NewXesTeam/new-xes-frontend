@@ -1,7 +1,6 @@
 import { type Component, createApp } from 'vue';
 import { createPinia } from 'pinia';
 import PiniaPluginPersistedState from 'pinia-plugin-persistedstate';
-import './styles/main.css';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
@@ -77,6 +76,7 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
 
         import('@mdi/font/css/materialdesignicons.css');
         import('vuetify/dist/vuetify.min.css');
+        import('./styles/main.css');
     } catch (error) {
         console.error(`[NewXesFrontned] 加载错误: ${error}`);
         element.innerHTML = `<h1>页面加载错误，请稍后再试。报错内容: ${error}</h1>`;
