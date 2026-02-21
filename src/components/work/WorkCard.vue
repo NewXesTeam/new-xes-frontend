@@ -16,7 +16,7 @@ const onOpenAuthorHome = () => {
 </script>
 
 <template>
-    <v-card v-tooltip:top="work.created_at">
+    <v-card v-tooltip:top="work.created_at || work.published_at">
         <CardActionArea :href="getWorkLink(work)" rel="noopener" target="_blank">
             <v-img
                 class="mx-auto"

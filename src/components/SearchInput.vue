@@ -17,7 +17,7 @@ const isLoading = ref(false);
 
 const onEnter = () => {
     if (inputKeyword.value) {
-        location.href = `/search?keyword=${inputKeyword.value}&tab=all`;
+        location.href = `/search-center?keyword=${inputKeyword.value}&tab=all`;
     }
 };
 
@@ -45,12 +45,6 @@ watch(selectedSuggestion, () => {
     if (!selectedSuggestion.value) return;
     inputKeyword.value = '';
     console.log('Go Search > ', selectedSuggestion.value);
-    // router.push({
-    //     name: "search",
-    //     query: {
-    //         keyword: selectedSuggestion.value,
-    //     }
-    // })
 });
 </script>
 

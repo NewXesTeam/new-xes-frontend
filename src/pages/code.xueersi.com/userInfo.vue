@@ -18,7 +18,7 @@ watch(
     loaded => {
         if (!loaded) return;
         if (!store.isLoggedIn) {
-            location.href = 'https://login.xueersi.com/'
+            location.href = 'https://login.xueersi.com/';
             return;
         }
 
