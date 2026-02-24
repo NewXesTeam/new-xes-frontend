@@ -6,7 +6,7 @@ const tooltip = `粉丝：${user.fans} 关注：${user.follows}`;
 </script>
 
 <template>
-    <v-card v-tooltip:top="tooltip" rel="noopener" target="_blank" :href="`/space/${user.id}/home`">
+    <v-card v-tooltip:top="tooltip" rel="noopener" target="_blank" :href="`/space/${user.id}`">
         <div class="flex justify-center" style="padding: 4px">
             <v-avatar :size="80" :image="user.avatar_path" />
         </div>

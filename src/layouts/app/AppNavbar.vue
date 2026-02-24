@@ -16,7 +16,7 @@ const messageTotal = computed(() => {
     if (messageData.value.error) return 0;
     return messageData.value.data?.reduce((acc, cur: MessageData) => acc + cur.count, 0);
 });
-const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}/home`);
+const mySpaceLink = computed(() => `/space/${store.userInfo?.user_id}`);
 
 const onClickLogout = async () => {
     window.open('https://login.xueersi.com/newLogin/logout', '_blank');

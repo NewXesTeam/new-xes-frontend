@@ -23,12 +23,22 @@ type ComponentLoader = () => Promise<Module>;
 // 获取所有的页面组件
 const pageComponents = import.meta.glob<Module>('./pages/**/*.vue');
 
+let props = {};
+
 // 根据路由获取对应的页面组件
 function getPageComponentsLoader(): ComponentLoader | undefined | null {
     if (path === '/') {
         // 依据host映射
         const key = `${host}/` as keyof typeof pageMap;
         return pageMap[key] ? pageComponents[pageMap[key]] : null;
+    } else if (path.startsWith('/space/')) {
+        const regex = /\/space\/(\d+)/;
+        const match = path.match(regex);
+        if (match) {
+            console.log(`[NewXesFrontned] 访问了空间页面，空间ID: ${match[1]}`);
+            props = { spaceId: match[1] };
+            return pageComponents['./pages/Space.vue'];
+        }
     } else {
         // 如果是其他的路径就尝试直接匹配
         const visitPath = `./pages/${host}${path}.vue`;
@@ -66,7 +76,7 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
         pinia.use(PiniaPluginPersistedState);
 
         // 创建一个Vue实例
-        const instance = createApp(PageContent);
+        const instance = createApp(PageContent, props);
         // 使用Pinia
         instance.use(pinia);
         instance.use(
@@ -78,10 +88,15 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
 
         // 挂载实例
         instance.mount(element);
+        props = {}; // 清空props
 
-        import('@mdi/font/css/materialdesignicons.css');
-        import('vuetify/dist/vuetify.min.css');
-        import('./styles/main.css');
+        await Promise.all([
+            import('@mdi/font/css/materialdesignicons.css'),
+            import('vuetify/dist/vuetify.min.css'),
+            import('./styles/main.css'),
+        ]).catch(err => {
+            console.warn('[NewXesFrontned] 样式加载警告:', err);
+        });
     } catch (error) {
         console.error(`[NewXesFrontned] 加载错误: ${error}`);
         element.innerHTML = `<h1>页面加载错误，请稍后再试。报错内容: ${error}</h1>`;

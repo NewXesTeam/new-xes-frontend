@@ -11,7 +11,7 @@ const userLink = computed(() => `/space/${user.user_id}/`);
 const userName = computed(() => {
     return user.user_id === undefined ? '666 这位是 undefined 先生' : user.realname.replace(/<em>|<\/em>/g, '');
 });
-const isUserFollowed = ref(user.is_followed);
+const isUserFollowed = ref(user.is_follow || user.is_followed);
 
 const onClickFollow = async () => {
     await fetch('/api/space/follow', {
