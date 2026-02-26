@@ -3,14 +3,23 @@ import type { Work } from '@/types/work.ts';
 import WorkCard from '@/components/work/WorkCard.vue';
 import RemovedWorkCard from '@/components/work/RemovedWorkCard.vue';
 import { v4 as uuid } from 'uuid';
+import { useAttrs } from 'vue';
 
 interface Props {
+    enableRemoved?: boolean;
     className?: string;
     works: Work[];
+    WorkCardInterface?: typeof WorkCard;
 }
 
-const { className = 'm-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2', works } =
-    defineProps<Props>();
+const attrs = useAttrs();
+
+const {
+    enableRemoved = false,
+    className = 'm-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2',
+    works,
+    WorkCardInterface = WorkCard,
+} = defineProps<Props>();
 </script>
 
 <template>
@@ -19,8 +28,9 @@ const { className = 'm-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-
         <component
             v-for="work of works"
             :key="work?.id || work?.topic_id || uuid()"
-            :is="work && !work.removed ? WorkCard : RemovedWorkCard"
+            :is="enableRemoved ? WorkCardInterface : work && !work.removed ? WorkCardInterface : RemovedWorkCard"
             :work="work"
+            v-bind="attrs"
         />
     </div>
 </template>
