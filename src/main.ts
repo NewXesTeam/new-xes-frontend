@@ -70,13 +70,18 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
         const component = await loader();
         const PageContent: Component = component.default;
 
+        const { default: AppWrapper } = await import('./pages/_app.vue');
+
         // 初始化Pinia
         const pinia = createPinia();
         // 加一个持久化插件
         pinia.use(PiniaPluginPersistedState);
 
         // 创建一个Vue实例
-        const instance = createApp(PageContent, props);
+        const instance = createApp(AppWrapper, {
+            component: PageContent,
+            ...props,
+        });
         // 使用Pinia
         instance.use(pinia);
         instance.use(

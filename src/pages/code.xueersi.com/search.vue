@@ -4,7 +4,6 @@ import { useFetchState, commonFetch } from '@/utils';
 import type { WorkList as IWorkList } from '@/types/work';
 import WorkList from '@/components/work/WorkList.vue';
 import Loading from '@/components/common/Loading.vue';
-import Layout from '@/components/Layout.vue';
 
 const currentPage = ref(1);
 const orderType = ref('latest');
@@ -49,29 +48,25 @@ onMounted(() => {
 </script>
 
 <template>
-    <Layout class="flex-1 flex flex-col">
-        <div class="flex flex-col gap-2">
-            <div class="flex justify-between">
-                <v-btn-toggle v-model="orderLang" variant="outlined" mandatory>
-                    <v-btn value="">全部</v-btn>
-                    <v-btn value="scratch">TurboWarp</v-btn>
-                    <v-btn value="python">Python</v-btn>
-                    <v-btn value="cpp">C++</v-btn>
-                </v-btn-toggle>
+    <div class="flex justify-between mb-2">
+        <v-btn-toggle v-model="orderLang" variant="outlined" mandatory>
+            <v-btn value="">全部</v-btn>
+            <v-btn value="scratch">TurboWarp</v-btn>
+            <v-btn value="python">Python</v-btn>
+            <v-btn value="cpp">C++</v-btn>
+        </v-btn-toggle>
 
-                <v-btn-toggle v-model="orderType" variant="outlined" mandatory>
-                    <v-btn value="latest">最新发布</v-btn>
-                    <v-btn value="popular">最受欢迎</v-btn>
-                    <v-btn value="courses">随堂练习</v-btn>
-                </v-btn-toggle>
-            </div>
+        <v-btn-toggle v-model="orderType" variant="outlined" mandatory>
+            <v-btn value="latest">最新发布</v-btn>
+            <v-btn value="popular">最受欢迎</v-btn>
+            <v-btn value="courses">随堂练习</v-btn>
+        </v-btn-toggle>
+    </div>
 
-            <Loading v-if="!discoverWorksData.success" :error="discoverWorksData.error" />
-            <WorkList v-else :works="discoverWorksData.data ? discoverWorksData.data.data : []" />
+    <Loading v-if="!discoverWorksData.success" :error="discoverWorksData.error" />
+    <WorkList v-else :works="discoverWorksData.data ? discoverWorksData.data.data : []" />
 
-            <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />
-        </div>
-    </Layout>
+    <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />
 </template>
 
 <style scoped></style>

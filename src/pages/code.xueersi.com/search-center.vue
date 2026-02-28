@@ -4,7 +4,6 @@ import SearchInput from '@/components/SearchInput.vue';
 import SearchAllTab from '@/components/search/SearchAllTab.vue';
 import SearchUserTab from '@/components/search/SearchUserTab.vue';
 import SearchProjectsTab from '@/components/search/SearchProjectsTab.vue';
-import Layout from '@/components/Layout.vue';
 
 const getSafeUrlParam = (paramName: string): string => {
     try {
@@ -37,34 +36,30 @@ watch(
 </script>
 
 <template>
-    <Layout>
-        <div>
-            <div class="mt-5 flex flex-col items-center">
-                <h1 v-if="!keyword">关键字不存在</h1>
-                <SearchInput v-else :keyword="keyword" />
+    <div class="mt-5 flex flex-col items-center">
+        <h1 v-if="!keyword">关键字不存在</h1>
+        <SearchInput v-else :keyword="keyword" />
 
-                <v-tabs v-model="searchTab" color="primary">
-                    <v-tab value="all">综合</v-tab>
-                    <v-tab value="users">作者</v-tab>
-                    <v-tab value="projects">作品</v-tab>
-                </v-tabs>
+        <v-tabs v-model="searchTab" color="primary">
+            <v-tab value="all">综合</v-tab>
+            <v-tab value="users">作者</v-tab>
+            <v-tab value="projects">作品</v-tab>
+        </v-tabs>
 
-                <v-divider class="w-full h-px" />
-            </div>
+        <v-divider class="w-full h-px" />
+    </div>
 
-            <v-tabs-window v-model="searchTab">
-                <v-tabs-window-item value="all">
-                    <SearchAllTab :keyword="keyword" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="users">
-                    <SearchUserTab :keyword="keyword" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="projects">
-                    <SearchProjectsTab :keyword="keyword" />
-                </v-tabs-window-item>
-            </v-tabs-window>
-        </div>
-    </Layout>
+    <v-tabs-window v-model="searchTab">
+        <v-tabs-window-item value="all">
+            <SearchAllTab :keyword="keyword" />
+        </v-tabs-window-item>
+        <v-tabs-window-item value="users">
+            <SearchUserTab :keyword="keyword" />
+        </v-tabs-window-item>
+        <v-tabs-window-item value="projects">
+            <SearchProjectsTab :keyword="keyword" />
+        </v-tabs-window-item>
+    </v-tabs-window>
 </template>
 
 <style scoped></style>

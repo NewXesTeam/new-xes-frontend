@@ -5,7 +5,6 @@ import { useFetchData } from '@/utils';
 import Loading from '@/components/common/Loading.vue';
 import type { SpaceProfile } from '@/types/space.ts';
 import type { ErrorResponse } from '@/types/common.ts';
-import Layout from '@/components/Layout.vue';
 import SpaceCoverTab from '@/components/space/SpaceCoverTab.vue';
 import SpaceProjectsTab from '@/components/space/SpaceProjectsTab.vue';
 import SpaceFavoritesTab from '@/components/space/SpaceFavoritesTab.vue';
@@ -103,100 +102,96 @@ onMounted(() => {
 </script>
 
 <template>
-    <Layout>
-        <v-container v-if="!spaceData.success">
-            <Loading :error="spaceData.error" />
-        </v-container>
+    <v-container v-if="!spaceData.success">
+        <Loading :error="spaceData.error" />
+    </v-container>
 
-        <div v-else class="flex flex-col flex-1 gap-2">
-            <v-container class="flex flex-col gap-2">
-                <div class="flex gap-2 items-center">
-                    <v-avatar :size="128" :image="spaceData.data?.avatar_path" />
-                    <div class="flex flex-1 flex-col gap-1">
-                        <div class="flex items-baseline">
-                            <h2 style="font-size: 24px">{{ spaceData.data?.realname }}</h2>
-                            <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
-                                ({{ spaceData.data?.user_id }})
-                            </span>
-                        </div>
-
-                        <v-text-field
-                            v-if="isChangingSignature"
-                            class="signature-input max-w-125"
-                            variant="outlined"
-                            :hide-details="true"
-                            autofocus
-                            v-model="signatureInput"
-                            @blur="onChangeSignature"
-                            @keydown="signatureInputKeyDown"
-                        />
-
-                        <div v-else class="flex items-center">
-                            <span style="font-size: 16px">
-                                {{
-                                    currentSignature === '' ? spaceData.data?.signature || '暂无签名' : currentSignature
-                                }}
-                            </span>
-
-                            <v-btn
-                                v-if="spaceData.data?.is_my"
-                                size="small"
-                                variant="outlined"
-                                color="primary"
-                                @click="onClickChangeSignature"
-                            >
-                                修改签名
-                            </v-btn>
-                        </div>
-
-                        <span style="font-size: 16px">
-                            关注：{{ spaceData.data?.follows }} &nbsp; 粉丝：{{ spaceData.data?.fans }}
+    <div v-else class="flex flex-col flex-1 gap-2">
+        <v-container class="flex flex-col gap-2">
+            <div class="flex gap-2 items-center">
+                <v-avatar :size="128" :image="spaceData.data?.avatar_path" />
+                <div class="flex flex-1 flex-col gap-1">
+                    <div class="flex items-baseline">
+                        <h2 style="font-size: 24px">{{ spaceData.data?.realname }}</h2>
+                        <span class="text-neutral-700 dark:text-neutral-300" style="font-size: 16px">
+                            ({{ spaceData.data?.user_id }})
                         </span>
                     </div>
-                    <div class="flex flex-col h-fit">
+
+                    <v-text-field
+                        v-if="isChangingSignature"
+                        class="signature-input max-w-125"
+                        variant="outlined"
+                        :hide-details="true"
+                        autofocus
+                        v-model="signatureInput"
+                        @blur="onChangeSignature"
+                        @keydown="signatureInputKeyDown"
+                    />
+
+                    <div v-else class="flex items-center">
+                        <span style="font-size: 16px">
+                            {{ currentSignature === '' ? spaceData.data?.signature || '暂无签名' : currentSignature }}
+                        </span>
+
                         <v-btn
-                            v-if="!spaceData.data?.is_my"
-                            :variant="isUserFollowed ? 'outlined' : undefined"
-                            :color="isUserFollowed ? 'secondary' : 'primary'"
-                            @click="onClickFollow"
+                            v-if="spaceData.data?.is_my"
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            @click="onClickChangeSignature"
                         >
-                            {{ isUserFollowed ? '已关注' : '关注' }}
+                            修改签名
                         </v-btn>
                     </div>
+
+                    <span style="font-size: 16px">
+                        关注：{{ spaceData.data?.follows }} &nbsp; 粉丝：{{ spaceData.data?.fans }}
+                    </span>
                 </div>
-            </v-container>
-
-            <div class="flex flex-col items-center">
-                <v-tabs v-model="spaceTab" color="primary">
-                    <v-tab value="home">主页</v-tab>
-                    <v-tab value="cover">封面</v-tab>
-                    <v-tab value="projects">作品</v-tab>
-                    <v-tab value="favorites">收藏</v-tab>
-                    <v-tab value="social">社交</v-tab>
-                </v-tabs>
-
-                <v-divider class="w-full h-px" />
+                <div class="flex flex-col h-fit">
+                    <v-btn
+                        v-if="!spaceData.data?.is_my"
+                        :variant="isUserFollowed ? 'outlined' : undefined"
+                        :color="isUserFollowed ? 'secondary' : 'primary'"
+                        @click="onClickFollow"
+                    >
+                        {{ isUserFollowed ? '已关注' : '关注' }}
+                    </v-btn>
+                </div>
             </div>
+        </v-container>
 
-            <v-tabs-window v-model="spaceTab">
-                <v-tabs-window-item value="home">
-                    <SpaceHomeTab :userId="props.spaceId" :setSpaceTab="setSpaceTab" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="cover">
-                    <SpaceCoverTab :userId="props.spaceId" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="projects">
-                    <SpaceProjectsTab :userId="props.spaceId" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="favorites">
-                    <SpaceFavoritesTab :userId="props.spaceId" />
-                </v-tabs-window-item>
-                <v-tabs-window-item value="social">
-                    <SpaceSocialTab :userId="props.spaceId" />
-                </v-tabs-window-item>
-            </v-tabs-window>
+        <div class="flex flex-col items-center">
+            <v-tabs v-model="spaceTab" color="primary">
+                <v-tab value="home">主页</v-tab>
+                <v-tab value="cover">封面</v-tab>
+                <v-tab value="projects">作品</v-tab>
+                <v-tab value="favorites">收藏</v-tab>
+                <v-tab value="social">社交</v-tab>
+            </v-tabs>
+
+            <v-divider class="w-full h-px" />
         </div>
-    </Layout>
+
+        <v-tabs-window v-model="spaceTab">
+            <v-tabs-window-item value="home">
+                <SpaceHomeTab :userId="props.spaceId" :setSpaceTab="setSpaceTab" />
+            </v-tabs-window-item>
+            <v-tabs-window-item value="cover">
+                <SpaceCoverTab :userId="props.spaceId" />
+            </v-tabs-window-item>
+            <v-tabs-window-item value="projects">
+                <SpaceProjectsTab :userId="props.spaceId" />
+            </v-tabs-window-item>
+            <v-tabs-window-item value="favorites">
+                <SpaceFavoritesTab :userId="props.spaceId" />
+            </v-tabs-window-item>
+            <v-tabs-window-item value="social">
+                <SpaceSocialTab :userId="props.spaceId" />
+            </v-tabs-window-item>
+        </v-tabs-window>
+    </div>
 </template>
 
 <style>

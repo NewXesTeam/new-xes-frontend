@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import monkey, { cdn, MonkeyUserScript } from 'vite-plugin-monkey';
+import monkey, { MonkeyUserScript } from 'vite-plugin-monkey';
 import tailwindcss from '@tailwindcss/vite';
 import { hostNames } from './src/injections/injection-config.ts';
 import { fileURLToPath } from 'node:url';
@@ -27,9 +27,6 @@ export default defineConfig({
             userscript: userscriptConfig,
             build: {
                 fileName: 'new-xes-frontend.user.js',
-                externalGlobals: {
-                    vue: cdn.jsdelivr('Vue', 'dist/vue.global.prod.js'),
-                },
             },
         }),
         tailwindcss(),
