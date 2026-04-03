@@ -3,6 +3,7 @@ import { PublishWorkInfo, Work } from '@/types/work';
 import { getEditWorkLink, getWorkLink } from '@/utils';
 import { ref } from 'vue';
 import CardActionArea from '../common/CardActionArea.vue';
+import ProjectPublishModal from '../ProjectPublishModal.vue';
 
 const emits = defineEmits(['publish', 'cancel-publish']);
 const { work } = defineProps<{ work: Work }>();
@@ -30,11 +31,6 @@ function onShowOperators() {
 }
 function onHideOperators() {
     isShowOperators.value = false;
-}
-
-function onPublish() {
-    const workData = work as unknown as PublishWorkInfo;
-    emits('publish', workData)
 }
 
 function onCancelPublish() {
@@ -101,7 +97,7 @@ function onCancelPublish() {
                     编辑
                 </v-btn>
 
-                <v-btn
+                <!-- <v-btn
                     xSmall
                     color="green"
                     v-if="work.published === 0 && !work.removed"
@@ -110,7 +106,8 @@ function onCancelPublish() {
                 >
                     <v-icon icon="mdi-publish"></v-icon>
                     发布
-                </v-btn>
+                </v-btn> -->
+                <ProjectPublishModal :work="work as unknown as PublishWorkInfo"></ProjectPublishModal>
 
                 <v-btn
                     xSmall

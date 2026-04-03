@@ -21,11 +21,6 @@ const totalPages = computed(() =>
     Math.max(Math.ceil((userWorkData.value.data ? userWorkData.value.data.total : 0) / 20), 1),
 );
 
-function handlePublish(work: Work) {
-    // TODO: 实现发布
-    console.log('publish', work);
-}
-
 async function handleCancelPublish(work: Work) {
     try {
         await fetch(`/api/${lang.value}/${work.id}/cancel_publish`, {
@@ -107,8 +102,8 @@ onMounted(() => {
         :works="(userWorkData.data?.data as unknown as Work[]) || []"
         enable-removed
         :-work-card-interface="UserPageWorkCard"
-        @publish="handlePublish"
         @cancel-publish="handleCancelPublish"
+        refresh-key="refreshKey"
     />
 
     <v-pagination v-model="currentPage" :length="totalPages" rounded :total-visible="7" />

@@ -1,0 +1,137 @@
+<script setup lang="ts">
+import { PublishWorkInfo } from '@/types/work';
+import { ref } from 'vue';
+import Tagify from './Tagify.vue';
+import { useAlertsStore } from '@/stores/alerts';
+
+const { work } = defineProps<{ work: PublishWorkInfo }>();
+const thumnailImage = ref(
+    work.thumbnail || 'https://static0.xesimg.com/talcode/assets/py/default-python-thumbnail.png',
+);
+const workName = ref(work.name);
+const description = ref('');
+const origin = ref(work.created_source || 'original');
+const tagText = ref();
+
+const alertsStore = useAlertsStore();
+const isActive = ref(false);
+
+const handleTagsChange = (event: CustomEvent) => {
+    console.log(event);
+    const tags: { value: string }[] = event.detail.tagify.getCleanValue();
+    let tag_str = '';
+    tags.forEach(tag => {
+        tag_str += tag.value.replaceAll(' ', '&nbsp;') + ' ';
+    });
+    tagText.value = tag_str;
+};
+
+let lang = work.lang;
+if (lang === 'webpy' || lang === 'python') {
+    lang = 'python';
+} else if (lang === 'cpp') {
+    lang = 'compilers';
+} else {
+    lang = 'projects';
+}
+
+const onClickPublish = async () => {
+    if (workName.value.length === 0 || tagText.value.length === 0) {
+        alertsStore.addAlert({
+            type: 'warning',
+            text: '有选项未填写！',
+        });
+        return;
+    }
+
+    try {
+        await fetch(`/api/${lang}/${work.id}/publish`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                projectId: work.id,
+                name: workName.value,
+                tags: tagText.value.trimEnd(),
+                created_source: origin.value,
+                thumbnail: thumnailImage.value,
+                hidden_code: 2,
+                description: description.value,
+            }),
+        });
+        isActive.value = false;
+        alertsStore.addAlert({
+            type: 'success',
+            text: '已发布',
+        });
+        location.reload();
+    } catch (error) {
+        alertsStore.addAlert({
+            type: 'error',
+            text: '发布失败，请重试',
+        });
+    }
+};
+</script>
+
+<template>
+    <v-dialog max-width="800" v-model="isActive">
+        <template v-slot:activator="{ props: activatorProps }">
+            <v-btn
+                xSmall
+                color="green"
+                v-if="work.published === 0 && !work.removed"
+                class="px-1 mr-1"
+                v-bind="activatorProps"
+            >
+                <v-icon icon="mdi-publish"></v-icon>
+                发布
+            </v-btn>
+        </template>
+
+        <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-card-text class="flex gap-4 flex-wrap">
+                    <div class="flex-1">
+                        <h4 class="font-weight-bold">作品封面</h4>
+
+                        <div class="overflow-hidden rounded">
+                            <v-img :src="thumnailImage" alt="作品封面" />
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <v-form>
+                            <v-text-field label="作品名称" v-model="workName"></v-text-field>
+
+                            <v-radio-group label="作品来源" inline v-model="origin">
+                                <v-radio label="原创" value="original"></v-radio>
+                                <v-radio label="改编" value="adapt"></v-radio>
+                                <v-radio label="转载" value="reprint"></v-radio>
+                            </v-radio-group>
+
+                            <Tagify
+                                :settings="{
+                                    whitelist: ['游戏', '动画', '故事', '模拟', '艺术', '教程', '其他'],
+                                    placeholder: '添加标签',
+                                    dropdown: { enabled: 0 },
+                                }"
+                                @change="handleTagsChange"
+                            />
+
+                            <v-textarea class="mt-4" label="作品描述" v-model="description"></v-textarea>
+                        </v-form>
+                    </div>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn text="取消" @click="isActive.value = false"></v-btn>
+
+                    <v-btn @click="onClickPublish"> 发布 </v-btn>
+                </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
+</template>
+
+<style scoped></style>
