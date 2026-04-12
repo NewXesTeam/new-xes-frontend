@@ -18,6 +18,7 @@
         "@yaireo/tagify": "^4.36.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "dompurify": "^3.3.3",
         "lodash-es": "^4.17.23",
         "pinia": "^3.0.4",
         "pinia-plugin-persistedstate": "^4.7.1",

@@ -80,7 +80,7 @@ onMounted(() => {
                     </template>
 
                     <v-list>
-                        <v-list-item value="1">
+                        <v-list-item value="1" @click="navigate('/message-center?category=1')">
                             <v-badge
                                 inline
                                 color="error"
@@ -90,7 +90,7 @@ onMounted(() => {
                                 评论和回复
                             </v-badge>
                         </v-list-item>
-                        <v-list-item value="5">
+                        <v-list-item value="5" @click="navigate('/message-center?category=5')">
                             <v-badge
                                 inline
                                 color="error"
