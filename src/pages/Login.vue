@@ -129,6 +129,10 @@ const onSubmit = () => {
         processCaptcha();
     }
 };
+
+const openEula = () => {
+    window.open('https://code.xueersi.com/eula', '_blank')
+}
 </script>
 
 <template>
@@ -224,9 +228,7 @@ const onSubmit = () => {
                             <div>
                                 我已阅读并同意 <br />
                                 <a
-                                    href="/eula"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    @click="openEula"
                                     style="margin: 0 4px; color: #1976d2; font-size: 12px"
                                 >
                                     《NewXesFrontend 最终用户协议》
