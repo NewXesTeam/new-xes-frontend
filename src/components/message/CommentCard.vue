@@ -4,6 +4,7 @@ import { CommentDataItem } from '@/types/message';
 import { ref } from 'vue';
 import { processEmojiReplace, processLinkReplace } from './utils';
 import DOMPurify from 'dompurify';
+import CommentBox from './CommentBox.vue';
 
 const { message, className } = defineProps<{
     message: CommentDataItem;
@@ -15,6 +16,10 @@ const alertsStore = useAlertsStore();
 const needRead = ref(message.read_at === '');
 const show = ref(false);
 const sendUserLink = `/space/${message.send_user_id}/home`;
+
+const setShow = (value: boolean) => {
+    show.value = value;
+};
 
 const onClickRead = async () => {
     const response = await fetch('/api/messages/read', {
@@ -136,6 +141,14 @@ const onClickDelete = async () => {
                 </div>
             </template>
         </v-card-text>
+        <v-card-actions v-if="show" class="w-full">
+            <comment-box
+                :topic-id="message.topic_id"
+                :comment-id="message.comment_id"
+                :show="show"
+                @set-show="setShow"
+            ></comment-box>
+        </v-card-actions>
     </v-card>
 </template>
 
