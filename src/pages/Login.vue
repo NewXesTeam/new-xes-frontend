@@ -131,8 +131,8 @@ const onSubmit = () => {
 };
 
 const openEula = () => {
-    window.open('https://code.xueersi.com/eula', '_blank')
-}
+    window.open('https://code.xueersi.com/eula', '_blank');
+};
 </script>
 
 <template>
@@ -227,10 +227,7 @@ const openEula = () => {
                         <template v-slot:label>
                             <div>
                                 我已阅读并同意 <br />
-                                <a
-                                    @click="openEula"
-                                    style="margin: 0 4px; color: #1976d2; font-size: 12px"
-                                >
+                                <a @click="openEula" style="margin: 0 4px; color: #1976d2; font-size: 12px">
                                     《NewXesFrontend 最终用户协议》
                                 </a>
                             </div>
