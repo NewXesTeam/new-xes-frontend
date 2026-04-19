@@ -1,13 +1,16 @@
-<template v-once>
-    <textarea v-if="mode === 'textarea'" />
-    <input v-else />
+<template>
+    <v-combobox
+        v-model="selectedTags"
+        :items="settings?.whitelist || []"
+        :label="settings?.placeholder || ''"
+        multiple
+        chips
+        clearable
+        @update:model-value="handleChange"
+    ></v-combobox>
 </template>
 
 <script lang="ts">
-// @ts-ignore
-import Tagify from '@yaireo/tagify/dist/tagify.esm.js';
-import '@yaireo/tagify/dist/tagify.css';
-
 export default {
     name: 'Tagify',
     emits: ['change'],
@@ -17,14 +20,23 @@ export default {
     },
     data() {
         return {
-            tagify: null as Tagify | null,
+            selectedTags: [],
         };
     },
-    mounted() {
-        this.tagify = new Tagify(this.$el, this.settings);
-        this.tagify.off('change').on('change', (event: CustomEvent) => {
-            this.$emit('change', event);
-        });
+    methods: {
+        handleChange() {
+            this.$emit('change', {
+                detail: {
+                    tagify: {
+                        getCleanValue: () => {
+                            return this.selectedTags.map(item => ({ value: item }));
+                        },
+                    },
+                },
+            });
+        }
     },
 };
 </script>
+
+<style scoped></style>

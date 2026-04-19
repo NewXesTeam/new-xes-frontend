@@ -15,7 +15,6 @@
     "dependencies": {
         "@mdi/font": "^7.4.47",
         "@tailwindcss/vite": "^4.1.18",
-        "@yaireo/tagify": "^4.36.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "crypto-js": "^4.2.0",
