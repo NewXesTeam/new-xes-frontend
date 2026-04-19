@@ -73,7 +73,7 @@ onMounted(() => {
 <template>
     <v-tabs v-model="type">
         <v-tab value="normal">个人创作</v-tab>
-        <v-tab value="homework" v-tooltip:bottom="'（随堂练习）'">随堂练习</v-tab>
+        <v-tab value="homework" v-tooltip:bottom="'（隋唐练习）'">随堂练习</v-tab>
     </v-tabs>
     <v-card class="mb-3 shadow-1">
         <v-card-text>
