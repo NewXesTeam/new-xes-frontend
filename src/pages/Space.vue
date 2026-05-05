@@ -46,7 +46,10 @@ const onClickChangeSignature = () => {
 };
 
 const onChangeSignature = async () => {
-    if (currentSignature.value === signatureInput.value) return;
+    if (currentSignature.value === signatureInput.value){
+        isChangingSignature.value = false;
+        return;
+    }
 
     isChangingSignature.value = false;
     const response = await fetch('/api/space/edit_signature', {
@@ -72,15 +75,6 @@ const onChangeSignature = async () => {
     }
 
     signatureInput.value = '';
-};
-
-const signatureInputKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-        onChangeSignature();
-    } else if (event.key === 'Escape') {
-        isChangingSignature.value = false;
-        signatureInput.value = '';
-    }
 };
 
 function setSpaceTab(tab: string) {
@@ -125,8 +119,8 @@ onMounted(() => {
                         :hide-details="true"
                         autofocus
                         v-model="signatureInput"
-                        @blur="onChangeSignature"
-                        @keydown="signatureInputKeyDown"
+                        @blur.native="onChangeSignature"
+                        @keydown.enter="onChangeSignature"
                     />
 
                     <div v-else class="flex items-center">

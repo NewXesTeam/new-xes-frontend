@@ -4,6 +4,7 @@ import PiniaPluginPersistedState from 'pinia-plugin-persistedstate';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { md3 } from 'vuetify/blueprints';
 
 const host = window.location.host;
 const path = window.location.pathname;
@@ -88,6 +89,16 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
             createVuetify({
                 components,
                 directives,
+                blueprint: md3,
+                theme: {
+                    themes: {
+                        light: {
+                            colors: {
+                                background: '#fafafa'
+                            }
+                        }
+                    }
+                },
             }),
         );
 
