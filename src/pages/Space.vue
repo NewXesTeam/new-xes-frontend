@@ -46,7 +46,7 @@ const onClickChangeSignature = () => {
 };
 
 const onChangeSignature = async () => {
-    if (currentSignature.value === signatureInput.value){
+    if (currentSignature.value === signatureInput.value) {
         isChangingSignature.value = false;
         return;
     }

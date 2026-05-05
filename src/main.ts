@@ -94,10 +94,10 @@ async function mountApp(loader: ComponentLoader | undefined | null) {
                     themes: {
                         light: {
                             colors: {
-                                background: '#fafafa'
-                            }
-                        }
-                    }
+                                background: '#fafafa',
+                            },
+                        },
+                    },
                 },
             }),
         );
