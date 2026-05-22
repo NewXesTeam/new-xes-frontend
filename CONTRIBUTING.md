@@ -1,10 +1,17 @@
-感谢您对 NewXesFrontend 的贡献！
-在您进行贡献前，请完全阅读以下指南。
+# NewXesFrontend 贡献指南
 
-1. 在创建 issue 之前，请先搜索是否有相似的 issue。
-2. 请不要在 issue 中聊天。
-3. 请按照 issue 模板填写 issue。
-4. 在创建 Pull Request 之前，请先确认是否与主仓库冲突。
-   若冲突，请 @lrsgzs 协助解决。
-5. 请按照 Pul Request 模板填写 Pull Request。
-6. 请在 Pull Request 中描述清楚您的修改。
+感谢您对 **NewXesFrontend** 的贡献！
+在进行贡献之前，请完整阅读并遵守以下协作规范：
+
+## Issue 提交规范
+
+1. 创建 Issue 前，请先检索仓库，确认是否已存在相似 Issue，避免重复提交。
+2. Issue 仅用于问题反馈与需求讨论，**禁止在 Issue 内闲聊、发布无关内容**。
+3. 提交 Issue 时，请严格按照仓库内置模板完整填写，信息尽量详实。
+
+## Pull Request 提交规范
+
+1. 发起 PR 前，请同步主仓库最新代码，自行检查并处理代码冲突。
+   若遇到无法解决的冲突，可 @lrsgzs 协助处理。
+2. 提交 Pull Request 时，请严格按照 PR 模板规范填写内容。
+3. 在 PR 描述中清晰完整地说明本次修改内容、改动原因以及解决的相关问题，便于审核。
